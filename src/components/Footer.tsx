@@ -1,0 +1,112 @@
+"use client"
+
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import FooterSocials from "./FooterSocials";
+import styles from "./Footer.module.css";
+
+export default function Footer() {
+  return (
+    <footer className={styles.footer}>
+      <div className={styles.grid}>
+        <div className={styles.brandCol}>
+          <div className={styles.logoContainer}>
+              <Image
+                src="/logo.png"
+                alt="Emana Jewelry Logo"
+                width={220}
+                height={60}
+                className={styles.logoImg}
+              />
+          </div>
+          <p className={styles.desc}>
+            Jewelry for your everyday moments and special occasions, in a range of materials and styles. Visit us in Takoradi or speak with us about a piece made just for you.
+          </p>
+          <FooterSocials />
+        </div>
+
+        <div>
+          <h3 className={styles.heading}>Collections</h3>
+          <ul className={styles.list}>
+            <li><Link href="/catalog" className={styles.link}>All Jewelry</Link></li>
+            <li><Link href="/collections/rings" className={styles.link}>Signet &amp; Solitaire Rings</Link></li>
+            <li><Link href="/collections/necklaces" className={styles.link}>Necklaces &amp; Pendants</Link></li>
+            <li><Link href="/collections/luxury" className={styles.link}>Diamond &amp; Gemstone Pieces</Link></li>
+            <li><Link href="/collections/mens" className={styles.link}>Men&apos;s Jewelry</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 className={styles.heading}>About Emana</h3>
+          <ul className={styles.list}>
+            <li><Link href="/#custom-jewelry-form" className={styles.link}>Custom Jewelry</Link></li>
+            <li><Link href="/#sourcing" className={styles.link}>Materials Chosen With Care</Link></li>
+            <li><Link href="/#services" className={styles.link}>Cleaning &amp; Repairs</Link></li>
+            <li><Link href="/#consultation" className={styles.link}>Private Consultation</Link></li>
+            <li><Link href="/#atelier-location" className={styles.link}>Takoradi Store &amp; Map</Link></li>
+            <li><a href="https://wa.me/233242186590" target="_blank" rel="noopener noreferrer" className={styles.link}>Chat With Us on WhatsApp</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 className={styles.heading}>Contact</h3>
+          <ul className={styles.list}>
+            <li>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Emana+Jewelry,+Justmoh+Ave,+Takoradi,+Ghana"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.link}
+              >
+                Our shop: Justmoh Ave, Takoradi, Ghana
+              </a>
+            </li>
+            <li>
+              <a href="mailto:emanagold6590@gmail.com" className={styles.link}>
+                emanagold6590@gmail.com
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://wa.me/233242186590"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.link}
+              >
+                WhatsApp: +233 24 218 6590
+              </a>
+            </li>
+          </ul>
+          <p className={styles.newsletterDesc}>
+            Leave your email to hear about new jewelry, gemstones, and ideas for your next piece.
+          </p>
+          <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+            <input
+              type="email"
+              placeholder="Your Email Address"
+              className={styles.input}
+              required
+            />
+            <button type="submit" className={styles.submitBtn} aria-label="Subscribe">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div className={styles.bottom}>
+        <span>&copy; 2026 Emana Jewelry. All rights reserved.</span>
+        <div className={styles.bottomLinks}>
+          <Link href="/privacy" className={styles.link}>Privacy Policy</Link>
+          <Link href="/terms" className={styles.link}>Terms of Service</Link>
+          <Link href="/ethical-sourcing" className={styles.link}>Ethical Sourcing Policy</Link>
+          <Link href="/faq" className={styles.link}>FAQ</Link>
+        </div>
+      </div>
+    </footer>
+  );
+}

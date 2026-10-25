@@ -1,0 +1,178 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* HERO */
+.hero {
+  height: 45vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: var(--bg-deep);
+  padding: 0 4%;
+  margin-top: 0;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.4) 0%, rgba(245, 242, 235, 0.9) 100%);
+  z-index: 1;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.heroSubtitle {
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.heroTitle {
+  font-size: 3.2rem;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.heroDesc {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+}
+
+/* GRID */
+.gridSection {
+  padding: 100px 4% 120px;
+  background: var(--background);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.card {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  cursor: pointer;
+  background: #FAF8F5;
+  transition: var(--transition-smooth);
+  display: block;
+  text-decoration: none;
+}
+
+.card:hover {
+  border-color: var(--gold-primary);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 0 0 15px rgba(158, 125, 71, 0.2);
+}
+
+.card:first-child {
+  grid-column: auto;
+}
+
+.cardImageWrapper {
+  position: absolute;
+  inset: 0;
+}
+
+.cardImage {
+  object-fit: cover;
+  opacity: 0.85;
+  transition: var(--transition-smooth);
+}
+
+.card:hover .cardImage {
+  transform: scale(1.05);
+  opacity: 0.95;
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(18, 16, 14, 0.92) 0%, rgba(18, 16, 14, 0.45) 55%, transparent 100%);
+  z-index: 1;
+}
+
+.cardContent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 40px 35px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cardCount {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  font-weight: 500;
+}
+
+.cardTitle {
+  font-size: 1.8rem;
+  color: #FFFFFF;
+}
+
+.cardDesc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 500px;
+}
+
+.cardAction {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-top: 0.5rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: var(--transition-smooth);
+}
+
+.card:hover .cardAction {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2.2rem;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .card,
+  .card:first-child {
+    height: 380px;
+    grid-column: auto;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

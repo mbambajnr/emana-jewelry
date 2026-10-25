@@ -1,0 +1,130 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: 500;
+}
+
+.count {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  border: 1px dashed var(--card-border);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.emptyHint {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+}
+
+.table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  border-bottom: 1px solid var(--card-border);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.7rem;
+}
+
+.table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+
+.nameCell {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.mono {
+  font-family: monospace;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.emailLink {
+  color: var(--gold-primary);
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+.emailLink:hover {
+  text-decoration: underline;
+}
+
+.details {
+  font-size: 0.8rem;
+}
+
+.summary {
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.summary:hover {
+  color: var(--gold-primary);
+}
+
+.itemList {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  list-style: disc;
+}
+
+.total {
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.pending {
+  color: #fbbf24;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+.waContact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #25d366;
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: var(--transition-fast);
+}
+
+.waContact:hover {
+  color: #20bd5a;
+  text-decoration: underline;
+}
+
+.table { display: block; overflow-x: auto; max-width: 100%; }

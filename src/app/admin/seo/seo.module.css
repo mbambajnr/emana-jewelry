@@ -1,0 +1,17 @@
+.page { max-width: 900px; display: grid; gap: 24px; min-width: 0; }
+.page h1 { font-size: clamp(1.8rem, 5vw, 2.5rem); margin-bottom: 12px; }
+.page h2 { font-size: 1.4rem; }
+.page a { color: var(--gold-dark); text-decoration: underline; overflow-wrap: anywhere; }
+.page p { margin-top: 12px; }
+.card { padding: 24px 18px; border: 1px solid var(--card-border); background: white; border-radius: 8px; min-width: 0; }
+.fields { border: 0; padding: 0; display: grid; gap: 24px; min-width: 0; }
+.fields label { display: block; font-weight: 600; margin: 20px 0 8px; }
+.fields textarea { width: 100%; font: inherit; font-size: 16px; padding: 12px; border: 1px solid var(--card-border-hover); border-radius: 4px; resize: vertical; }
+.page ol { padding-left: 22px; margin-top: 16px; line-height: 1.7; }
+.page li + li { margin-top: 8px; }
+.save { padding: 14px 24px; min-height: 48px; background: var(--gold-dark); color: white; border: 0; border-radius: 4px; font: inherit; cursor: pointer; }
+.save:disabled { opacity: .6; cursor: wait; }
+.notice { padding: 16px; background: #f4f0e6; border-left: 3px solid var(--gold-primary); }
+.error { padding: 16px; background: #fff0f0; color: #9b1c1c; }
+.status { font-size: .9rem; font-weight: 600; }
+@media (min-width: 768px) { .card { padding: 32px; } }

@@ -1,0 +1,409 @@
+.section {
+  padding: 100px 4%;
+  position: relative;
+  background: var(--bg-deep);
+  border-top: 1px solid rgba(197, 168, 128, 0.18);
+  border-bottom: 1px solid rgba(197, 168, 128, 0.18);
+}
+
+.header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 48px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.subtitle {
+  font-size: 0.78rem;
+  letter-spacing: 0.25em;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.title {
+  font-size: 2.75rem;
+  font-family: var(--font-serif);
+  color: var(--text-primary);
+  line-height: 1.15;
+}
+
+.desc {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Category Filter Bar */
+.filterBar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 40px;
+}
+
+.filterBtn {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--text-secondary);
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.filterBtn:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-dark);
+  background: rgba(158, 125, 71, 0.06);
+}
+
+.filterBtnActive {
+  background: var(--gold-primary);
+  border-color: var(--gold-primary);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(158, 125, 71, 0.25);
+}
+
+/* Products Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 28px;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Product Card */
+.card {
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(158, 125, 71, 0.4);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08), 0 0 20px rgba(158, 125, 71, 0.1);
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #FAF8F5;
+  overflow: hidden;
+}
+
+.productImage {
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover .productImage {
+  transform: scale(1.06);
+}
+
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(158, 125, 71, 0.35);
+  color: var(--gold-dark);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 3px;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.wishlistBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.wishlistBtn:hover {
+  background: rgba(197, 168, 128, 0.2);
+  color: var(--gold-primary);
+  border-color: var(--gold-primary);
+}
+
+.wishlistBtnActive {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.cardBody {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cardCategory {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-primary);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.cardTitle {
+  font-size: 1.15rem;
+  font-family: var(--font-serif);
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin-bottom: 8px;
+  transition: color var(--transition-fast);
+}
+
+.cardTitle:hover {
+  color: var(--gold-primary);
+}
+
+.specs {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 14px;
+  min-height: 2.2em;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+
+.quoteTag {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Card Actions */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.waBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(158, 125, 71, 0.09);
+  border: 1px solid rgba(158, 125, 71, 0.32);
+  color: var(--gold-dark);
+  padding: 9px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-align: center;
+}
+
+.waBtn:hover {
+  background: var(--gold-primary);
+  color: #FFFFFF;
+  border-color: var(--gold-primary);
+}
+
+.cartBtn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FAF8F5;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.cartBtn:hover {
+  background: rgba(158, 125, 71, 0.15);
+  color: var(--gold-dark);
+  border-color: var(--gold-primary);
+}
+
+.cartBtnAdded {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* View All Row */
+.viewAllContainer {
+  margin-top: 56px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.viewAllBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 34px;
+  background: #FFFFFF;
+  border: 1px solid var(--gold-primary);
+  color: var(--gold-dark);
+  font-size: 0.92rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 14px rgba(158, 125, 71, 0.1);
+}
+
+.viewAllBtn:hover {
+  background: var(--gold-primary);
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(158, 125, 71, 0.25);
+  transform: translateY(-2px);
+}
+
+.viewAllSub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  max-width: 600px;
+  margin: 20px auto 40px auto;
+  padding: 48px 24px;
+  background: #ffffff;
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.emptyTitle {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+.emptyDesc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+}
+
+.emptyActions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.emptyWaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #25D366;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.emptyWaBtn:hover {
+  opacity: 0.9;
+}
+
+.emptyBespokeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1a1a1a;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.emptyBespokeBtn:hover {
+  background: var(--gold-primary);
+}
+
+@media (max-width: 767px) {
+  .section { padding: 56px 20px; }
+  .title { font-size: 2rem; }
+  .header { margin-bottom: 28px; }
+  .emptyActions { flex-direction: column; }
+  .emptyWaBtn, .emptyBespokeBtn { min-height: 48px; width: 100%; text-align: center; justify-content: center; }
+}
+
+.section { padding-inline: var(--content-inset); }
+.grid { max-width: var(--content-width); }
+.card { min-width: 0; }
+.actions { margin-top: auto; padding-top: 14px; }

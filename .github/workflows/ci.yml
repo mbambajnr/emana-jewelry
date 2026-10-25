@@ -1,0 +1,63 @@
+name: CI Pipeline & Test Automation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality-gate:
+    name: Lint, Test & Build Verification
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: emana_ci
+          POSTGRES_PASSWORD: emana_ci
+          POSTGRES_DB: emana_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U emana_ci -d emana_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      SESSION_SECRET: test-secret-key-32-chars-minimum-xyz
+      DATABASE_URL: "postgresql://emana_ci:emana_ci@localhost:5432/emana_test"
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (v24)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Apply Database Migrations
+        run: npx prisma migrate deploy
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run TypeScript Type Check
+        run: npx tsc --noEmit
+
+      - name: Run Automated Test Suite
+        run: npm test
+
+      - name: Run Production Build
+        run: npm run build

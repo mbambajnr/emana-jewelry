@@ -1,0 +1,2 @@
+ALTER TABLE "Product" ADD COLUMN "youtubeUrl" TEXT;
+ALTER TABLE "ProductImage" ADD COLUMN "alt" TEXT NOT NULL DEFAULT '';

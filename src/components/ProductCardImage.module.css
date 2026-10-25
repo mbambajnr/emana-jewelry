@@ -1,0 +1,16 @@
+.frame { position: absolute; inset: 0; pointer-events: none; }
+.image { object-fit: cover; }
+.alternate { opacity: 0; transition: opacity .25s ease; }
+@media (hover: hover) and (pointer: fine) {
+  :global([data-product-card]:hover) .alternate[data-product-alternate="ready"] { opacity: 1; }
+}
+:global([data-product-card]:focus-visible) .alternate[data-product-alternate="ready"] { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .alternate { transition: none; } }
+.photoIndicator { display: none; }
+@media (hover: none), (pointer: coarse) {
+  .frame { pointer-events: auto; touch-action: pan-y pinch-zoom; }
+  .photoIndicator { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; max-width: calc(100% - 32px); flex-wrap: wrap; justify-content: center; padding: 7px 10px; background: #ffffffe8; border: 1px solid #d8cebb; border-radius: 999px; pointer-events: none; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: #c7bdac; }
+  .activeDot { background: var(--gold-dark); width: 15px; border-radius: 4px; }
+  .alternate { display: none; }
+}

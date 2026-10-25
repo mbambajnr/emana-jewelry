@@ -1,0 +1,138 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  padding: 6rem 2rem 4rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 1.8rem;
+  margin-bottom: 2.5rem;
+  color: var(--text-primary);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.browseBtn {
+  display: inline-flex;
+  padding: 12px 26px;
+  background: var(--gold-primary);
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  transition: var(--transition-fast);
+}
+
+.browseBtn:hover {
+  background: var(--gold-dark);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  position: relative;
+  border: 1px solid var(--card-border);
+  background: #FFFFFF;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition: var(--transition-smooth);
+}
+
+.card:hover {
+  border-color: var(--gold-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.cardImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  background: #FAF8F5;
+}
+
+.cardImage {
+  object-fit: cover;
+  transition: var(--transition-smooth);
+}
+
+.card:hover .cardImage {
+  opacity: 0.95;
+  transform: scale(1.04);
+}
+
+.cardBody {
+  padding: 1rem;
+}
+
+.cardSub {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.cardTitle {
+  font-size: 1rem;
+  margin-top: 0.3rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.removeBtn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #ef4444;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: var(--transition-fast);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.removeBtn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  transform: scale(1.08);
+}
+
+@media (max-width: 640px) { .main { padding: 6rem 16px 3rem; } .empty { padding: 32px 12px; } }
+

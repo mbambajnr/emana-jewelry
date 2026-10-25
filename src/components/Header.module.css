@@ -1,0 +1,221 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4%;
+  z-index: 1000;
+  transition: var(--transition-smooth);
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.scrolled {
+  background: var(--nav-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  height: 70px;
+  border-bottom: 1px solid var(--card-border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+.logoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.logoImg {
+  max-height: 60px;
+  max-width: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  letter-spacing: 0.15em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.logoSub {
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  margin-top: 3px;
+  padding-left: 2px;
+}
+
+.nav {
+  display: none;
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+.navLink {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  position: relative;
+  padding: 8px 0;
+  font-weight: 500;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--gold-primary);
+  transition: var(--transition-fast);
+}
+
+.navLink:hover {
+  color: var(--gold-primary);
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.iconLink {
+  position: relative;
+  color: var(--text-primary);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.iconLink:hover {
+  color: var(--gold-primary);
+  transform: translateY(-1px);
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 600;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.iconButton {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.iconButton:hover {
+  color: var(--gold-primary);
+  background: rgba(197, 168, 128, 0.08);
+  transform: translateY(-1px);
+}
+
+.burger {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.burgerLine {
+  width: 24px;
+  height: 2px;
+  background-color: var(--text-primary);
+  transition: var(--transition-fast);
+}
+
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: min(100%, 360px);
+  height: 100dvh;
+  overflow-y: auto;
+  visibility: hidden;
+  background: var(--bg-deep);
+  border-left: 1px solid var(--card-border);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.6);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  padding: 100px 40px 40px 40px;
+  gap: 2rem;
+  transition: right 0.3s ease, visibility 0.3s;
+}
+
+.mobileMenuOpen {
+  right: 0;
+  visibility: visible;
+}
+
+.mobileMenu .navLink {
+  font-size: 1.1rem;
+  display: block;
+}
+
+.mobileMenuClose {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+
+.logoContainer { min-width: 0; max-width: 145px; }
+.actions { flex-shrink: 0; }
+.iconLink, .burger, .mobileMenuClose { min-width: 44px; min-height: 44px; }
+.burger { justify-content: center; align-items: center; }
+.mobileMenu { gap: 0.75rem; padding: 88px 24px max(24px, env(safe-area-inset-bottom)); }
+.mobileMenu .navLink { min-height: 48px; }
+@media (min-width: 1200px) {
+  .nav { display: flex; align-items: center; }
+  .burger { display: none; }
+  .logoContainer { max-width: 180px; }
+  .actions { gap: 0.75rem; }
+  .mobileMenu { display: none; }
+}
+
+.header { padding-inline: var(--content-inset); }

@@ -1,0 +1,32 @@
+.gallery { min-width: 0; display: flex; flex-direction: column-reverse; gap: 12px; }
+.thumbnails { display: flex; gap: 10px; overflow-x: auto; padding: 4px; scrollbar-width: thin; }
+.thumbnail { width: 64px; height: 70px; position: relative; flex-shrink: 0; border: 1px solid #ded8ce; border-radius: 6px; overflow: hidden; background: #fff; cursor: pointer; padding: 4px; }
+.selected { border: 2px solid var(--gold-dark); box-shadow: 0 0 0 2px #ede2cc; }
+.thumbnailImage { object-fit: contain; }
+.videoThumb { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--gold-dark); }
+.videoThumb span { font-size: 25px; }
+.stageColumn { min-width: 0; }
+.stage { position: relative; aspect-ratio: 1; background: #f6f4f0; border: 1px solid #ebe6de; border-radius: 10px; overflow: hidden; }
+.photoButton { display: block; position: absolute; inset: 0; width: 100%; height: 100%; border: 0; cursor: zoom-in; background: transparent; touch-action: pan-y pinch-zoom; }
+.mainPhoto { object-fit: contain; padding: 12px; }
+.arrows { position: absolute; inset: 50% 10px auto; display: flex; justify-content: space-between; pointer-events: none; }
+.arrows button { pointer-events: auto; width: 44px; height: 44px; border: 1px solid #e2ddd2; border-radius: 50%; background: #fffffff0; font-size: 28px; cursor: pointer; color: #34302a; }
+.caption { text-align: center; font-size: .8rem; color: var(--text-secondary); margin-top: 12px; }
+.videoPoster { position: absolute; inset: 0; width: 100%; padding: 24px; border: 0; background: #eee8dc; color: #342c20; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; cursor: pointer; }
+.videoPoster > span:last-child { font-size: .85rem; }
+.playIcon { width: 68px; height: 68px; display: grid; place-items: center; border: 1px solid #bba171; border-radius: 50%; font-size: 36px; }
+.videoFrame { height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 10px; gap: 16px; }
+.videoFrame iframe { width: 100%; aspect-ratio: 16/9; min-height: 200px; border: 0; }
+.videoFrame a { font-size: .8rem; text-align: center; text-decoration: underline; }
+.lightbox { position: fixed; inset: 0; margin: auto; width: min(1100px, 96vw); max-width: 96vw; max-height: 94dvh; padding: 16px; border: 0; border-radius: 10px; background: white; }
+.lightbox::backdrop { background: #15110bd9; }
+.lightboxHeader { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.lightboxHeader button, .lightboxActions button { min-width: 44px; min-height: 44px; cursor: pointer; border: 1px solid #ded8ce; background: #fff; border-radius: 6px; padding: 8px 14px; }
+.expandedImage { height: min(65dvh, 700px); position: relative; }
+.lightboxActions { display: flex; justify-content: center; gap: 16px; }
+@media (min-width: 768px) {
+  .gallery { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-items: start; }
+  .thumbnails { flex-direction: column; max-height: 620px; overflow-y: auto; }
+  .thumbnail { width: 56px; height: 64px; }
+  .gallery { position: sticky; top: 100px; }
+}
