@@ -17,7 +17,7 @@ describe("mobile navigation keyboard access", () => {
   it("keeps focus inside the open menu and returns it to the trigger on Escape", async () => {
     const user = userEvent.setup()
     render(<Header />)
-    const trigger = screen.getByRole("button", { name: "Menu", exact: true })
+    const trigger = screen.getByRole("button", { name: /^Menu$/ })
     await user.click(trigger)
 
     const menu = screen.getByRole("dialog", { name: "Navigation" })
