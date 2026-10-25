@@ -10,14 +10,14 @@ A submission succeeds only after a database write. Database failure returns an e
 
 ## Local database / deployment
 
-The configured PostgreSQL database must be running and reachable. Docker CLI is available on this machine, but its daemon was unavailable during verification. No database reset or replacement was performed.
+The configured PostgreSQL database must be running and reachable. Local verification uses the project database; CI provisions a separate temporary PostgreSQL service. Never point CI or sample-data scripts at the live shop database.
 
 1. Start PostgreSQL or the intended Docker database and confirm DATABASE_URL points to it.
 2. Run `npx prisma migrate deploy` and `npx prisma generate`.
 3. Check `/admin`: unavailable data is shown as a connection error rather than fabricated zero counts.
 4. Test an actual inquiry and appointment using controlled test contacts, then exercise the stages and inspect the activity history.
 
-Pending migrations include settings, product media, social profiles, and request activity. Existing pending inquiries become new; existing confirmed appointments are preserved. New appointments default to requested. Development-only social/search settings currently remain in ignored local files; production uses database tables. They must be entered in the live admin after deployment.
+Migrations cover settings, product media, social profiles, and request activity. Apply all committed migrations to each new deployment. Existing pending inquiries become new; existing confirmed appointments are preserved. New appointments default to requested. Development-only social/search settings currently remain in ignored local files; production uses database tables. They must be entered in the live admin after deployment.
 
 Production builds use Webpack, matching the development script, because the native SWC/Turbopack binding is unavailable on this machine. This avoids changing platform security settings.
 

@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "admin:credentials": "node scripts/create-admin-credentials.mjs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

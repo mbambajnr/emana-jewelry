@@ -17,6 +17,6 @@ Development-only design preview: `/preview/product`. It uses explicitly marked s
 
 ## Local photo uploads
 
-During development, uploads are saved in `.data/product-images` and served through `/media/products/<uuid>.<extension>`. Keep this ignored folder with your local database; removing it removes local uploaded photos. These files are not deployed automatically. Production continues to use the Supabase `product-images` bucket. The currently configured storage hostname failed DNS lookup during troubleshooting and must be corrected/re-enabled before production uploads work.
+During development, uploads are saved in `.data/product-images` and served through `/media/products/<uuid>.<extension>`. Keep this ignored folder with your local database; removing it removes local uploaded photos. These files are not deployed automatically. Production continues to use the Supabase `product-images` bucket. Verify the storage project hostname and bucket access in the target deployment; successful local uploads do not verify the production storage connection.
 
 The form shows upload errors returned by the API and reports broken previews rather than hiding them. Re-upload a photo whose earlier cloud upload failed. Local media URLs intentionally return 404 in production; upload the actual production media to durable cloud storage before migrating local catalog data.
