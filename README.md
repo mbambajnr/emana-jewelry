@@ -11,6 +11,21 @@ A catalog and inquiry website for a jewelry shop in Takoradi, Ghana. Customers b
 - Save favorites and recently viewed products in the browser without signing up.
 - Manage products, collections, inquiries, appointments, search verification, and social links in a staff-only admin.
 
+## Screenshots
+
+Desktop catalog:
+
+![Desktop catalog](docs/screenshots/catalog-desktop.png)
+
+<details>
+<summary>Phone layout</summary>
+
+<img src="docs/screenshots/catalog-mobile.png" alt="Catalog on a 390-pixel-wide phone screen" width="300" />
+
+</details>
+
+Screenshots show local catalog data. See the deployment notes below for moving product data and images to a live environment.
+
 ## Stack and structure
 
 Next.js 16 App Router, React 19, TypeScript, CSS Modules, Prisma 7, and PostgreSQL. Remotion renders the homepage slideshow. Production image uploads use Supabase Storage; optional notification emails use Resend. Vitest and Testing Library cover application logic and selected UI workflows.

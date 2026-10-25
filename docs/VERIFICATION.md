@@ -19,3 +19,12 @@ Use a local/staging database and controlled test contacts. Do not submit test re
 ## Deployment acceptance
 
 Test real image uploads against the configured Supabase bucket, sender verification and email delivery, canonical URLs and sitemap, and database backup/restore. A successful local build does not establish any of those production connections.
+
+## Cleanup verification — 25 October 2026
+
+- All 103 existing tests passed. A separate new navigation test passed for menu focus trapping, Escape, and focus restoration.
+- ESLint, TypeScript, and the Webpack production build passed locally.
+- The built app returned 200 for the homepage, full catalog, catalog search, and a database-backed product detail page. The removed homepage collection heading stayed absent and the extracted services section remained present.
+- `/admin/products` redirected an unauthenticated request to login. Product creation and upload endpoints returned 401 without a session.
+- Browser checks exercised catalog search, opening a product, changing its photo, and mobile navigation to the custom-order form. The catalog had no horizontal overflow at 1280 px and 390 px.
+- No real customer submissions, outgoing WhatsApp messages, production uploads, or email deliveries were made during this pass. Those integrations still require deployment acceptance.
