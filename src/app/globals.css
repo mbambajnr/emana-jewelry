@@ -2,13 +2,13 @@
   --content-width: 1320px;
   --page-gutter: clamp(20px, 3vw, 40px);
   --content-inset: max(var(--page-gutter), calc((100% - var(--content-width)) / 2));
-  /* Bright, Ivory & Pure Silk Backgrounds */
+  /* Backgrounds */
   --background: #FCFBF9;
   --bg-deep: #F5F2EB;
   --bg-elevated: #FFFFFF;
   --nav-bg: rgba(252, 251, 249, 0.94);
   
-  /* Luxury Gold Accents (high contrast & elegance on light backgrounds) */
+  /* Gold palette */
   --gold-primary: #9E7D47;
   --gold-hover: #846733;
   --gold-light: #B8935A;
@@ -16,14 +16,14 @@
   --gold-glow: rgba(158, 125, 71, 0.12);
   --gold-glow-strong: rgba(158, 125, 71, 0.3);
   
-  /* Cards & Surface Containers */
+  /* Cards */
   --card-bg: rgba(255, 255, 255, 0.94);
   --card-bg-solid: #FFFFFF;
   --card-border: rgba(0, 0, 0, 0.08);
   --card-border-hover: rgba(158, 125, 71, 0.4);
   --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
   
-  /* High-Readability Luxury Typography */
+  /* Text colors */
   --foreground: #181716;
   --text-primary: #181716;
   --text-secondary: #484542;
@@ -96,7 +96,7 @@ a {
   transition: var(--transition-fast);
 }
 
-/* Modern Utilities & Premium Aesthetics */
+/* Utilities */
 .luxury-overlay {
   background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, rgba(245, 242, 235, 0.9) 100%);
 }

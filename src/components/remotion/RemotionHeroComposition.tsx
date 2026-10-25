@@ -143,7 +143,7 @@ export default function RemotionHeroComposition() {
               />
             </div>
 
-            {/* Dark & Gold Cinematic Vignette Overlay */}
+            {/* Background contrast */}
             <div
               style={{
                 position: "absolute",
@@ -163,7 +163,7 @@ export default function RemotionHeroComposition() {
               }}
             />
 
-            {/* Programmatic Animated Ambient Light Shimmer */}
+            {/* Moving light overlay */}
             <div
               style={{
                 position: "absolute",
@@ -178,7 +178,7 @@ export default function RemotionHeroComposition() {
               }}
             />
 
-            {/* Remotion In-Frame Content */}
+            {/* Slide content */}
             <div
               style={{
                 position: "absolute",
@@ -238,7 +238,7 @@ export default function RemotionHeroComposition() {
         )
       })}
 
-      {/* Frame Timeline Pulse Indicator at bottom */}
+      {/* Playback progress */}
       <div
         style={{
           position: "absolute",

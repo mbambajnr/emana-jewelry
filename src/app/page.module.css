@@ -43,157 +43,6 @@
   color: var(--text-secondary);
 }
 
-/* HERO SECTION */
-.hero {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  background-color: var(--bg-deep);
-  padding: 0 4%;
-}
-
-.heroBg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.32;
-  filter: saturate(1.05) contrast(1.05);
-  z-index: 1;
-}
-
-.heroOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.76) 0%, rgba(246, 243, 237, 0.94) 100%);
-  z-index: 2;
-}
-
-.heroContent {
-  position: relative;
-  z-index: 3;
-  text-align: center;
-  max-width: 850px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.8rem;
-  align-items: center;
-}
-
-.heroTagline {
-  font-size: 0.9rem;
-  letter-spacing: 0.3em;
-  color: var(--gold-primary);
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-.heroTitle {
-  font-size: 4rem;
-  line-height: 1.15;
-  font-family: var(--font-serif);
-}
-
-.heroDesc {
-  font-size: 1.2rem;
-  color: var(--text-secondary);
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-
-.heroCtas {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-/* COLLECTIONS SECTION */
-.collections {
-  background-color: var(--background);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-}
-
-.collectionCard {
-  position: relative;
-  height: 480px;
-  overflow: hidden;
-  border: 1px solid var(--card-border);
-  border-radius: 6px;
-  cursor: pointer;
-  background-color: #FAF8F5;
-  transition: var(--transition-smooth);
-}
-
-.collectionCardImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: var(--transition-smooth);
-  opacity: 0.85;
-}
-
-.collectionCardOverlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 40px 30px;
-  background: linear-gradient(to top, rgba(18, 16, 14, 0.92) 0%, rgba(18, 16, 14, 0.4) 60%, transparent 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  height: 60%;
-  transition: var(--transition-smooth);
-  z-index: 2;
-}
-
-.collectionCardTitle {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: #FFFFFF;
-}
-
-.collectionCardAction {
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--gold-light);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: var(--transition-smooth);
-}
-
-.collectionCard:hover {
-  border-color: var(--gold-primary);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 0 15px rgba(158, 125, 71, 0.15);
-}
-
-.collectionCard:hover .collectionCardImg {
-  transform: scale(1.08);
-  opacity: 0.95;
-}
-
-.collectionCard:hover .collectionCardAction {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* CUSTOM BUILDER SECTION */
 .customBuilder {
   background-color: var(--bg-deep);
@@ -555,12 +404,6 @@
 
 /* RESPONSIVE STYLING */
 @media (max-width: 1200px) {
-  .heroTitle {
-    font-size: 3.2rem;
-  }
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .builderContainer, .rawEarthContainer, .servicesContainer, .consultationContainer {
     grid-template-columns: 1fr;
     gap: 4rem;
@@ -573,20 +416,6 @@
 @media (max-width: 768px) {
   .section {
     padding: 80px 4%;
-  }
-  .heroTitle {
-    font-size: 2.5rem;
-  }
-  .heroDesc {
-    font-size: 1rem;
-  }
-  .heroCtas {
-    flex-direction: column;
-    width: 100%;
-    gap: 1rem;
-  }
-  .grid {
-    grid-template-columns: 1fr;
   }
   .badgeGrid {
     grid-template-columns: 1fr;
@@ -696,7 +525,7 @@
 
 /* Shared content edges across the home sections. */
 .section { padding-inline: var(--content-inset); }
-.grid, .builderContainer, .rawEarthContainer, .servicesContainer, .consultationContainer, .pillarsGrid { max-width: var(--content-width); margin-inline: auto; min-width: 0; }
+ .builderContainer, .rawEarthContainer, .servicesContainer, .consultationContainer, .pillarsGrid { max-width: var(--content-width); margin-inline: auto; min-width: 0; }
 .builderContainer, .rawEarthContainer, .servicesContainer, .consultationContainer { column-gap: clamp(28px, 4vw, 64px); }
 .quickPaths { max-width: none; padding-inline: var(--content-inset); }
 .pillarsBar { padding-inline: var(--content-inset); }

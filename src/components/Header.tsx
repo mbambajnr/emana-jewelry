@@ -5,6 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./Header.module.css";
 
+const navigationLinks = [
+  { href: "/catalog", label: "Catalog" },
+  { href: "/#custom-jewelry-form", label: "Custom Jewelry" },
+  { href: "/#services", label: "Cleaning & Repairs" },
+  { href: "/#consultation", label: "Book a Visit" },
+]
+
 export default function Header() {
   const menuButton = useRef<HTMLButtonElement>(null);
   const menuPanel = useRef<HTMLDivElement>(null);
@@ -104,10 +111,9 @@ export default function Header() {
         </div>
 
         <nav className={styles.nav}>
-          <Link href="/catalog" className={styles.navLink}>Catalog</Link>
-          <Link href="/#custom-jewelry-form" className={styles.navLink}>Custom Jewelry</Link>
-          <Link href="/#services" className={styles.navLink}>Cleaning &amp; Repairs</Link>
-          <Link href="/#consultation" className={styles.navLink}>Book a Visit</Link>
+          {navigationLinks.map(({ href, label }) => (
+            <Link key={href} href={href} className={styles.navLink}>{label}</Link>
+          ))}
         </nav>
 
         <div className={styles.actions}>
@@ -141,10 +147,9 @@ export default function Header() {
         <button aria-label="Close menu" className={styles.mobileMenuClose} onClick={toggleMobileMenu}>
           &times;
         </button>
-        <Link href="/catalog" className={styles.navLink} onClick={toggleMobileMenu}>Catalog</Link>
-        <Link href="/#custom-jewelry-form" className={styles.navLink} onClick={toggleMobileMenu}>Custom Jewelry</Link>
-        <Link href="/#services" className={styles.navLink} onClick={toggleMobileMenu}>Cleaning &amp; Repairs</Link>
-        <Link href="/#consultation" className={styles.navLink} onClick={toggleMobileMenu}>Book a Visit</Link>
+        {navigationLinks.map(({ href, label }) => (
+          <Link key={href} href={href} className={styles.navLink} onClick={toggleMobileMenu}>{label}</Link>
+        ))}
       </div>
     </>
   );
