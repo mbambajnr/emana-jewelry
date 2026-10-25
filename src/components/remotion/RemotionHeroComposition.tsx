@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import heroImages from "./hero-images.json"
 import {
   interpolate,
   useCurrentFrame,
@@ -9,7 +10,7 @@ import {
 } from "remotion"
 
 interface SceneData {
-  image: string
+  image: keyof typeof heroImages
   title: string
   highlight: string
   description: string
@@ -19,7 +20,7 @@ interface SceneData {
 
 const scenes: SceneData[] = [
   {
-    image: "/hero/artisan_goldsmith.jpg",
+    image: "artisan_goldsmith",
     title: "Shop",
     highlight: "Our Jewelry",
     description: "Browse necklaces, rings, bracelets, earrings, and more.",
@@ -27,7 +28,7 @@ const scenes: SceneData[] = [
     endFrame: 120,
   },
   {
-    image: "/hero/lion_medallion.jpg",
+    image: "lion_medallion",
     title: "Necklaces &",
     highlight: "Pendants",
     description: "Explore the collection and ask us about any piece you like.",
@@ -35,7 +36,7 @@ const scenes: SceneData[] = [
     endFrame: 240,
   },
   {
-    image: "/hero/bear_pendant.jpg",
+    image: "bear_pendant",
     title: "Emana",
     highlight: "Jewelry",
     description: "Shop online or visit our store in Takoradi.",
@@ -132,7 +133,9 @@ export default function RemotionHeroComposition() {
               }}
             >
               <Img
-                src={scene.image}
+                {...heroImages[scene.image]}
+                fetchPriority={isFirst ? "high" : "auto"}
+                decoding="async"
                 alt={scene.title}
                 style={{
                   width: "100%",

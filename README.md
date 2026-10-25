@@ -92,6 +92,8 @@ Apply migrations to a persistent PostgreSQL database and configure production en
 - Some collection/product routes retain sample-data fallbacks when database queries fail. The full catalog and admin do not provide an offline production database replacement.
 - Payment processing and customer accounts are outside the current scope.
 
+Image optimisation details and regeneration steps: [Homepage performance](docs/HOMEPAGE-PERFORMANCE.md).
+
 Further notes: [Backend operations](docs/BACKEND-OPERATIONS.md), [Product media](docs/PRODUCT-MEDIA.md), [Customer browsing](docs/CUSTOMER-BROWSING.md), and [Search visibility](docs/SEARCH-VISIBILITY.md).
 
 ## Development approach

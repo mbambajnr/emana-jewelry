@@ -2,7 +2,7 @@
 
 import React from "react"
 import dynamic from "next/dynamic"
-import Image from "next/image"
+import heroImages from "./remotion/hero-images.json"
 import styles from "./remotion/RemotionHero.module.css"
 
 const RemotionHeroPlayer = dynamic(
@@ -11,12 +11,15 @@ const RemotionHeroPlayer = dynamic(
     ssr: false,
     loading: () => (
       <div className={styles.heroWrapper}>
-        <Image
-          src="/hero/artisan_goldsmith.jpg"
+        {/* Pre-encoded responsive assets also work without a runtime image optimizer. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          {...heroImages.artisan_goldsmith}
           alt="A goldsmith at work in our Takoradi workshop"
-          fill
-          priority
-          style={{ objectFit: "cover", filter: "brightness(0.65)" }}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", filter: "brightness(0.65)" }}
         />
         <div className={styles.overlayContent}>
           <div className={styles.ctaRow}>
@@ -34,5 +37,15 @@ const RemotionHeroPlayer = dynamic(
 )
 
 export default function RemotionHeroSection() {
-  return <RemotionHeroPlayer />
+  return <>
+    <link
+      rel="preload"
+      as="image"
+      href={heroImages.artisan_goldsmith.src}
+      imageSrcSet={heroImages.artisan_goldsmith.srcSet}
+      imageSizes={heroImages.artisan_goldsmith.sizes}
+      fetchPriority="high"
+    />
+    <RemotionHeroPlayer />
+  </>
 }

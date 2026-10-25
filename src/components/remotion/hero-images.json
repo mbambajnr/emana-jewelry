@@ -1,0 +1,17 @@
+{
+  "artisan_goldsmith": {
+    "src": "/hero/optimized/artisan_goldsmith-1400-acb825f32e9f.webp",
+    "srcSet": "/hero/optimized/artisan_goldsmith-640-f9af7ffc9e93.webp 640w, /hero/optimized/artisan_goldsmith-960-4272b9363317.webp 960w, /hero/optimized/artisan_goldsmith-1400-acb825f32e9f.webp 1400w",
+    "sizes": "100vw"
+  },
+  "lion_medallion": {
+    "src": "/hero/optimized/lion_medallion-1400-8a4627f9956a.webp",
+    "srcSet": "/hero/optimized/lion_medallion-640-0af8ed97e530.webp 640w, /hero/optimized/lion_medallion-960-5a774c93028c.webp 960w, /hero/optimized/lion_medallion-1400-8a4627f9956a.webp 1400w",
+    "sizes": "100vw"
+  },
+  "bear_pendant": {
+    "src": "/hero/optimized/bear_pendant-1400-9b4ebfadf275.webp",
+    "srcSet": "/hero/optimized/bear_pendant-640-cb10b6032b13.webp 640w, /hero/optimized/bear_pendant-960-05ed737ad9bd.webp 960w, /hero/optimized/bear_pendant-1400-9b4ebfadf275.webp 1400w",
+    "sizes": "100vw"
+  }
+}
