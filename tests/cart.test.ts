@@ -108,3 +108,27 @@ describe("Cart Storage & State Management", () => {
     expect(getCartCount()).toBe(0)
   })
 })
+
+describe("metal choices in the quote list", () => {
+  beforeEach(() => localStorage.clear())
+  it("keeps Gold and Silver separate and changes only the selected line", () => {
+    const piece = { slug: "pendant", name: "Pendant", image: "/pendant.jpg", price: 0 }
+    addToCart({ ...piece, metal: "Gold" })
+    addToCart({ ...piece, metal: "Silver", quantity: 2 })
+    addToCart({ ...piece, metal: "Gold" })
+    expect(getCart()).toHaveLength(2)
+    expect(getCart().find(item => item.metal === "Gold")?.quantity).toBe(2)
+    updateQuantity("pendant", 4, "Silver")
+    expect(getCart().find(item => item.metal === "Gold")?.quantity).toBe(2)
+    expect(getCart().find(item => item.metal === "Silver")?.quantity).toBe(4)
+    removeFromCart("pendant", "Gold")
+    expect(getCart()).toEqual([expect.objectContaining({ metal: "Silver", quantity: 4 })])
+  })
+  it("preserves older quote items that have no metal choice", () => {
+    const piece = { slug: "pendant", name: "Pendant", image: "/pendant.jpg", price: 0 }
+    addToCart(piece)
+    addToCart({ ...piece, metal: "Silver" })
+    removeFromCart("pendant", "Silver")
+    expect(getCart()).toEqual([expect.objectContaining({ slug: "pendant", quantity: 1 })])
+  })
+})

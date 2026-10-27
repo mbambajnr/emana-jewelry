@@ -1,5 +1,7 @@
 "use client"
 
+import { METAL_OPTIONS, productMetalOptions, type MetalOption } from "@/lib/product-options"
+
 import { normalizeYoutubeUrl } from "@/lib/product-media"
 import { useState, useRef, type FormEvent } from "react"
 import { useRouter } from "next/navigation"
@@ -16,6 +18,7 @@ export interface ProductData {
   name?: string
   slug?: string
   subcategory?: string | null
+  metalOptions?: string[]
   price?: number
   originalPrice?: number | null
   description?: string
@@ -68,6 +71,8 @@ export default function ProductForm({
     available: product?.available ?? true,
     categoryId: product?.categoryId ?? categories[0]?.id ?? "",
   })
+
+  const [metalOptions, setMetalOptions] = useState<MetalOption[]>(productMetalOptions(product?.metalOptions))
 
   const [details, setDetails] = useState<string[]>(
     product?.details?.map((d) => d.text) ?? [""],
@@ -175,11 +180,13 @@ export default function ProductForm({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (!form.categoryId) { setError("Choose a collection or create one below before saving."); return }
+    if (metalOptions.length === 0) { setError("Choose Gold, Silver, or both for this product."); return }
     setSaving(true)
     setError("")
 
     const body = {
       ...form,
+      metalOptions,
       details: details.filter((d) => d.trim()).map((text) => ({ text })),
       images: images.map((url, index) => ({ url, alt: imageAlts[index] || "" })).filter(image => image.url.trim()),
       materials: materials.filter((m) => m.metal && m.purity),
@@ -216,6 +223,15 @@ export default function ProductForm({
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       {error && <div role="alert" className={styles.error}>{error}</div>}
+
+      <fieldset className={styles.metalOptions}>
+        <legend>Metal choices for clients</legend>
+        <p>Select the options clients can request for this piece.</p>
+        <div>{METAL_OPTIONS.map(option => <label key={option}>
+          <input type="checkbox" checked={metalOptions.includes(option)} onChange={event => setMetalOptions(previous => event.target.checked ? [...previous, option] : previous.filter(value => value !== option))} />
+          {option}
+        </label>)}</div>
+      </fieldset>
 
       <div className={styles.grid2}>
         <div className={styles.field}>

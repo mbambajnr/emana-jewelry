@@ -10,6 +10,7 @@ interface CartItem {
   name: string
   image: string
   price: number
+  metal?: string
   quantity: number
 }
 
@@ -101,8 +102,8 @@ async function OrderList() {
                       </summary>
                       <ul className={styles.itemList}>
                         {items.map((i) => (
-                          <li key={i.slug}>
-                            {i.name} × {i.quantity}
+                          <li key={JSON.stringify([i.slug, i.metal])}>
+                            {i.name}{i.metal ? ` — ${i.metal}` : ""} × {i.quantity}
                           </li>
                         ))}
                       </ul>

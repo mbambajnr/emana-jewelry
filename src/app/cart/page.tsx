@@ -152,7 +152,7 @@ export default function CartPage() {
             <>
               <div className={styles.items}>
                 {items.map((item) => (
-                  <div key={item.slug} className={styles.item}>
+                  <div key={JSON.stringify([item.slug, item.metal])} className={styles.item}>
                     <Link href={`/products/${encodeURIComponent(item.slug)}`} className={styles.itemImageLink}>
                       <div className={styles.itemImageWrapper}>
                         <Image src={item.image} alt={item.name} fill className={styles.itemImage} />
@@ -162,28 +162,29 @@ export default function CartPage() {
                       <Link href={`/products/${encodeURIComponent(item.slug)}`} className={styles.itemName}>
                         {item.name}
                       </Link>
+                      {item.metal && <p>Metal: {item.metal}</p>}
                       <div className={styles.itemControls}>
                         <div className={styles.qtyControl}>
                           <button
                             className={styles.qtyBtn}
-                            onClick={() => updateQuantity(item.slug, item.quantity - 1)}
-                            aria-label="Decrease quantity"
+                            onClick={() => updateQuantity(item.slug, item.quantity - 1, item.metal)}
+                            aria-label={`Decrease quantity for ${item.name}${item.metal ? ` in ${item.metal}` : ""}`}
                           >
                             &minus;
                           </button>
                           <span className={styles.qtyValue}>{item.quantity}</span>
                           <button
                             className={styles.qtyBtn}
-                            onClick={() => updateQuantity(item.slug, item.quantity + 1)}
-                            aria-label="Increase quantity"
+                            onClick={() => updateQuantity(item.slug, item.quantity + 1, item.metal)}
+                            aria-label={`Increase quantity for ${item.name}${item.metal ? ` in ${item.metal}` : ""}`}
                           >
                             +
                           </button>
                         </div>
                         <button
                           className={styles.removeBtn}
-                          onClick={() => removeFromCart(item.slug)}
-                          aria-label={`Remove ${item.name}`}
+                          onClick={() => removeFromCart(item.slug, item.metal)}
+                          aria-label={`Remove ${item.name}${item.metal ? ` in ${item.metal}` : ""}`}
                         >
                           Remove
                         </button>

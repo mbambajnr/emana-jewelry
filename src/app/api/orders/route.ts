@@ -1,3 +1,4 @@
+import { productMetalOptions } from "@/lib/product-options"
 import { after, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { sendOrderNotification, sendOrderConfirmation } from "@/lib/notifications"
@@ -11,10 +12,16 @@ export async function POST(request: Request) {
   } catch (error) { return NextResponse.json({ error: error instanceof InputError ? error.message : "Please check your request." }, { status: 400 }) }
   try {
     const products = await prisma.product.findMany({ where: { slug: { in: input.items.map(item => item.slug) } }, include: { images: { take: 1, orderBy: { sortOrder: "asc" } } } })
-    if (products.length !== input.items.length) return NextResponse.json({ error: "A piece in your request is no longer listed. Please refresh your cart." }, { status: 400 })
+    if (products.length !== new Set(input.items.map(item => item.slug)).size) return NextResponse.json({ error: "A piece in your request is no longer listed. Please refresh your cart." }, { status: 400 })
+    for (const item of input.items) {
+      const product = products.find(product => product.slug === item.slug)!
+      if (item.metal && !productMetalOptions(product.metalOptions).includes(item.metal)) {
+        return NextResponse.json({ error: `${item.metal} is no longer an option for ${product.name}. Please open the product and update your request.` }, { status: 400 })
+      }
+    }
     const items = input.items.map(item => {
       const product = products.find(product => product.slug === item.slug)!
-      return { slug: product.slug, name: product.name, image: product.images[0]?.url || "/hero_bg.png", price: 0, quantity: item.quantity }
+      return { slug: product.slug, name: product.name, image: product.images[0]?.url || "/hero_bg.png", price: 0, quantity: item.quantity, ...(item.metal ? { metal: item.metal } : {}) }
     })
     // Legacy numeric fields stay zero; this is an unpriced inquiry, not a free order.
     const total = 0

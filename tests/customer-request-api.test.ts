@@ -21,6 +21,17 @@ describe("Customer inquiry persistence", () => {
     expect(mocks.order).toHaveBeenCalledWith({ data: expect.objectContaining({ total: 0, status: "new", items: [expect.objectContaining({ name: "Real Ring", price: 0, quantity: 2 })] }) })
     expect(mocks.after).toHaveBeenCalledOnce()
   })
+  it("saves separate Gold and Silver selections with server catalog names", async () => {
+    const response = await inquiry(post({ ...order, items: [{ slug: "ring", quantity: 1, metal: "Gold" }, { slug: "ring", quantity: 2, metal: "Silver" }] }))
+    expect(response.status).toBe(201)
+    expect(mocks.order).toHaveBeenCalledWith({ data: expect.objectContaining({ items: [expect.objectContaining({ name: "Real Ring", metal: "Gold", quantity: 1 }), expect.objectContaining({ name: "Real Ring", metal: "Silver", quantity: 2 })] }) })
+  })
+  it("rejects a metal removed from the product before a request is submitted", async () => {
+    mocks.products.mockResolvedValue([{ slug: "ring", name: "Real Ring", metalOptions: ["Gold"], images: [] }])
+    const response = await inquiry(post({ ...order, items: [{ slug: "ring", quantity: 1, metal: "Silver" }] }))
+    expect(response.status).toBe(400)
+    expect(mocks.order).not.toHaveBeenCalled()
+  })
   it("does not return success or send email after a database failure", async () => {
     mocks.order.mockRejectedValue(new Error("offline"))
     const response = await inquiry(post(order))

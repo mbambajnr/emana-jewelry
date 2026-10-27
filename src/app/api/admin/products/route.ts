@@ -1,3 +1,4 @@
+import { validateMetalOptions } from "@/lib/product-options"
 import { normalizeYoutubeUrl } from "@/lib/product-media"
 import { isAdminRequest } from "@/lib/admin-request"
 import { NextResponse } from "next/server"
@@ -12,6 +13,7 @@ export async function POST(request: Request) {
     const product = await prisma.product.create({
       data: {
         youtubeUrl,
+        metalOptions: validateMetalOptions(body.metalOptions),
         slug: body.slug,
         name: body.name,
         subcategory: body.subcategory || null,

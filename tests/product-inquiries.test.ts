@@ -16,3 +16,7 @@ describe("Simple product WhatsApp inquiry", () => {
     }
   })
 })
+
+it("includes the client's metal preference in a product enquiry", () => {
+  expect(buildProductInquiryConciergeMessage("Pendant", "/products/pendant", "Silver")).toContain("*Pendant* in Silver")
+})

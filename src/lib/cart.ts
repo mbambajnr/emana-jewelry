@@ -1,3 +1,5 @@
+import type { MetalOption } from "./product-options"
+
 const STORAGE_KEY = "emana_cart"
 
 export interface CartItem {
@@ -6,6 +8,7 @@ export interface CartItem {
   image: string
   price: number
   quantity: number
+  metal?: MetalOption
 }
 
 export function getCart(): CartItem[] {
@@ -24,7 +27,7 @@ function saveCart(items: CartItem[]) {
 
 export function addToCart(item: Omit<CartItem, "quantity"> & { quantity?: number }) {
   const items = getCart()
-  const existing = items.find((i) => i.slug === item.slug)
+  const existing = items.find((i) => i.slug === item.slug && i.metal === item.metal)
   if (existing) {
     existing.quantity += item.quantity ?? 1
   } else {
@@ -34,16 +37,16 @@ export function addToCart(item: Omit<CartItem, "quantity"> & { quantity?: number
   return items
 }
 
-export function removeFromCart(slug: string) {
-  const items = getCart().filter((i) => i.slug !== slug)
+export function removeFromCart(slug: string, metal?: MetalOption) {
+  const items = getCart().filter((i) => i.slug !== slug || i.metal !== metal)
   saveCart(items)
   return items
 }
 
-export function updateQuantity(slug: string, quantity: number) {
-  if (quantity < 1) return removeFromCart(slug)
+export function updateQuantity(slug: string, quantity: number, metal?: MetalOption) {
+  if (quantity < 1) return removeFromCart(slug, metal)
   const items = getCart()
-  const item = items.find((i) => i.slug === slug)
+  const item = items.find((i) => i.slug === slug && i.metal === metal)
   if (item) {
     item.quantity = quantity
     saveCart(items)

@@ -6,6 +6,7 @@ A catalog and inquiry website for a jewelry shop in Takoradi, Ghana. Customers b
 
 - Search and filter the catalog by collection, with pagination.
 - View product photos, swipe between images on mobile, and optionally watch a product's YouTube video.
+- Choose Gold or Silver on product pages; staff control the offered choices for each piece.
 - Send a WhatsApp price enquiry with the product name and link, or submit a quote list.
 - Request an appointment for custom jewelry, cleaning, or repairs.
 - Save favorites and recently viewed products in the browser without signing up.
@@ -93,6 +94,8 @@ Apply migrations to a persistent PostgreSQL database and configure production en
 - Payment processing and customer accounts are outside the current scope.
 
 Image optimisation details and regeneration steps: [Homepage performance](docs/HOMEPAGE-PERFORMANCE.md).
+
+Product option setup: [Gold and Silver choices](docs/PRODUCT-OPTIONS.md).
 
 Further notes: [Backend operations](docs/BACKEND-OPERATIONS.md), [Product media](docs/PRODUCT-MEDIA.md), [Customer browsing](docs/CUSTOMER-BROWSING.md), and [Search visibility](docs/SEARCH-VISIBILITY.md).
 

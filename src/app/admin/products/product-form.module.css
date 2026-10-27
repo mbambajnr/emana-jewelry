@@ -246,3 +246,10 @@
 .inlineCollection label { font-size: .85rem; }
 .collectionActions { display: flex; flex-wrap: wrap; gap: 12px; }
 .collectionActions button { min-height: 44px; }
+
+.metalOptions { border: 1px solid var(--card-border); padding: 20px; border-radius: 8px; margin-bottom: 24px; }
+.metalOptions legend { padding-inline: 6px; font-weight: 600; }
+.metalOptions p { font-size: .85rem; margin-bottom: 12px; }
+.metalOptions > div { display: flex; flex-wrap: wrap; gap: 16px; }
+.metalOptions label { display: inline-flex; gap: 10px; align-items: center; min-height: 44px; cursor: pointer; }
+.metalOptions input { width: 18px; height: 18px; accent-color: var(--gold-dark); }

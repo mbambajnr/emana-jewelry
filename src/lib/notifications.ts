@@ -22,7 +22,7 @@ export async function sendOrderNotification(order: {
   const itemsHtml = order.items
     .map(
       (i) =>
-        `<tr><td style="padding: 6px 8px; border-bottom: 1px solid #eee;">${escapeHtml(i.name)}</td><td style="padding: 6px 8px; border-bottom: 1px solid #eee; text-align: center;">${i.quantity}</td></tr>`
+        `<tr><td style="padding: 6px 8px; border-bottom: 1px solid #eee;">${escapeHtml(i.name)}${i.metal ? ` — ${escapeHtml(i.metal)}` : ""}</td><td style="padding: 6px 8px; border-bottom: 1px solid #eee; text-align: center;">${i.quantity}</td></tr>`
     )
     .join("")
 
@@ -77,7 +77,7 @@ export async function sendOrderConfirmation(order: {
   const itemsHtml = order.items
     .map(
       (i) =>
-        `<tr><td style="padding: 6px 8px; border-bottom: 1px solid #eee;">${escapeHtml(i.name)}</td><td style="padding: 6px 8px; border-bottom: 1px solid #eee; text-align: center;">${i.quantity}</td></tr>`
+        `<tr><td style="padding: 6px 8px; border-bottom: 1px solid #eee;">${escapeHtml(i.name)}${i.metal ? ` — ${escapeHtml(i.metal)}` : ""}</td><td style="padding: 6px 8px; border-bottom: 1px solid #eee; text-align: center;">${i.quantity}</td></tr>`
     )
     .join("")
 

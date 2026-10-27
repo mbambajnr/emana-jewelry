@@ -1,3 +1,4 @@
+import { validateMetalOptions } from "@/lib/product-options"
 import { normalizeYoutubeUrl } from "@/lib/product-media"
 import { isAdminRequest } from "@/lib/admin-request"
 import { NextResponse } from "next/server"
@@ -17,6 +18,7 @@ export async function PUT(
       where: { id },
       data: {
         youtubeUrl,
+        metalOptions: body.metalOptions === undefined ? undefined : validateMetalOptions(body.metalOptions),
         slug: body.slug,
         name: body.name,
         subcategory: body.subcategory || null,

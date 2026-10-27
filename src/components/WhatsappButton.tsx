@@ -1,5 +1,6 @@
 "use client"
 
+import type { MetalOption } from "@/lib/product-options"
 import { type MouseEvent } from "react"
 import {
   buildProductInquiryConciergeMessage,
@@ -10,12 +11,14 @@ import {
 export function WhatsappButton({
   productName,
   productUrl,
+  metal,
   className,
   iconSize = 18,
   label,
 }: {
   productName: string
   productUrl: string
+  metal?: MetalOption
   className?: string
   iconSize?: number
   label?: string
@@ -29,7 +32,7 @@ export function WhatsappButton({
         ? productUrl
         : `${origin}${productUrl}`
       : productUrl
-    const message = buildProductInquiryConciergeMessage(productName, fullUrl)
+    const message = buildProductInquiryConciergeMessage(productName, fullUrl, metal)
     const href = getWhatsAppConciergeUrl(message)
     window.open(href, "_blank", "noopener,noreferrer")
 

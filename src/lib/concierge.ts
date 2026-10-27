@@ -1,3 +1,4 @@
+import type { MetalOption } from "./product-options"
 import { absoluteUrl } from "./seo"
 
 export const CONCIERGE_PHONE = "233242186590"
@@ -8,6 +9,7 @@ export const CONCIERGE_HOURS = "Monday – Saturday: 9:00 AM – 6:00 PM GMT"
 export interface ConciergeItem {
   name: string
   quantity: number
+  metal?: MetalOption
   price?: number
   slug?: string
 }
@@ -38,7 +40,7 @@ export function buildOrderConciergeMessage(details: ConciergeOrderDetails): stri
   parts.push("Hello Emana, please let me know the price and availability of these pieces:")
 
   details.items.forEach((item, index) => {
-    parts.push(`${index + 1}. *${item.name}* × ${item.quantity}`)
+    parts.push(`${index + 1}. *${item.name}*${item.metal ? ` — ${item.metal}` : ""} × ${item.quantity}`)
   })
 
   if (details.customerName || details.deliveryAddress || details.notes) {
@@ -63,9 +65,10 @@ export function buildOrderConciergeMessage(details: ConciergeOrderDetails): stri
 export function buildProductInquiryConciergeMessage(
   productName: string,
   productUrl?: string,
+  metal?: MetalOption,
 ): string {
   const parts = [
-    `Hello Emana, I’m interested in the *${productName}*.`,
+    `Hello Emana, I’m interested in the *${productName}*${metal ? ` in ${metal}` : ""}.`,
     "Please, how much is it?",
   ]
   if (productUrl) {

@@ -25,6 +25,7 @@ model Product {
   name           String
   youtubeUrl     String?
   subcategory    String?
+  metalOptions   String[]       @default(["Gold", "Silver"])
   price          Float
   originalPrice  Float?
   description    String
