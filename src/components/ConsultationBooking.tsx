@@ -1,6 +1,8 @@
 "use client"
 
-import { useState, useEffect, type FormEvent } from "react"
+import { useSiteContent } from "@/components/cms/SiteContentProvider"
+import { bookableServices, serviceValue, serviceLabel } from "@/lib/site-content"
+import { useState, useEffect, useMemo, type FormEvent } from "react"
 import styles from "./ConsultationBooking.module.css"
 
 interface FormData {
@@ -21,21 +23,12 @@ interface FormErrors {
   date?: string
 }
 
-const services = [
-  "Bespoke Design Walkthrough (30 Mins)",
-  "Gemstone Sourcing Consultation (45 Mins)",
-  "Metal Sizing & Scaling Analysis (30 Mins)",
-  "Jewelry Cleaning & Deep Detailing (30 Mins)",
-  "Resizing & Repair Assessment (45 Mins)",
-  "Antique Restoration Consultation (60 Mins)",
-]
-
 const formats = [
   "Private Atelier (Takoradi - Justmoh Ave)",
   "WhatsApp Concierge Video Consultation",
 ]
 
-const bookingLabels: Record<string, string> = {
+const formatAndLegacyLabels: Record<string, string> = {
   "Bespoke Design Walkthrough (30 Mins)": "Talk About Your Custom Design (30 Mins)",
   "Gemstone Sourcing Consultation (45 Mins)": "Help Choosing Gemstones (45 Mins)",
   "Metal Sizing & Scaling Analysis (30 Mins)": "Help With Sizing and Materials (30 Mins)",
@@ -46,11 +39,6 @@ const bookingLabels: Record<string, string> = {
   "WhatsApp Concierge Video Consultation": "WhatsApp Video Call"
 }
 
-const isCareOrRepair = (service: string) =>
-  service.includes("Cleaning") ||
-  service.includes("Repair") ||
-  service.includes("Restoration")
-
 const tomorrow = () => {
   const d = new Date()
   d.setDate(d.getDate() + 1)
@@ -58,12 +46,20 @@ const tomorrow = () => {
 }
 
 export default function ConsultationBooking() {
+  const { services: registry, preview } = useSiteContent()
+  const available = useMemo(() => bookableServices({ copy: {}, faqs: [], services: registry }), [registry])
+  const services = useMemo(() => available.map(serviceValue), [available])
+  const customService = available.find(service => service.kind === "custom")
+  const customValue = customService ? serviceValue(customService) : services[0] || ""
+  const bookingLabels = { ...formatAndLegacyLabels, ...Object.fromEntries(available.map(service => [serviceValue(service), serviceLabel(service)])) }
+  const isCareOrRepair = (value: string) => available.find(service => serviceValue(service) === value)?.kind === "care"
+
   const [minDate, setMinDate] = useState("")
   const [form, setForm] = useState<FormData>({
     name: "",
     email: "",
     phone: "",
-    service: services[0],
+    service: services[0] || "",
     notes: "",
     format: formats[0],
     date: "",
@@ -81,7 +77,7 @@ export default function ConsultationBooking() {
 
   useEffect(() => {
     const selectCustomDesign = () => {
-      setForm(previous => ({ ...previous, service: services[0] }))
+      setForm(previous => ({ ...previous, service: customValue }))
       setStatus("idle")
       setServerError("")
       setErrors(previous => ({ ...previous, service: undefined }))
@@ -96,7 +92,7 @@ export default function ConsultationBooking() {
     window.addEventListener("hashchange", onHashChange)
     document.addEventListener("click", onClick)
     return () => { clearTimeout(timer); window.removeEventListener("hashchange", onHashChange); document.removeEventListener("click", onClick) }
-  }, [])
+  }, [customValue])
 
   const update = (field: keyof FormData, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -112,7 +108,7 @@ export default function ConsultationBooking() {
     if (!form.name.trim()) errs.name = "Full name is required"
     if (!form.email.trim()) errs.email = "Email is required"
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = "Invalid email address"
-    if (!form.service.trim()) errs.service = "Select a service"
+    if (!services.includes(form.service)) errs.service = "Select a service"
     if (!form.format.trim()) errs.format = "Select an appointment format"
     if (!form.date.trim()) errs.date = "Select a preferred date"
     else if (form.date < tomorrow()) errs.date = "Date must be in the future"
@@ -122,7 +118,7 @@ export default function ConsultationBooking() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!validate()) return
+    if (preview || !validate()) return
 
     setStatus("submitting")
     setServerError("")
@@ -192,7 +188,7 @@ export default function ConsultationBooking() {
             onClick={() => {
               setStatus("idle")
               setForm({
-                name: "", email: "", phone: "", service: services[0], notes: "", format: formats[0], date: tomorrow(),
+                name: "", email: "", phone: "", service: services[0] || "", notes: "", format: formats[0], date: tomorrow(),
               })
             }}
           >
@@ -220,6 +216,8 @@ export default function ConsultationBooking() {
       </a>
 
       <p className={styles.formHint}>Choose a service and a day that suits you. You can also book directly on WhatsApp.</p>
+      {preview && <p role="status">Draft preview — appointments cannot be submitted here.</p>}
+      {services.length === 0 && <p role="status">Please contact us on WhatsApp to arrange a service.</p>}
       <form onSubmit={handleSubmit} className={styles.form}>
         {/* Name */}
         <div className={styles.field}>
@@ -362,7 +360,7 @@ export default function ConsultationBooking() {
         <button
           type="submit"
           className={styles.submitBtn}
-          disabled={status === "submitting"}
+          disabled={preview || services.length === 0 || status === "submitting"}
         >
           {status === "submitting" ? (
             <><span className={styles.spinner} aria-hidden="true" /> Sending your request…</>

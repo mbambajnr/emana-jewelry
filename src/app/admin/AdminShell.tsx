@@ -11,7 +11,7 @@ export default function AdminShell({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
-  if (pathname === "/admin/login") return <>{children}</>
+  if (pathname === "/admin/login" || pathname === "/admin/content/preview") return <>{children}</>
   return (
     <div className={styles.layout}>
       <aside className={styles.sidebar}>
@@ -23,6 +23,8 @@ export default function AdminShell({
           <span className={styles.groupLabel}>Catalog</span>
           <Link href="/admin/products" aria-current={pathname === "/admin/products" ? "page" : undefined} className={styles.navLink}>Products &amp; Media</Link>
           <Link href="/admin/categories" aria-current={pathname === "/admin/categories" ? "page" : undefined} className={styles.navLink}>Collections</Link>
+          <span className={styles.groupLabel}>Website</span>
+          <Link href="/admin/content" aria-current={pathname.startsWith("/admin/content") ? "page" : undefined} className={styles.navLink}>Content, Services &amp; FAQs</Link>
           <span className={styles.groupLabel}>Client Care</span>
           <Link href="/admin/orders" aria-current={pathname === "/admin/orders" ? "page" : undefined} className={styles.navLink}>Customer Requests</Link>
           <Link href="/admin/consultations" aria-current={pathname === "/admin/consultations" ? "page" : undefined} className={styles.navLink}>Appointments</Link>

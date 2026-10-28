@@ -1,0 +1,23 @@
+.editor { max-width: 1100px; margin: auto; }
+.editor h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 12px; }
+.editor p { line-height: 1.6; margin-bottom: 16px; }
+.toolbar, .row, .tabs { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.toolbar { position: sticky; top: 0; background: #fcfbf9f5; border: 1px solid var(--card-border); border-radius: 8px; padding: 16px; margin: 24px 0; z-index: 2; }
+.toolbar span { margin-right: auto; font-size: .85rem; }
+.editor button, .toolbar a { min-height: 44px; padding: 10px 16px; border: 1px solid #d5cbb9; border-radius: 6px; background: white; color: var(--gold-dark); cursor: pointer; font: inherit; font-size: .85rem; }
+.editor button:disabled { opacity: .5; cursor: default; }
+.editor .primary, .tabs [aria-pressed="true"] { color: white; background: var(--gold-dark); }
+.tabs { margin-bottom: 24px; }
+.body { min-width: 0; border: 0; padding: 0; }
+.card { padding: 20px; border: 1px solid var(--card-border); border-radius: 8px; background: white; margin: 16px 0; }
+.card summary { font-weight: 600; cursor: pointer; min-height: 32px; }
+.fields { display: grid; gap: 16px; margin-top: 20px; }
+.field { display: grid; gap: 8px; font-size: .9rem; margin-bottom: 16px; overflow-wrap: anywhere; }
+.field input, .field textarea, .field select { min-width: 0; width: 100%; min-height: 44px; padding: 12px; border: 1px solid #d5cbb9; border-radius: 6px; background: white; color: #25211c; font: inherit; }
+.field textarea { resize: vertical; }
+.image { max-height: 180px; max-width: 100%; object-fit: contain; justify-self: start; }
+.switches { display: flex; gap: 20px; flex-wrap: wrap; }
+.switches label { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+.switches input { width: 18px; height: 18px; accent-color: var(--gold-dark); }
+.notice, .error { padding: 16px; border-radius: 6px; background: #edf5eb; }
+.error { background: #fff0ec; color: #872c20; }

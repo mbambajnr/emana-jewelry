@@ -1,5 +1,7 @@
 "use client"
 
+import { useSiteContent } from "@/components/cms/SiteContentProvider";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,6 +9,7 @@ import FooterSocials from "./FooterSocials";
 import styles from "./Footer.module.css";
 
 export default function Footer() {
+  const { copy } = useSiteContent();
   return (
     <footer className={styles.footer}>
       <div className={styles.grid}>
@@ -20,9 +23,7 @@ export default function Footer() {
                 className={styles.logoImg}
               />
           </div>
-          <p className={styles.desc}>
-            Jewelry for your everyday moments and special occasions, in a range of materials and styles. Visit us in Takoradi or speak with us about a piece made just for you.
-          </p>
+          <p className={styles.desc}>{copy["footer.001"]}</p>
           <FooterSocials />
         </div>
 
@@ -78,9 +79,7 @@ export default function Footer() {
               </a>
             </li>
           </ul>
-          <p className={styles.newsletterDesc}>
-            Leave your email to hear about new jewelry, gemstones, and ideas for your next piece.
-          </p>
+          <p className={styles.newsletterDesc}>{copy["footer.002"]}</p>
           <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
             <input
               type="email"

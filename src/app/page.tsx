@@ -1,9 +1,13 @@
+import { publishedContent } from "@/lib/content-store"
 import { Suspense } from "react"
 import FeaturedProducts from "@/components/FeaturedProducts"
 import HomeContent from "./home-content"
 import { businessSchema, jsonLdString, pageMetadata, SITE_URL } from "@/lib/seo"
 
-export const metadata = pageMetadata("Jewelry & Custom Designs in Takoradi, Ghana", "Explore jewelry for your style and budget in Takoradi, Ghana. Ask Emana Jewelry about custom designs, materials, gemstones, cleaning, and repairs.", "/")
+export async function generateMetadata() {
+  const { copy } = await publishedContent()
+  return pageMetadata(copy["seo.homeTitle"], copy["seo.homeDescription"], "/")
+}
 
 export default function HomePage() {
   return <>

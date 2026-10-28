@@ -1,5 +1,7 @@
 "use client"
 
+import { useSiteContent } from "@/components/cms/SiteContentProvider";
+
 import React, { useRef, useState, useEffect } from "react"
 import { Player, type PlayerRef } from "@remotion/player"
 import Link from "next/link"
@@ -7,6 +9,7 @@ import RemotionHeroComposition from "./RemotionHeroComposition"
 import styles from "./RemotionHero.module.css"
 
 export default function RemotionHeroPlayer() {
+  const { copy } = useSiteContent();
   const containerRef = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ width: 375, height: 760 })
 
@@ -79,15 +82,9 @@ export default function RemotionHeroPlayer() {
       <div className={styles.overlayContent}>
         {/* Call to Actions */}
         <div className={styles.ctaRow}>
-          <a href="/catalog" className={styles.btnPrimary}>
-            Shop Jewelry
-          </a>
-          <a href="#custom-jewelry-form" className={styles.btnSecondary}>
-            Custom Orders
-          </a>
-          <Link href="/#atelier-location" className={styles.btnOutline}>
-            Visit Takoradi Store
-          </Link>
+          <a href="/catalog" className={styles.btnPrimary}>{copy["heroActions.001"]}</a>
+          <a href="#custom-jewelry-form" className={styles.btnSecondary}>{copy["heroActions.002"]}</a>
+          <Link href="/#atelier-location" className={styles.btnOutline}>{copy["heroActions.003"]}</Link>
         </div>
 
         {/* Scene Navigation & Player Controls */}
@@ -100,7 +97,7 @@ export default function RemotionHeroPlayer() {
               aria-label="Scene 1: Shop jewelry"
             >
               <span className={styles.pillNum}>01</span>
-              <span className={styles.pillLabel}>Our Takoradi Workshop</span>
+              <span className={styles.pillLabel}>{copy["heroActions.004"]}</span>
             </button>
 
             <button
@@ -110,7 +107,7 @@ export default function RemotionHeroPlayer() {
               aria-label="Scene 2: Necklaces and pendants"
             >
               <span className={styles.pillNum}>02</span>
-              <span className={styles.pillLabel}>Necklaces & Pendants</span>
+              <span className={styles.pillLabel}>{copy["heroActions.005"]}</span>
             </button>
 
             <button
@@ -120,7 +117,7 @@ export default function RemotionHeroPlayer() {
               aria-label="Scene 3: Emana Jewelry"
             >
               <span className={styles.pillNum}>03</span>
-              <span className={styles.pillLabel}>Emana Jewelry</span>
+              <span className={styles.pillLabel}>{copy["heroActions.006"]}</span>
             </button>
           </div>
 

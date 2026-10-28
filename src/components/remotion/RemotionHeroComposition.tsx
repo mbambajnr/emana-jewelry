@@ -1,7 +1,9 @@
 "use client"
 
 import React from "react"
+import { useSiteContent } from "@/components/cms/SiteContentProvider"
 import heroImages from "./hero-images.json"
+import { heroImageProps } from "./hero-image-props"
 import {
   interpolate,
   useCurrentFrame,
@@ -46,6 +48,7 @@ const scenes: SceneData[] = [
 ]
 
 export default function RemotionHeroComposition() {
+  const { copy } = useSiteContent()
   const frame = useCurrentFrame()
   const { durationInFrames, width } = useVideoConfig()
 
@@ -133,10 +136,10 @@ export default function RemotionHeroComposition() {
               }}
             >
               <Img
-                {...heroImages[scene.image]}
+                {...heroImageProps(scene.image, copy[`hero.${index}.image`])}
                 fetchPriority={isFirst ? "high" : "auto"}
                 decoding="async"
-                alt={scene.title}
+                alt={`${copy[`hero.${index}.title`]} ${copy[`hero.${index}.highlight`]}`}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -209,7 +212,7 @@ export default function RemotionHeroComposition() {
                   textShadow: "0 4px 24px rgba(0, 0, 0, 0.7)",
                 }}
               >
-                {scene.title}{" "}
+                {copy[`hero.${index}.title`]}{" "}
                 <span
                   style={{
                     background: "linear-gradient(135deg, #f7e0a3 0%, #d4af37 50%, #aa820a 100%)",
@@ -218,7 +221,7 @@ export default function RemotionHeroComposition() {
                     display: "inline-block",
                   }}
                 >
-                  {scene.highlight}
+                  {copy[`hero.${index}.highlight`]}
                 </span>
               </h2>
 
@@ -234,7 +237,7 @@ export default function RemotionHeroComposition() {
                   fontWeight: 300,
                 }}
               >
-                {scene.description}
+                {copy[`hero.${index}.description`]}
               </p>
             </div>
           </div>

@@ -1,9 +1,12 @@
 "use client"
 
+import { useSiteContent } from "@/components/cms/SiteContentProvider";
+
 import React, { useState } from "react"
 import styles from "./LocationWidget.module.css"
 
 export default function LocationWidget() {
+  const { copy } = useSiteContent();
   const [copied, setCopied] = useState(false)
   const addressText = "Emana Jewelry, Justmoh Ave, Takoradi, Ghana"
   const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}`
@@ -25,11 +28,9 @@ export default function LocationWidget() {
     <section id="atelier-location" className={styles.section}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <span className={styles.subtitle}>Find Us in Takoradi</span>
-          <h2 className={styles.title}>Visit Our Takoradi Store</h2>
-          <p className={styles.description}>
-            Come and see our jewelry, take a closer look at the gemstones, and speak with the people who make your pieces. You’ll find us on Justmoh Ave in Takoradi.
-          </p>
+          <span className={styles.subtitle}>{copy["store.001"]}</span>
+          <h2 className={styles.title}>{copy["store.002"]}</h2>
+          <p className={styles.description}>{copy["store.003"]}</p>
         </div>
 
         <div className={styles.grid}>

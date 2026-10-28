@@ -1,5 +1,7 @@
 "use client";
 
+import { useSiteContent } from "@/components/cms/SiteContentProvider";
+
 import HomeServices from "@/components/home/HomeServices";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import React, { useState } from "react";
@@ -13,38 +15,11 @@ import RemotionHeroSection from "../components/RemotionHeroSection";
 import styles from "./page.module.css";
 
 export default function Home({ featuredProducts }: { featuredProducts: React.ReactNode }) {
+  const { copy } = useSiteContent();
   const [activeStep, setActiveStep] = useState(1);
 
-  // Dynamic visual for the bespoke commission stepper
-  const getStepImage = () => {
-    switch (activeStep) {
-      case 1:
-        return "/bespoke_drafting.jpg";
-      case 2:
-        return "/gold_signet_ring.jpg";
-      case 3:
-        return "/gemstones_sourcing.jpg";
-      case 4:
-        return "/hero_gold_necklace.jpg";
-      default:
-        return "/bespoke_drafting.jpg";
-    }
-  };
-
-  const getStepBadge = () => {
-    switch (activeStep) {
-      case 1:
-        return "Step 1: Your Idea";
-      case 2:
-        return "Step 2: Your Design";
-      case 3:
-        return "Step 3: Materials and Stones";
-      case 4:
-        return "Step 4: Making and Delivery";
-      default:
-        return "Step 1: Your Idea";
-    }
-  };
+  const getStepImage = () => copy[`process.${activeStep}.image`]
+  const getStepBadge = () => copy[`process.${activeStep}.label`]
 
   return (
     <div className={styles.page}>
@@ -55,30 +30,30 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
         <RemotionHeroSection />
 
         <section className={styles.businessIntro} aria-labelledby="business-title">
-          <h1 id="business-title">Jewelry &amp; Custom Designs in Takoradi, Ghana</h1>
-          <p>At Emana Jewelry, there’s room for your style. Explore different metals, stones, and materials, or bring us an idea of your own. Visit our shop on Justmoh Ave in Takoradi for jewelry, custom designs, cleaning, and repairs.</p>
-          <p>Tell us what you have in mind and your budget. We’ll explain your options and give you a quote before you decide.</p>
-          <div className={styles.introLinks}><Link href="/#consultation">Book a visit or call</Link><Link href="/faq">Questions? Start here</Link></div>
+          <h1 id="business-title">{copy["home.001"]}</h1>
+          <p>{copy["home.002"]}</p>
+          <p>{copy["home.003"]}</p>
+          <div className={styles.introLinks}><Link href="/#consultation">{copy["home.004"]}</Link><Link href="/faq">{copy["home.005"]}</Link></div>
         </section>
 
         <section id="how-can-we-help" className={styles.quickPaths} aria-label="How can we help you?">
           <Link href="/catalog" className={styles.pathCard}>
-            <span className={styles.pathNumber}>01 / FIND YOUR PIECE</span>
-            <h2>Something for you.<br />Or someone special.</h2>
-            <p>Explore rings, necklaces, and more, in materials and styles that suit you.</p>
-            <span className={styles.pathAction}>Browse jewelry <span aria-hidden="true">↗</span></span>
+            <span className={styles.pathNumber}>{copy["home.006"]}</span>
+            <h2>{copy["home.007"]}<br />{copy["home.008"]}</h2>
+            <p>{copy["home.009"]}</p>
+            <span className={styles.pathAction}>{copy["home.010"]}<span aria-hidden="true">↗</span></span>
           </Link>
           <Link href="#custom-jewelry-form" className={styles.pathCard}>
-            <span className={styles.pathNumber}>02 / MADE FOR YOU</span>
-            <h2>Your idea.<br />Our craftsmanship.</h2>
-            <p>Have a picture or a design in mind? Let’s make a piece that feels like you.</p>
-            <span className={styles.pathAction}>Create your own piece <span aria-hidden="true">↗</span></span>
+            <span className={styles.pathNumber}>{copy["home.011"]}</span>
+            <h2>{copy["home.012"]}<br />{copy["home.013"]}</h2>
+            <p>{copy["home.014"]}</p>
+            <span className={styles.pathAction}>{copy["home.015"]}<span aria-hidden="true">↗</span></span>
           </Link>
           <Link href="#services" className={styles.pathCard}>
-            <span className={styles.pathNumber}>03 / A LITTLE CARE</span>
-            <h2>A favourite piece.<br />A fresh start.</h2>
-            <p>From a broken chain to a ring that no longer fits, we’re here to help.</p>
-            <span className={styles.pathAction}>Cleaning &amp; repairs <span aria-hidden="true">↗</span></span>
+            <span className={styles.pathNumber}>{copy["home.016"]}</span>
+            <h2>{copy["home.017"]}<br />{copy["home.018"]}</h2>
+            <p>{copy["home.019"]}</p>
+            <span className={styles.pathAction}>{copy["home.020"]}<span aria-hidden="true">↗</span></span>
           </Link>
         </section>
 
@@ -93,8 +68,8 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                 </svg>
               </div>
               <div className={styles.pillarText}>
-                <h4 className={styles.pillarTitle}>Materials That Suit You</h4>
-                <p className={styles.pillarDesc}>Let’s find the right material, finish, and style for your budget.</p>
+                <h4 className={styles.pillarTitle}>{copy["home.021"]}</h4>
+                <p className={styles.pillarDesc}>{copy["home.022"]}</p>
               </div>
             </div>
 
@@ -105,8 +80,8 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                 </svg>
               </div>
               <div className={styles.pillarText}>
-                <h4 className={styles.pillarTitle}>Speak With Us on WhatsApp</h4>
-                <p className={styles.pillarDesc}>Ask us about a design, your size, or a price on WhatsApp.</p>
+                <h4 className={styles.pillarTitle}>{copy["home.023"]}</h4>
+                <p className={styles.pillarDesc}>{copy["home.024"]}</p>
               </div>
             </div>
 
@@ -117,8 +92,8 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                 </svg>
               </div>
               <div className={styles.pillarText}>
-                <h4 className={styles.pillarTitle}>Delivery, Arranged With You</h4>
-                <p className={styles.pillarDesc}>Speak with us about delivery within Ghana or abroad.</p>
+                <h4 className={styles.pillarTitle}>{copy["home.025"]}</h4>
+                <p className={styles.pillarDesc}>{copy["home.026"]}</p>
               </div>
             </div>
           </div>
@@ -131,11 +106,9 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
         {/* BESPOKE COMMISSIONS SECTION */}
         <section id="bespoke" className={`${styles.section} ${styles.customBuilder}`}>
           <div className={styles.sectionHeader}>
-            <span className={styles.sectionSubtitle}>Made to Order</span>
-            <h2 className={styles.sectionTitle}>Jewelry Made Just for You</h2>
-            <p className={styles.sectionDesc}>
-              Have a design in mind? Send us a picture or tell us your idea. Our team will help you choose the materials, stones, and style to suit your budget.
-            </p>
+            <span className={styles.sectionSubtitle}>{copy["home.027"]}</span>
+            <h2 className={styles.sectionTitle}>{copy["home.028"]}</h2>
+            <p className={styles.sectionDesc}>{copy["home.029"]}</p>
           </div>
 
           <div className={styles.builderContainer}>
@@ -163,12 +136,10 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                 onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setActiveStep(1); } }}
                 onClick={() => setActiveStep(1)}
               >
-                <div className={styles.stepNumber}>I</div>
+                <div className={styles.stepNumber}>{copy["home.030"]}</div>
                 <div className={styles.stepContent}>
-                  <h3 className={styles.stepTitle}>Tell Us Your Idea</h3>
-                  <p className={styles.stepDesc}>
-                    Send us a picture, a sketch, or a message on WhatsApp. Tell us what you like and how much you would like to spend.
-                  </p>
+                  <h3 className={styles.stepTitle}>{copy["home.031"]}</h3>
+                  <p className={styles.stepDesc}>{copy["home.032"]}</p>
                 </div>
               </div>
 
@@ -181,12 +152,10 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                 onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setActiveStep(2); } }}
                 onClick={() => setActiveStep(2)}
               >
-                <div className={styles.stepNumber}>II</div>
+                <div className={styles.stepNumber}>{copy["home.033"]}</div>
                 <div className={styles.stepContent}>
-                  <h3 className={styles.stepTitle}>See Your Design</h3>
-                  <p className={styles.stepDesc}>
-                    We’ll show you a drawing or model so you can check the look and fit before we start making your piece.
-                  </p>
+                  <h3 className={styles.stepTitle}>{copy["home.034"]}</h3>
+                  <p className={styles.stepDesc}>{copy["home.035"]}</p>
                 </div>
               </div>
 
@@ -199,12 +168,10 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                 onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setActiveStep(3); } }}
                 onClick={() => setActiveStep(3)}
               >
-                <div className={styles.stepNumber}>III</div>
+                <div className={styles.stepNumber}>{copy["home.036"]}</div>
                 <div className={styles.stepContent}>
-                  <h3 className={styles.stepTitle}>Choose Your Materials and Stones</h3>
-                  <p className={styles.stepDesc}>
-                    Tell us the look you want and your budget. We’ll talk you through the available metals, stones, and other materials, and help you choose.
-                  </p>
+                  <h3 className={styles.stepTitle}>{copy["home.037"]}</h3>
+                  <p className={styles.stepDesc}>{copy["home.038"]}</p>
                 </div>
               </div>
 
@@ -217,12 +184,10 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                 onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setActiveStep(4); } }}
                 onClick={() => setActiveStep(4)}
               >
-                <div className={styles.stepNumber}>IV</div>
+                <div className={styles.stepNumber}>{copy["home.039"]}</div>
                 <div className={styles.stepContent}>
-                  <h3 className={styles.stepTitle}>We Make and Check Your Jewelry</h3>
-                  <p className={styles.stepDesc}>
-                    We make your piece and check the materials, fit, and finish. Then we pack it safely for collection or delivery.
-                  </p>
+                  <h3 className={styles.stepTitle}>{copy["home.040"]}</h3>
+                  <p className={styles.stepDesc}>{copy["home.041"]}</p>
                 </div>
               </div>
             </div>
@@ -234,11 +199,9 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
           <div className={styles.rawEarthContainer}>
             <div className={styles.rawEarthInfo}>
               <div className={styles.sectionHeader} style={{ textAlign: "left", margin: "0" }}>
-                <span className={styles.sectionSubtitle}>The Materials Behind Your Piece</span>
-                <h2 className={styles.sectionTitle}>Materials Chosen With Care</h2>
-                <p className={styles.sectionDesc}>
-                  Different pieces call for different materials. Ask us about the metals, stones, finishes, and other materials available for your design, and where they come from.
-                </p>
+                <span className={styles.sectionSubtitle}>{copy["home.042"]}</span>
+                <h2 className={styles.sectionTitle}>{copy["home.043"]}</h2>
+                <p className={styles.sectionDesc}>{copy["home.044"]}</p>
               </div>
 
               <div className={styles.badgeGrid}>
@@ -251,10 +214,8 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                       <path d="M2 12h20" />
                     </svg>
                   </div>
-                  <h3 className={styles.badgeTitle}>Knowing Where Our Stones Come From</h3>
-                  <p className={styles.badgeDesc}>
-                    We trace our colored stones directly to responsible origin mines across Africa, Sri Lanka, and Colombia.
-                  </p>
+                  <h3 className={styles.badgeTitle}>{copy["home.045"]}</h3>
+                  <p className={styles.badgeDesc}>{copy["home.046"]}</p>
                 </div>
 
                 {/* Badge 3 */}
@@ -266,10 +227,8 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                       <path d="m9 14 2 2 4-4" />
                     </svg>
                   </div>
-                  <h3 className={styles.badgeTitle}>Gold From Ghanaian Gold Miners</h3>
-                  <p className={styles.badgeDesc}>
-                    Our 18K and 22K gold is sourced through vetted small-scale Ghanaian co-operatives with fair-labor standards.
-                  </p>
+                  <h3 className={styles.badgeTitle}>{copy["home.047"]}</h3>
+                  <p className={styles.badgeDesc}>{copy["home.048"]}</p>
                 </div>
 
                 {/* Badge 4 */}
@@ -281,18 +240,16 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                       <path d="M10 11V9a2 2 0 1 1 4 0v2" />
                     </svg>
                   </div>
-                  <h3 className={styles.badgeTitle}>Gold Purity Checks</h3>
-                  <p className={styles.badgeDesc}>
-                    For gold pieces, we check purity and explain the hallmark, a mark showing the gold quality. For other materials, we’ll explain the finish and how to care for your piece.
-                  </p>
+                  <h3 className={styles.badgeTitle}>{copy["home.049"]}</h3>
+                  <p className={styles.badgeDesc}>{copy["home.050"]}</p>
                 </div>
               </div>
             </div>
 
             <div className={styles.rawVisual}>
               <Image
-                src="/gemstones_sourcing.jpg"
-                alt="Natural rough and cut gemstones in folded dealer parcel paper with jeweler tweezers"
+                src={copy["home.image.051"]}
+                alt={copy["home.imageAlt.051"]}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className={styles.rawVisualImg}
@@ -308,17 +265,15 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
           <div className={styles.consultationContainer}>
             <div className={styles.consultationInfo}>
               <div className={styles.sectionHeader} style={{ textAlign: "left", margin: "0" }}>
-                <span className={styles.sectionSubtitle}>Visit Us or Speak With Us Online</span>
-                <h2 className={styles.sectionTitle}>Let’s Talk About Your Jewelry</h2>
-                <p className={styles.sectionDesc}>
-                  Come to our Takoradi shop or speak with us by video call. Whether you want a new piece, a repair, or a little advice, we’re happy to help.
-                </p>
+                <span className={styles.sectionSubtitle}>{copy["home.052"]}</span>
+                <h2 className={styles.sectionTitle}>{copy["home.053"]}</h2>
+                <p className={styles.sectionDesc}>{copy["home.054"]}</p>
               </div>
 
               <div className={styles.consultationVisualContainer}>
                 <Image
-                  src="/consultation_desk.jpg"
-                  alt="Private jewelry consultation desk with emerald velvet tray, brass loupe, and ring mandrels"
+                  src={copy["home.image.055"]}
+                  alt={copy["home.imageAlt.055"]}
                   width={500}
                   height={280}
                   className={styles.consultationVisualImg}
@@ -333,8 +288,8 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                     </svg>
                   </div>
                   <div className={styles.featureText}>
-                    <h3 className={styles.featureTitle}>Help With Your Design</h3>
-                    <p className={styles.featureDesc}>Talk us through your idea. We’ll help you choose a style, size, and materials that work for you.</p>
+                    <h3 className={styles.featureTitle}>{copy["home.056"]}</h3>
+                    <p className={styles.featureDesc}>{copy["home.057"]}</p>
                   </div>
                 </div>
 
@@ -345,8 +300,8 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                     </svg>
                   </div>
                   <div className={styles.featureText}>
-                    <h3 className={styles.featureTitle}>Know What Your Jewelry Is Made From</h3>
-                    <p className={styles.featureDesc}>Ask us about the materials and stones in your piece. We’ll explain where they come from and show you the available certificates.</p>
+                    <h3 className={styles.featureTitle}>{copy["home.058"]}</h3>
+                    <p className={styles.featureDesc}>{copy["home.059"]}</p>
                   </div>
                 </div>
 
@@ -357,8 +312,8 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
                     </svg>
                   </div>
                   <div className={styles.featureText}>
-                    <h3 className={styles.featureTitle}>Advice on Cleaning & Repairs</h3>
-                    <p className={styles.featureDesc}>Bring your piece for us to check. We’ll explain the work it needs and the cost before you decide.</p>
+                    <h3 className={styles.featureTitle}>{copy["home.060"]}</h3>
+                    <p className={styles.featureDesc}>{copy["home.061"]}</p>
                   </div>
                 </div>
               </div>

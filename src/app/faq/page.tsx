@@ -1,3 +1,6 @@
+import { Suspense } from "react"
+import { publishedContent } from "@/lib/content-store"
+import { jsonLdString } from "@/lib/seo"
 import { pageMetadata } from "@/lib/seo"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
@@ -5,85 +8,12 @@ import styles from "./page.module.css"
 
 export const metadata = pageMetadata("Frequently Asked Questions", "Answers to common questions about Emana Jewelry — ordering, custom design, pricing, shipping, and more.", "/faq")
 
-const faqs = [
-  {
-    q: "Where is Emana Jewelry located in Ghana?",
-    a: "Our shop is on Justmoh Ave in Takoradi, Western Region, Ghana. Visit us to see our jewelry or speak with our goldsmiths. You can also call or WhatsApp us on +233 24 218 6590 before you come.",
-  },
-  {
-    q: "What are your opening hours?",
-    a: "Our Takoradi shop opens Monday to Friday, 9:00 AM to 6:00 PM, and Saturday, 10:00 AM to 5:00 PM, Ghana time. Sunday visits are by appointment. Please contact us to arrange your visit.",
-  },
-  {
-    q: "How do I place an order?",
-    a: "Browse our collections and add items to your cart. When ready, head to your cart and choose either WhatsApp checkout (we'll discuss details via chat) or submit the email form. We'll follow up with a personalized quotation.",
-  },
-  {
-    q: "Why don't I see prices on the website?",
-    a: "Emana Jewelry uses quote-based pricing. Every piece is unique — final prices depend on materials, gemstone quality, craftsmanship complexity, and current market rates. Request a quote via cart checkout or WhatsApp and we'll provide a detailed quotation.",
-  },
-  {
-    q: "Can I request a custom design?",
-    a: "Yes. Send us a picture or sketch on WhatsApp, or book a visit to our Takoradi shop. Tell us your idea and budget. We’ll help you choose the materials, explain the cost, and agree on the design before we start.",
-  },
-  {
-    q: "What raw gemstones do you offer?",
-    a: "We source a wide range of ethically sourced raw gemstones including emeralds, sapphires, rubies, tourmalines, and more. Contact us to ask which stones are available and request a quote.",
-  },
-  {
-    q: "Are your gemstones ethically sourced?",
-    a: "Yes. We are committed to ethical sourcing. All our suppliers adhere to strict standards — no conflict stones, fair labor practices, and environmentally responsible mining. See our Ethical Sourcing Policy for details.",
-  },
-  {
-    q: "How does the consultation process work?",
-    a: "Book a Visit or Call through our website, WhatsApp, or email. We'll discuss your requirements, budget, and timeline. Consultations can cover custom designs, gemstone selection, or general advice.",
-  },
-  {
-    q: "Do you ship internationally?",
-    a: "We primarily serve customers in Ghana with international shipping available on a case-by-case basis. Shipping costs and timelines will be provided in your quotation.",
-  },
-  {
-    q: "What payment methods do you accept?",
-    a: "Payment terms are discussed during the quotation process. We typically accept mobile money, bank transfers, and other agreed-upon methods.",
-  },
-  {
-    q: "Can I return or exchange a piece?",
-    a: "Returns and exchanges are handled on a case-by-case basis. Custom-made pieces are generally non-returnable unless defective. Standard pieces may be eligible within a specified window. Damage claims must be reported within 48 hours of delivery.",
-  },
-  {
-    q: "What materials can I choose from?",
-    a: "We work with a range of metals and other jewelry materials, beyond gold and silver. Tell us the look you want, how you plan to wear the piece, and your budget. We’ll explain what’s available and suitable. Each product listing describes the materials used.",
-  },
-  {
-    q: "Do you offer jewelry cleaning or repair services?",
-    a: "Yes. We provide professional cleaning and repair services for all types of jewelry. Contact us for a quote.",
-  },
-  {
-    q: "How does the wishlist work?",
-    a: "Click the heart icon on any product to save it to your wishlist. Your wishlist is stored in your browser and doesn't require an account. Access it anytime from the heart icon in the header.",
-  },
-  {
-    q: "How does the cart work?",
-    a: "Add items to your cart using the 'Add to Quote Request' button. You can adjust quantities or remove items. When ready, choose WhatsApp or email checkout. Your cart is stored in your browser.",
-  },
-  {
-    q: "Do I need to create an account?",
-    a: "No. We don't require accounts. Your cart and wishlist are stored locally in your browser. During checkout, you'll provide your contact details so we can follow up.",
-  },
-  {
-    q: "How long does a custom piece take?",
-    a: "Timelines vary based on complexity. Simple pieces may take 1-2 weeks, while intricate designs can take 4-8 weeks or longer. We'll provide an estimated timeline during consultation.",
-  },
-  {
-    q: "How can I contact you?",
-    a: "You can reach us via WhatsApp at +233 24 218 6590, email at emanagold6590@gmail.com, or through the consultation booking form on our website.",
-  },
-]
-
-export default function FAQPage() {
+async function FAQContent() {
+  const { faqs } = await publishedContent()
   return (
     <div className={styles.page}>
       <Header />
+      {faqs.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(faq => ({ "@type": "Question", name: faq.q, acceptedAnswer: { "@type": "Answer", text: faq.a } })) }) }} />}
       <main className={styles.main}>
         <div className={styles.container}>
           <h1 className={styles.title}>Frequently Asked Questions</h1>
@@ -102,3 +32,5 @@ export default function FAQPage() {
     </div>
   )
 }
+
+export default function FAQPage() { return <Suspense fallback={<p role="status">Loading questions…</p>}><FAQContent /></Suspense> }

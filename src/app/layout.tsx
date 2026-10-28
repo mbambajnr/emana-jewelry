@@ -1,3 +1,5 @@
+import { publishedContent } from "@/lib/content-store";
+import { SiteContentProvider } from "@/components/cms/SiteContentProvider";
 import { searchVerificationMetadata } from "@/lib/search-settings";
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
@@ -39,14 +41,15 @@ export async function generateMetadata(): Promise<Metadata> {
   return { ...baseMetadata, verification: await searchVerificationMetadata() };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const document = await publishedContent();
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <body><SiteContentProvider document={document}>{children}</SiteContentProvider></body>
     </html>
   );
 }
