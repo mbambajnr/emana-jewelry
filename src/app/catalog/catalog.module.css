@@ -44,3 +44,13 @@
 .card { display: flex; flex-direction: column; }
 .body { display: flex; flex-direction: column; flex: 1; }
 .inquiry { margin-top: auto; align-self: flex-start; }
+
+.filterControls { flex-wrap: wrap; align-items: end; margin-top: 16px; }
+.filterControls label { flex: 1 1 130px; margin: 0; min-width: 0; }
+.filterControls select { display: block; width: 100%; min-height: 48px; margin-top: 8px; padding: 10px 12px; border: 1px solid #d8cebb; border-radius: 6px; background: white; font: inherit; font-size: 16px; color: var(--text-primary); }
+.filterControls button { flex: 1 1 80px; }
+.activeFilters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 20px; font-size: .8rem; }
+.activeFilters a { padding: 10px 14px; min-height: 44px; border: 1px solid #ded6c7; border-radius: 6px; color: var(--gold-dark); }
+.activeFilters span { color: var(--text-secondary); }
+.results { flex-wrap: wrap; }
+.searchForm :focus-visible, .activeFilters a:focus-visible { outline: 3px solid var(--gold-dark); outline-offset: 3px; }

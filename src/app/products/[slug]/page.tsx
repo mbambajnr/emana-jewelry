@@ -1,3 +1,4 @@
+import { isMetalOption, type MetalOption } from "@/lib/product-options"
 import RelatedProducts from "@/components/RelatedProducts"
 import { decodeProductSlug } from "@/lib/product-links"
 import { absoluteUrl } from "@/lib/seo"
@@ -92,7 +93,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-async function ProductContent({ slug }: { slug: string }) {
+async function ProductContent({ slug, initialMetal }: { slug: string; initialMetal?: MetalOption }) {
   let product: ProductFromDb | null = null
 
   try {
@@ -117,24 +118,26 @@ async function ProductContent({ slug }: { slug: string }) {
 
   if (!product) notFound()
 
-  return <ProductDetailClient product={{ ...product, price: 0, originalPrice: null }} relatedProducts={<Suspense fallback={null}><RelatedProducts slug={product.slug} category={product.category.slug} /></Suspense>} />
+  return <ProductDetailClient key={`${product.id}:${initialMetal || "default"}`} initialMetal={initialMetal} product={{ ...product, price: 0, originalPrice: null }} relatedProducts={<Suspense fallback={null}><RelatedProducts slug={product.slug} category={product.category.slug} /></Suspense>} />
 }
 
-async function ProductPageContent({ paramsPromise }: { paramsPromise: Promise<{ slug: string }> }) {
+async function ProductPageContent({ paramsPromise, searchParams }: { paramsPromise: Promise<{ slug: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const { slug } = await paramsPromise
-  return <ProductContent slug={decodeProductSlug(slug)} />
+  const { metal } = await searchParams
+  return <ProductContent slug={decodeProductSlug(slug)} initialMetal={isMetalOption(metal) ? metal : undefined} />
 }
 
 export default function ProductDetailPage({
-  params,
+  params, searchParams,
 }: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
   params: Promise<{ slug: string }>
 }) {
   return (
     <>
       <Header />
       <Suspense fallback={<p role="status" style={{ padding: "120px 24px" }}>Loading this piece…</p>}>
-        <ProductPageContent paramsPromise={params} />
+        <ProductPageContent paramsPromise={params} searchParams={searchParams} />
       </Suspense>
     </>
   )

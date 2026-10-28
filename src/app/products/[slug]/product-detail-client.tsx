@@ -46,10 +46,10 @@ export interface ProductFromDb extends ProductInformation {
 }
 
 
-export default function ProductDetailClient({ product, preview = false, relatedProducts }: { product: ProductFromDb; preview?: boolean; relatedProducts?: ReactNode }) {
+export default function ProductDetailClient({ product, preview = false, relatedProducts, initialMetal }: { product: ProductFromDb; preview?: boolean; relatedProducts?: ReactNode; initialMetal?: MetalOption }) {
   useEffect(() => { if (!preview) recordProductView(product.slug) }, [product.slug, preview])
   const options = productMetalOptions(product.metalOptions)
-  const [selectedMetal, setSelectedMetal] = useState<MetalOption | undefined>(options[0])
+  const [selectedMetal, setSelectedMetal] = useState<MetalOption | undefined>(initialMetal && options.includes(initialMetal) ? initialMetal : options[0])
   const metal = selectedMetal && options.includes(selectedMetal) ? selectedMetal : options[0]
   const [quantity, setQuantity] = useState(1)
   const [wishlisted, setWishlisted] = useState(false)

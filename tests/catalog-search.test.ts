@@ -17,3 +17,7 @@ describe("Catalog search", () => {
     expect(catalogWhere("", "")).toEqual({})
   })
 })
+
+it("filters by offered metal rather than words in the description", () => {
+  expect(catalogWhere("rings", "", "Silver")).toEqual({ category: { slug: "rings" }, metalOptions: { has: "Silver" } })
+})

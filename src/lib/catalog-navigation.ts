@@ -1,3 +1,4 @@
+import { isMetalOption, type MetalOption } from "./product-options"
 export const CATALOG_PAGE_SIZE = 8
 export type CatalogSearchParams = Record<string, string | string[] | undefined>
 export function catalogQuery(params: CatalogSearchParams) {
@@ -5,12 +6,16 @@ export function catalogQuery(params: CatalogSearchParams) {
   const rawPage = typeof params.page === "string" ? params.page : ""
   const page = /^\d+$/.test(rawPage) && Number.isSafeInteger(Number(rawPage)) && Number(rawPage) > 0 ? Number(rawPage) : 1
   const q = typeof params.q === "string" ? params.q.trim().replace(/\s+/g, " ").slice(0, 120) : ""
-  return { category, page, q }
+  const metal = isMetalOption(params.metal) ? params.metal : undefined
+  const sort = params.sort === "name" ? "name" : "newest"
+  return { category, page, q, metal, sort }
 }
-export function catalogHref(category: string, page = 1, q = "") {
+export function catalogHref(category: string, page = 1, q = "", metal?: MetalOption, sort = "newest") {
   const params = new URLSearchParams()
   if (q) params.set("q", q)
   if (category) params.set("category", category)
+  if (metal) params.set("metal", metal)
+  if (sort === "name") params.set("sort", sort)
   if (page > 1) params.set("page", String(page))
   return `/catalog${params.size ? `?${params}` : ""}`
 }

@@ -1,6 +1,8 @@
+import type { MetalOption } from "./product-options"
 import type { Prisma } from "@/generated/prisma/client"
-export function catalogWhere(category: string, query: string): Prisma.ProductWhereInput {
+export function catalogWhere(category: string, query: string, metal?: MetalOption): Prisma.ProductWhereInput {
   const where: Prisma.ProductWhereInput = category ? { category: { slug: category } } : {}
+  if (metal) where.metalOptions = { has: metal }
   const words = query.trim().split(/\s+/).filter(Boolean).slice(0, 8)
   if (words.length) where.AND = words.map(word => {
     const match = { contains: word, mode: "insensitive" as const }

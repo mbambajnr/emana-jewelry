@@ -9,9 +9,9 @@ import { pageMetadata } from "@/lib/seo"
 import styles from "./catalog.module.css"
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<CatalogSearchParams> }) {
-  const { category, page, q } = catalogQuery(await searchParams)
-  const metadata = pageMetadata(page > 1 ? `Browse Jewelry — Page ${page}` : "Browse All Jewelry", "Browse Emana’s jewelry, shop by category, and enquire directly on WhatsApp.", catalogHref(category, page, q))
-  return { ...metadata, robots: { index: !q, follow: true } }
+  const { category, page, q, metal, sort } = catalogQuery(await searchParams)
+  const metadata = pageMetadata(page > 1 ? `Browse Jewelry — Page ${page}` : "Browse All Jewelry", "Browse Emana’s jewelry, shop by category, and enquire directly on WhatsApp.", catalogHref(category, page, q, metal, sort))
+  return { ...metadata, robots: { index: !q && !metal && sort === "newest", follow: true } }
 }
 export default function CatalogPage({ searchParams }: { searchParams: Promise<CatalogSearchParams> }) {
   return <><Header /><main className={styles.container}>

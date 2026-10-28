@@ -69,3 +69,12 @@ it("puts the enquiry controls before the longer description and disables enquiri
   expect(enquire).toBeDisabled()
   expect(screen.queryByRole("navigation", { name: "Quick product enquiry" })).not.toBeInTheDocument()
 })
+
+it("starts with the metal chosen in the catalogue, falling back to an offered option", () => {
+  const { unmount } = render(<ProductDetailClient product={product} initialMetal="Silver" />)
+  expect(screen.getByRole("radio", { name: "Silver" })).toBeChecked()
+  expect(screen.getByRole("img", { name: "Silver pendant" })).toBeInTheDocument()
+  unmount()
+  render(<ProductDetailClient product={{ ...product, metalOptions: ["Gold"] }} initialMetal="Silver" />)
+  expect(screen.getByRole("radio", { name: "Gold" })).toBeChecked()
+})
