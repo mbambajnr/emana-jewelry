@@ -97,7 +97,16 @@ model Review {
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
+model ProductView {
+  id String @id @default(cuid())
+  productSlug String
+  createdAt DateTime @default(now())
+  @@index([createdAt, productSlug])
+}
+
 model WhatsAppClick {
+  productSlug String?
+  metal String?
   id        String   @id @default(cuid())
   source    String
   label     String?

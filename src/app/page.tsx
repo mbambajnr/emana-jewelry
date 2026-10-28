@@ -9,9 +9,11 @@ export async function generateMetadata() {
   return pageMetadata(copy["seo.homeTitle"], copy["seo.homeDescription"], "/")
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { services } = await publishedContent()
+  const storeSchema = { ...businessSchema, hasOfferCatalog: { "@type": "OfferCatalog", name: "Jewelry and Services", itemListElement: services.filter(service => service.enabled).map(service => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: service.title, description: service.description } })) } }
   return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString({ "@context": "https://schema.org", "@graph": [businessSchema, { "@type": "WebSite", "@id": `${SITE_URL}/#website`, name: "Emana Jewelry", url: SITE_URL, publisher: { "@id": `${SITE_URL}/#business` } }] }) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString({ "@context": "https://schema.org", "@graph": [storeSchema, { "@type": "WebSite", "@id": `${SITE_URL}/#website`, name: "Emana Jewelry", url: SITE_URL, publisher: { "@id": `${SITE_URL}/#business` } }] }) }} />
     <HomeContent featuredProducts={<Suspense fallback={<section id="featured-creations" style={{ padding: "56px 20px", textAlign: "center" }}><h2>Featured Jewelry</h2><p role="status">Loading our latest pieces…</p></section>}><FeaturedProducts /></Suspense>} />
   </>
 }

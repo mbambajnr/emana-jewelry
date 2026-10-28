@@ -125,3 +125,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.explanation { font-size: .85rem; margin: 12px 0 20px; max-width: 780px; }
+.tableScroll { overflow-x: auto; }
+.table caption { text-align: left; font-size: .8rem; padding: 12px 0; }
+.table td { overflow-wrap: anywhere; }

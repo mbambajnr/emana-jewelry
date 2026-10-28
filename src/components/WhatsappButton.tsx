@@ -1,5 +1,6 @@
 "use client"
 
+import { productTrackingDetails } from "@/lib/product-analytics"
 import type { MetalOption } from "@/lib/product-options"
 import { type MouseEvent } from "react"
 import {
@@ -37,7 +38,7 @@ export function WhatsappButton({
     window.open(href, "_blank", "noopener,noreferrer")
 
     const source = typeof window !== "undefined" ? window.location.pathname : ""
-    trackConciergeClick(source, label, productName)
+    trackConciergeClick(source, label, productName, productTrackingDetails(productUrl, metal))
   }
 
   return (

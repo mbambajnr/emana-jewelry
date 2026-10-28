@@ -1,3 +1,4 @@
+import { analyticsAllowed } from "./product-analytics"
 import type { MetalOption } from "./product-options"
 import { absoluteUrl } from "./seo"
 
@@ -116,11 +117,12 @@ export function getWhatsAppConciergeUrl(message: string): string {
 /**
  * Dispatches an analytics event for Chat With Us on WhatsApp interactions.
  */
-export function trackConciergeClick(source: string, label?: string, product?: string): void {
-  if (typeof window === "undefined") return
+export function trackConciergeClick(source: string, label?: string, product?: string, details?: { productSlug?: string; metal?: MetalOption }): void {
+  if (typeof window === "undefined" || !analyticsAllowed()) return
   fetch("/api/analytics/whatsapp-click", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ source, label, product }),
+    body: JSON.stringify({ source: source.split(/[?#]/)[0] || "/", label, product, ...details }),
+    keepalive: true,
   }).catch(() => {})
 }

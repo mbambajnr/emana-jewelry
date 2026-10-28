@@ -1,23 +1,26 @@
-import { NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
+import { isSameOrigin } from "@/lib/admin-request"
+import { isMetalOption } from "@/lib/product-options"
 
 export async function POST(request: Request) {
+  if (!isSameOrigin(request)) return Response.json({ success: false }, { status: 403 })
   try {
-    const { source, label, product } = await request.json()
-    try {
-      await prisma.whatsAppClick.create({
-        data: {
-          source: String(source || "unknown"),
-          label: label ? String(label) : null,
-          product: product ? String(product) : null,
-        },
-      })
-    } catch (dbError) {
-      console.warn("Analytics event could not be persisted to database (DB offline):", dbError)
+    const raw = await request.text()
+    if (raw.length > 2000) return Response.json({ success: false }, { status: 400 })
+    let body
+    try { body = JSON.parse(raw) } catch { return Response.json({ success: false }, { status: 400 }) }
+    if (!body || typeof body !== "object") return Response.json({ success: false }, { status: 400 })
+    const { source, label, product, productSlug, metal } = body
+    if (typeof source !== "string" || !source.startsWith("/") || source.startsWith("//") || source.length > 300 || source.includes("?") || source.includes("#") ||
+      [label, product].some(value => value != null && (typeof value !== "string" || value.length > 300)) ||
+      (productSlug != null && (typeof productSlug !== "string" || !productSlug || productSlug.length > 160)) || (metal != null && !isMetalOption(metal))) return Response.json({ success: false }, { status: 400 })
+    let name = product || null
+    if (productSlug) {
+      const item = await prisma.product.findUnique({ where: { slug: productSlug }, select: { name: true, metalOptions: true } })
+      if (!item || (metal && !item.metalOptions.includes(metal))) return Response.json({ success: false }, { status: 400 })
+      name = item.name
     }
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error("WhatsApp click tracking request error:", error)
-    return NextResponse.json({ success: false }, { status: 400 })
-  }
+    await prisma.whatsAppClick.create({ data: { source, label: label || null, product: name, productSlug: productSlug || null, metal: metal || null } })
+    return Response.json({ success: true })
+  } catch { return Response.json({ success: false }, { status: 503 }) }
 }

@@ -21,7 +21,7 @@ export default function PrivacyPage() {
               <li><strong>Personal Information</strong> — name, email address, phone number, and shipping address when you place an order, book a consultation, or subscribe to our newsletter.</li>
               <li><strong>Order Information</strong> — product selections, custom design specifications, and transaction details.</li>
               <li><strong>Communication Data</strong> — correspondence via email or WhatsApp, including inquiries and consultation messages.</li>
-              <li><strong>Usage Data</strong> — browsing behavior, pages visited, and interactions with our site, collected via cookies and similar technologies.</li>
+              <li><strong>Usage Data</strong> — product views and WhatsApp button clicks. These records contain product references, page paths, selected metal, and timestamps; we do not attach names, email addresses, or visitor identifiers to them. Optional activity tracking respects Do Not Track and Global Privacy Control. Session storage limits repeated view counts, while recently viewed pieces are saved on your browser for up to 30 days.</li>
             </ul>
           </section>
 

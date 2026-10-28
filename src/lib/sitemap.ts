@@ -38,7 +38,7 @@ export async function getSitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   const collectionPages = collections.map((c) => ({
-    url: `${siteUrl}/collections/${c.slug}`,
+    url: `${siteUrl}/collections/${encodeURIComponent(c.slug)}`,
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }))

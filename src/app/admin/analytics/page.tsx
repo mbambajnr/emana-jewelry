@@ -1,3 +1,4 @@
+import ProductActivityReport from "@/components/admin/ProductActivityReport"
 import { requireAdmin } from "@/lib/auth"
 import { Suspense } from "react"
 import { prisma } from "@/lib/db"
@@ -41,7 +42,7 @@ async function AnalyticsContent() {
       <div className={styles.stats}>
         <div className={styles.statCard}>
           <span className={styles.statValue}>{totalClicks}</span>
-          <span className={styles.statLabel}>WhatsApp Clicks</span>
+          <span className={styles.statLabel}>WhatsApp clicks · all time</span>
         </div>
       </div>
 
@@ -134,30 +135,10 @@ async function AnalyticsContent() {
 }
 
 async function getTopProducts() {
-  try {
-    const clicks = await prisma.whatsAppClick.groupBy({
-      by: ["product"],
-      _count: { id: true },
-      orderBy: { _count: { id: "desc" } },
-      take: 10,
-    })
-    return clicks.filter((c) => c.product)
-  } catch {
-    return []
-  }
+  return prisma.whatsAppClick.groupBy({ by: ["product"], where: { product: { not: null } }, _count: { id: true }, orderBy: { _count: { id: "desc" } }, take: 10 })
 }
-
 async function getSourceBreakdown() {
-  try {
-    const clicks = await prisma.whatsAppClick.groupBy({
-      by: ["source"],
-      _count: { id: true },
-      orderBy: { _count: { id: "desc" } },
-    })
-    return clicks
-  } catch {
-    return []
-  }
+  return prisma.whatsAppClick.groupBy({ by: ["source"], _count: { id: true }, orderBy: { _count: { id: "desc" } }, take: 30 })
 }
 
 export default function AnalyticsPage() {
@@ -166,6 +147,7 @@ export default function AnalyticsPage() {
       <div className={styles.header}>
         <h1 className={styles.title}>Analytics</h1>
       </div>
+      <Suspense fallback={<p>Loading product interest…</p>}><ProductActivityReport /></Suspense>
       <Suspense fallback={<p className={styles.loading}>Loading analytics...</p>}>
         <AnalyticsContent />
       </Suspense>

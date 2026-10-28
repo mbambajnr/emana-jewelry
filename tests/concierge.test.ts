@@ -104,6 +104,7 @@ describe("WhatsApp Concierge Library", () => {
       expect(fetchSpy).toHaveBeenCalledWith("/api/analytics/whatsapp-click", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        keepalive: true,
         body: JSON.stringify({
           source: "/cart",
           label: "cart_checkout_click",
