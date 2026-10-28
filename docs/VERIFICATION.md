@@ -28,3 +28,12 @@ Test real image uploads against the configured Supabase bucket, sender verificat
 - `/admin/products` redirected an unauthenticated request to login. Product creation and upload endpoints returned 401 without a session.
 - Browser checks exercised catalog search, opening a product, changing its photo, and mobile navigation to the custom-order form. The catalog had no horizontal overflow at 1280 px and 390 px.
 - No real customer submissions, outgoing WhatsApp messages, production uploads, or email deliveries were made during this pass. Those integrations still require deployment acceptance.
+
+## CMS verification — 28 October 2026
+
+- The full suite passed 139 tests. The new-service panel also passed a focused regression check after fixing its tendency to close while typing a description.
+- Lint, TypeScript, and the production build passed.
+- Acceptance checks used a separate temporary PostgreSQL database and a local production server. They verified protected draft reads, draft-only service rejection, private draft preview, publication, new-service bookings, readable appointment snapshots, stale-write rejection, baseline revision capture, restore-without-publication, and publishing a restored baseline.
+- Browser checks exercised adding a service, editing its description and duration, saving a draft, and publishing. The newly published service appeared in both homepage cards and the appointment dropdown. A final regression check confirmed that editing one service's duration left existing services unchanged.
+- The content editor was checked at 1280 px and 390 px. At phone width the fields stayed inside the viewport without horizontal overflow.
+- The temporary test database and test account configuration were removed afterward. The shop's content and customer records were not used for test submissions. Outgoing email was disabled in the acceptance environment.

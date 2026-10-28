@@ -11,6 +11,7 @@ A catalog and inquiry website for a jewelry shop in Takoradi, Ghana. Customers b
 - Request an appointment for custom jewelry, cleaning, or repairs.
 - Save favorites and recently viewed products in the browser without signing up.
 - Manage products, collections, inquiries, appointments, search verification, and social links in a staff-only admin.
+- Edit main website copy and images, add services and FAQs, preview drafts, publish, and restore revisions through the custom CMS.
 
 ## Screenshots
 
@@ -22,6 +23,13 @@ Desktop catalog:
 <summary>Phone layout</summary>
 
 <img src="docs/screenshots/catalog-mobile.png" alt="Catalog on a 390-pixel-wide phone screen" width="300" />
+
+</details>
+
+<details>
+<summary>Content and services editor</summary>
+
+![Custom CMS editor](docs/screenshots/cms-editor.png)
 
 </details>
 
@@ -96,6 +104,8 @@ Apply migrations to a persistent PostgreSQL database and configure production en
 Image optimisation details and regeneration steps: [Homepage performance](docs/HOMEPAGE-PERFORMANCE.md).
 
 Product option setup: [Gold and Silver choices](docs/PRODUCT-OPTIONS.md).
+
+CMS guide: [Website content management](docs/CONTENT-MANAGEMENT.md).
 
 Further notes: [Backend operations](docs/BACKEND-OPERATIONS.md), [Product media](docs/PRODUCT-MEDIA.md), [Customer browsing](docs/CUSTOMER-BROWSING.md), and [Search visibility](docs/SEARCH-VISIBILITY.md).
 

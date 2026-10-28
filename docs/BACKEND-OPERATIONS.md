@@ -1,6 +1,6 @@
 # Backend operations
 
-The admin is organised into Overview, Catalog, Client Care, Reports, and Settings. Inquiry stages are new → contacted → quoted → accepted → completed, plus cancelled. Appointments start as requested and can be confirmed, completed, or cancelled. Staff may correct a stage; every saved stage change or note records the previous stage, actor, and timestamp. Updates use the expected previous status so a stale tab cannot silently overwrite a newer stage.
+The admin is organised into Overview, Catalog, Website, Client Care, Reports, and Settings. Inquiry stages are new → contacted → quoted → accepted → completed, plus cancelled. Appointments start as requested and can be confirmed, completed, or cancelled. Staff may correct a stage; every saved stage change or note records the previous stage, actor, and timestamp. Updates use the expected previous status so a stale tab cannot silently overwrite a newer stage.
 
 ## Data and access
 
@@ -24,3 +24,7 @@ Production builds use Webpack, matching the development script, because the nati
 ## Further launch work
 
 Configure and test backups, a durable email outbox with retries, shared rate limits for login and public submissions, monitoring, and the real deployment's database/hosting credentials. Staff roles and separate accounts are future work; the current admin is one configured account. Search ownership verification still happens in Google/Bing accounts.
+
+## Website publishing
+
+The custom content editor saves drafts and published documents separately in PostgreSQL. Published services drive the booking choices; past appointments retain their saved description. See [Content management](CONTENT-MANAGEMENT.md) for publication, revision history, and deployment instructions.
