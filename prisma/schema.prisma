@@ -154,3 +154,21 @@ model RequestActivity {
   createdAt   DateTime @default(now())
   @@index([requestKind, requestId, createdAt])
 }
+
+model SiteContent {
+  id          String   @id @default("site")
+  draft       Json
+  published   Json
+  version     Int      @default(0)
+  publishedAt DateTime?
+  updatedAt   DateTime @updatedAt
+}
+
+model ContentRevision {
+  id        String   @id @default(cuid())
+  content   Json
+  action    String
+  actor     String
+  createdAt DateTime @default(now())
+  @@index([createdAt])
+}

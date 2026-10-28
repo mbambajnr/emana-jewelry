@@ -10,6 +10,7 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.ts"],
     alias: {
       "@": path.resolve(process.cwd(), "./src"),
+      "server-only": path.resolve(process.cwd(), "./tests/helpers/server-only.ts"),
     },
   },
 })

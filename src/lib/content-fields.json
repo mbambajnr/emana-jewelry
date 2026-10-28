@@ -1,0 +1,772 @@
+[
+  {
+    "key": "home.001",
+    "group": "Welcome section",
+    "label": "Main heading",
+    "default": "Jewelry & Custom Designs in Takoradi, Ghana",
+    "type": "short"
+  },
+  {
+    "key": "home.002",
+    "group": "Welcome section",
+    "label": "Welcome paragraph",
+    "default": "At Emana Jewelry, there’s room for your style. Explore different metals, stones, and materials, or bring us an idea of your own. Visit our shop on Justmoh Ave in Takoradi for jewelry, custom designs, cleaning, and repairs.",
+    "type": "text"
+  },
+  {
+    "key": "home.003",
+    "group": "Welcome section",
+    "label": "Quotation paragraph",
+    "default": "Tell us what you have in mind and your budget. We’ll explain your options and give you a quote before you decide.",
+    "type": "text"
+  },
+  {
+    "key": "home.004",
+    "group": "Welcome section",
+    "label": "Visit link label",
+    "default": "Book a visit or call",
+    "type": "short"
+  },
+  {
+    "key": "home.005",
+    "group": "Welcome section",
+    "label": "FAQ link label",
+    "default": "Questions? Start here",
+    "type": "short"
+  },
+  {
+    "key": "home.006",
+    "group": "Homepage quick links",
+    "label": "Catalog card — Small label",
+    "default": "01 / FIND YOUR PIECE",
+    "type": "short"
+  },
+  {
+    "key": "home.007",
+    "group": "Homepage quick links",
+    "label": "Catalog card — Heading line 1",
+    "default": "Something for you.",
+    "type": "short"
+  },
+  {
+    "key": "home.008",
+    "group": "Homepage quick links",
+    "label": "Catalog card — Heading line 2",
+    "default": "Or someone special.",
+    "type": "short"
+  },
+  {
+    "key": "home.009",
+    "group": "Homepage quick links",
+    "label": "Catalog card — Description",
+    "default": "Explore rings, necklaces, and more, in materials and styles that suit you.",
+    "type": "short"
+  },
+  {
+    "key": "home.010",
+    "group": "Homepage quick links",
+    "label": "Catalog card — Link label",
+    "default": "Browse jewelry",
+    "type": "short"
+  },
+  {
+    "key": "home.011",
+    "group": "Homepage quick links",
+    "label": "Custom design card — Small label",
+    "default": "02 / MADE FOR YOU",
+    "type": "short"
+  },
+  {
+    "key": "home.012",
+    "group": "Homepage quick links",
+    "label": "Custom design card — Heading line 1",
+    "default": "Your idea.",
+    "type": "short"
+  },
+  {
+    "key": "home.013",
+    "group": "Homepage quick links",
+    "label": "Custom design card — Heading line 2",
+    "default": "Our craftsmanship.",
+    "type": "short"
+  },
+  {
+    "key": "home.014",
+    "group": "Homepage quick links",
+    "label": "Custom design card — Description",
+    "default": "Have a picture or a design in mind? Let’s make a piece that feels like you.",
+    "type": "short"
+  },
+  {
+    "key": "home.015",
+    "group": "Homepage quick links",
+    "label": "Custom design card — Link label",
+    "default": "Create your own piece",
+    "type": "short"
+  },
+  {
+    "key": "home.016",
+    "group": "Homepage quick links",
+    "label": "Repairs card — Small label",
+    "default": "03 / A LITTLE CARE",
+    "type": "short"
+  },
+  {
+    "key": "home.017",
+    "group": "Homepage quick links",
+    "label": "Repairs card — Heading line 1",
+    "default": "A favourite piece.",
+    "type": "short"
+  },
+  {
+    "key": "home.018",
+    "group": "Homepage quick links",
+    "label": "Repairs card — Heading line 2",
+    "default": "A fresh start.",
+    "type": "short"
+  },
+  {
+    "key": "home.019",
+    "group": "Homepage quick links",
+    "label": "Repairs card — Description",
+    "default": "From a broken chain to a ring that no longer fits, we’re here to help.",
+    "type": "short"
+  },
+  {
+    "key": "home.020",
+    "group": "Homepage quick links",
+    "label": "Repairs card — Link label",
+    "default": "Cleaning & repairs",
+    "type": "short"
+  },
+  {
+    "key": "home.021",
+    "group": "Homepage highlights",
+    "label": "Highlight 1 heading",
+    "default": "Materials That Suit You",
+    "type": "short"
+  },
+  {
+    "key": "home.022",
+    "group": "Homepage highlights",
+    "label": "Highlight 1 description",
+    "default": "Let’s find the right material, finish, and style for your budget.",
+    "type": "short"
+  },
+  {
+    "key": "home.023",
+    "group": "Homepage highlights",
+    "label": "Highlight 2 heading",
+    "default": "Speak With Us on WhatsApp",
+    "type": "short"
+  },
+  {
+    "key": "home.024",
+    "group": "Homepage highlights",
+    "label": "Highlight 2 description",
+    "default": "Ask us about a design, your size, or a price on WhatsApp.",
+    "type": "short"
+  },
+  {
+    "key": "home.025",
+    "group": "Homepage highlights",
+    "label": "Highlight 3 heading",
+    "default": "Delivery, Arranged With You",
+    "type": "short"
+  },
+  {
+    "key": "home.026",
+    "group": "Homepage highlights",
+    "label": "Highlight 3 description",
+    "default": "Speak with us about delivery within Ghana or abroad.",
+    "type": "short"
+  },
+  {
+    "key": "home.027",
+    "group": "Custom design process",
+    "label": "Small heading",
+    "default": "Made to Order",
+    "type": "short"
+  },
+  {
+    "key": "home.028",
+    "group": "Custom design process",
+    "label": "Section heading",
+    "default": "Jewelry Made Just for You",
+    "type": "short"
+  },
+  {
+    "key": "home.029",
+    "group": "Custom design process",
+    "label": "Introduction",
+    "default": "Have a design in mind? Send us a picture or tell us your idea. Our team will help you choose the materials, stones, and style to suit your budget.",
+    "type": "text"
+  },
+  {
+    "key": "home.030",
+    "group": "Custom design process",
+    "label": "Step 1 number",
+    "default": "I",
+    "type": "short"
+  },
+  {
+    "key": "home.031",
+    "group": "Custom design process",
+    "label": "Step 1 heading",
+    "default": "Tell Us Your Idea",
+    "type": "short"
+  },
+  {
+    "key": "home.032",
+    "group": "Custom design process",
+    "label": "Step 1 description",
+    "default": "Send us a picture, a sketch, or a message on WhatsApp. Tell us what you like and how much you would like to spend.",
+    "type": "text"
+  },
+  {
+    "key": "home.033",
+    "group": "Custom design process",
+    "label": "Step 2 number",
+    "default": "II",
+    "type": "short"
+  },
+  {
+    "key": "home.034",
+    "group": "Custom design process",
+    "label": "Step 2 heading",
+    "default": "See Your Design",
+    "type": "short"
+  },
+  {
+    "key": "home.035",
+    "group": "Custom design process",
+    "label": "Step 2 description",
+    "default": "We’ll show you a drawing or model so you can check the look and fit before we start making your piece.",
+    "type": "short"
+  },
+  {
+    "key": "home.036",
+    "group": "Custom design process",
+    "label": "Step 3 number",
+    "default": "III",
+    "type": "short"
+  },
+  {
+    "key": "home.037",
+    "group": "Custom design process",
+    "label": "Step 3 heading",
+    "default": "Choose Your Materials and Stones",
+    "type": "short"
+  },
+  {
+    "key": "home.038",
+    "group": "Custom design process",
+    "label": "Step 3 description",
+    "default": "Tell us the look you want and your budget. We’ll talk you through the available metals, stones, and other materials, and help you choose.",
+    "type": "text"
+  },
+  {
+    "key": "home.039",
+    "group": "Custom design process",
+    "label": "Step 4 number",
+    "default": "IV",
+    "type": "short"
+  },
+  {
+    "key": "home.040",
+    "group": "Custom design process",
+    "label": "Step 4 heading",
+    "default": "We Make and Check Your Jewelry",
+    "type": "short"
+  },
+  {
+    "key": "home.041",
+    "group": "Custom design process",
+    "label": "Step 4 description",
+    "default": "We make your piece and check the materials, fit, and finish. Then we pack it safely for collection or delivery.",
+    "type": "text"
+  },
+  {
+    "key": "home.042",
+    "group": "Materials section",
+    "label": "Small heading",
+    "default": "The Materials Behind Your Piece",
+    "type": "short"
+  },
+  {
+    "key": "home.043",
+    "group": "Materials section",
+    "label": "Section heading",
+    "default": "Materials Chosen With Care",
+    "type": "short"
+  },
+  {
+    "key": "home.044",
+    "group": "Materials section",
+    "label": "Introduction",
+    "default": "Different pieces call for different materials. Ask us about the metals, stones, finishes, and other materials available for your design, and where they come from.",
+    "type": "text"
+  },
+  {
+    "key": "home.045",
+    "group": "Materials section",
+    "label": "Stone sourcing heading",
+    "default": "Knowing Where Our Stones Come From",
+    "type": "short"
+  },
+  {
+    "key": "home.046",
+    "group": "Materials section",
+    "label": "Stone sourcing description",
+    "default": "We trace our colored stones directly to responsible origin mines across Africa, Sri Lanka, and Colombia.",
+    "type": "short"
+  },
+  {
+    "key": "home.047",
+    "group": "Materials section",
+    "label": "Gold sourcing heading",
+    "default": "Gold From Ghanaian Gold Miners",
+    "type": "short"
+  },
+  {
+    "key": "home.048",
+    "group": "Materials section",
+    "label": "Gold sourcing description",
+    "default": "Our 18K and 22K gold is sourced through vetted small-scale Ghanaian co-operatives with fair-labor standards.",
+    "type": "short"
+  },
+  {
+    "key": "home.049",
+    "group": "Materials section",
+    "label": "Purity heading",
+    "default": "Gold Purity Checks",
+    "type": "short"
+  },
+  {
+    "key": "home.050",
+    "group": "Materials section",
+    "label": "Purity description",
+    "default": "For gold pieces, we check purity and explain the hallmark, a mark showing the gold quality. For other materials, we’ll explain the finish and how to care for your piece.",
+    "type": "text"
+  },
+  {
+    "key": "home.image.051",
+    "group": "Homepage images",
+    "label": "Materials photo",
+    "default": "/gemstones_sourcing.jpg",
+    "type": "image"
+  },
+  {
+    "key": "home.052",
+    "group": "Consultation section",
+    "label": "Small heading",
+    "default": "Visit Us or Speak With Us Online",
+    "type": "short"
+  },
+  {
+    "key": "home.053",
+    "group": "Consultation section",
+    "label": "Section heading",
+    "default": "Let’s Talk About Your Jewelry",
+    "type": "short"
+  },
+  {
+    "key": "home.054",
+    "group": "Consultation section",
+    "label": "Introduction",
+    "default": "Come to our Takoradi shop or speak with us by video call. Whether you want a new piece, a repair, or a little advice, we’re happy to help.",
+    "type": "text"
+  },
+  {
+    "key": "home.image.055",
+    "group": "Homepage images",
+    "label": "Consultation photo",
+    "default": "/consultation_desk.jpg",
+    "type": "image"
+  },
+  {
+    "key": "home.056",
+    "group": "Consultation section",
+    "label": "Design advice heading",
+    "default": "Help With Your Design",
+    "type": "short"
+  },
+  {
+    "key": "home.057",
+    "group": "Consultation section",
+    "label": "Design advice description",
+    "default": "Talk us through your idea. We’ll help you choose a style, size, and materials that work for you.",
+    "type": "short"
+  },
+  {
+    "key": "home.058",
+    "group": "Consultation section",
+    "label": "Material advice heading",
+    "default": "Know What Your Jewelry Is Made From",
+    "type": "short"
+  },
+  {
+    "key": "home.059",
+    "group": "Consultation section",
+    "label": "Material advice description",
+    "default": "Ask us about the materials and stones in your piece. We’ll explain where they come from and show you the available certificates.",
+    "type": "text"
+  },
+  {
+    "key": "home.060",
+    "group": "Consultation section",
+    "label": "Care advice heading",
+    "default": "Advice on Cleaning & Repairs",
+    "type": "short"
+  },
+  {
+    "key": "home.061",
+    "group": "Consultation section",
+    "label": "Care advice description",
+    "default": "Bring your piece for us to check. We’ll explain the work it needs and the cost before you decide.",
+    "type": "short"
+  },
+  {
+    "key": "footer.001",
+    "group": "Footer",
+    "label": "About Emana paragraph",
+    "default": "Jewelry for your everyday moments and special occasions, in a range of materials and styles. Visit us in Takoradi or speak with us about a piece made just for you.",
+    "type": "text"
+  },
+  {
+    "key": "footer.002",
+    "group": "Footer",
+    "label": "Newsletter introduction",
+    "default": "Leave your email to hear about new jewelry, gemstones, and ideas for your next piece.",
+    "type": "short"
+  },
+  {
+    "key": "store.001",
+    "group": "Store introduction",
+    "label": "Small heading",
+    "default": "Find Us in Takoradi",
+    "type": "short"
+  },
+  {
+    "key": "store.002",
+    "group": "Store introduction",
+    "label": "Section heading",
+    "default": "Visit Our Takoradi Store",
+    "type": "short"
+  },
+  {
+    "key": "store.003",
+    "group": "Store introduction",
+    "label": "Store introduction",
+    "default": "Come and see our jewelry, take a closer look at the gemstones, and speak with the people who make your pieces. You’ll find us on Justmoh Ave in Takoradi.",
+    "type": "text"
+  },
+  {
+    "key": "featured.001",
+    "group": "Featured products",
+    "label": "Small heading",
+    "default": "Signature Preview",
+    "type": "short"
+  },
+  {
+    "key": "featured.002",
+    "group": "Featured products",
+    "label": "Section heading",
+    "default": "Featured Jewelry",
+    "type": "short"
+  },
+  {
+    "key": "featured.003",
+    "group": "Featured products",
+    "label": "Introduction",
+    "default": "Discover pieces for different tastes, occasions, and budgets. Each product tells you about its materials, finish, and stones, where used.",
+    "type": "text"
+  },
+  {
+    "key": "featured.004",
+    "group": "Featured products",
+    "label": "Empty catalog heading",
+    "default": "New Jewelry Coming Soon",
+    "type": "short"
+  },
+  {
+    "key": "featured.005",
+    "group": "Featured products",
+    "label": "Empty catalog message",
+    "default": "We’re preparing new pieces in a range of styles and materials. Speak with us on WhatsApp to find out what’s available or tell us what you have in mind.",
+    "type": "text"
+  },
+  {
+    "key": "featured.006",
+    "group": "Featured products",
+    "label": "WhatsApp button label",
+    "default": "Chat With Us on WhatsApp",
+    "type": "short"
+  },
+  {
+    "key": "featured.007",
+    "group": "Featured products",
+    "label": "Custom design button label",
+    "default": "Custom Jewelry",
+    "type": "short"
+  },
+  {
+    "key": "featured.008",
+    "group": "Featured products",
+    "label": "Product enquiry button label",
+    "default": "Ask About This Piece",
+    "type": "short"
+  },
+  {
+    "key": "featured.009",
+    "group": "Featured products",
+    "label": "View More button label",
+    "default": "View More",
+    "type": "short"
+  },
+  {
+    "key": "featured.010",
+    "group": "Featured products",
+    "label": "View More note",
+    "default": "See all our jewelry in one place.",
+    "type": "short"
+  },
+  {
+    "key": "heroActions.001",
+    "group": "Hero buttons",
+    "label": "Shop button label",
+    "default": "Shop Jewelry",
+    "type": "short"
+  },
+  {
+    "key": "heroActions.002",
+    "group": "Hero buttons",
+    "label": "Custom order button label",
+    "default": "Custom Orders",
+    "type": "short"
+  },
+  {
+    "key": "heroActions.003",
+    "group": "Hero buttons",
+    "label": "Store button label",
+    "default": "Visit Takoradi Store",
+    "type": "short"
+  },
+  {
+    "key": "heroActions.004",
+    "group": "Hero buttons",
+    "label": "Slide 1 navigation label",
+    "default": "Our Takoradi Workshop",
+    "type": "short"
+  },
+  {
+    "key": "heroActions.005",
+    "group": "Hero buttons",
+    "label": "Slide 2 navigation label",
+    "default": "Necklaces & Pendants",
+    "type": "short"
+  },
+  {
+    "key": "heroActions.006",
+    "group": "Hero buttons",
+    "label": "Slide 3 navigation label",
+    "default": "Emana Jewelry",
+    "type": "short"
+  },
+  {
+    "key": "hero.0.title",
+    "group": "Hero slide 1",
+    "label": "Heading",
+    "default": "Shop",
+    "type": "short"
+  },
+  {
+    "key": "hero.0.highlight",
+    "group": "Hero slide 1",
+    "label": "Highlighted heading",
+    "default": "Our Jewelry",
+    "type": "short"
+  },
+  {
+    "key": "hero.0.description",
+    "group": "Hero slide 1",
+    "label": "Description",
+    "default": "Browse necklaces, rings, bracelets, earrings, and more.",
+    "type": "text"
+  },
+  {
+    "key": "hero.1.title",
+    "group": "Hero slide 2",
+    "label": "Heading",
+    "default": "Necklaces &",
+    "type": "short"
+  },
+  {
+    "key": "hero.1.highlight",
+    "group": "Hero slide 2",
+    "label": "Highlighted heading",
+    "default": "Pendants",
+    "type": "short"
+  },
+  {
+    "key": "hero.1.description",
+    "group": "Hero slide 2",
+    "label": "Description",
+    "default": "Explore the collection and ask us about any piece you like.",
+    "type": "text"
+  },
+  {
+    "key": "hero.2.title",
+    "group": "Hero slide 3",
+    "label": "Heading",
+    "default": "Emana",
+    "type": "short"
+  },
+  {
+    "key": "hero.2.highlight",
+    "group": "Hero slide 3",
+    "label": "Highlighted heading",
+    "default": "Jewelry",
+    "type": "short"
+  },
+  {
+    "key": "hero.2.description",
+    "group": "Hero slide 3",
+    "label": "Description",
+    "default": "Shop online or visit our store in Takoradi.",
+    "type": "text"
+  },
+  {
+    "key": "services.eyebrow",
+    "group": "Services section",
+    "label": "Small heading",
+    "default": "Cleaning & Repairs",
+    "type": "short"
+  },
+  {
+    "key": "services.title",
+    "group": "Services section",
+    "label": "Section heading",
+    "default": "Jewelry Cleaning & Repair Services",
+    "type": "short"
+  },
+  {
+    "key": "services.description",
+    "group": "Services section",
+    "label": "Introduction",
+    "default": "Your ring no longer fits? Your chain needs fixing? Bring it to us. We’ll check it, explain what needs to be done, and help it look its best again.",
+    "type": "text"
+  },
+  {
+    "key": "services.image",
+    "group": "Services section",
+    "label": "Services photo",
+    "default": "/jewelry_cleaner.png",
+    "type": "image"
+  },
+  {
+    "key": "seo.homeTitle",
+    "group": "Homepage search listing",
+    "label": "Page title",
+    "default": "Jewelry & Custom Designs in Takoradi, Ghana",
+    "type": "short"
+  },
+  {
+    "key": "seo.homeDescription",
+    "group": "Homepage search listing",
+    "label": "Search description",
+    "default": "Explore jewelry for your style and budget in Takoradi, Ghana. Ask Emana Jewelry about custom designs, materials, gemstones, cleaning, and repairs.",
+    "type": "text"
+  },
+  {
+    "key": "hero.0.image",
+    "group": "Hero slide 1",
+    "label": "Slide photo",
+    "default": "/hero/optimized/artisan_goldsmith-1400-acb825f32e9f.webp",
+    "type": "image"
+  },
+  {
+    "key": "hero.1.image",
+    "group": "Hero slide 2",
+    "label": "Slide photo",
+    "default": "/hero/optimized/lion_medallion-1400-8a4627f9956a.webp",
+    "type": "image"
+  },
+  {
+    "key": "hero.2.image",
+    "group": "Hero slide 3",
+    "label": "Slide photo",
+    "default": "/hero/optimized/bear_pendant-1400-9b4ebfadf275.webp",
+    "type": "image"
+  },
+  {
+    "key": "process.1.image",
+    "group": "Custom design steps",
+    "label": "Step 1 photo",
+    "default": "/bespoke_drafting.jpg",
+    "type": "image"
+  },
+  {
+    "key": "process.1.label",
+    "group": "Custom design steps",
+    "label": "Step 1 photo caption",
+    "default": "Step 1: Your Idea",
+    "type": "short"
+  },
+  {
+    "key": "process.2.image",
+    "group": "Custom design steps",
+    "label": "Step 2 photo",
+    "default": "/gold_signet_ring.jpg",
+    "type": "image"
+  },
+  {
+    "key": "process.2.label",
+    "group": "Custom design steps",
+    "label": "Step 2 photo caption",
+    "default": "Step 2: Your Design",
+    "type": "short"
+  },
+  {
+    "key": "process.3.image",
+    "group": "Custom design steps",
+    "label": "Step 3 photo",
+    "default": "/gemstones_sourcing.jpg",
+    "type": "image"
+  },
+  {
+    "key": "process.3.label",
+    "group": "Custom design steps",
+    "label": "Step 3 photo caption",
+    "default": "Step 3: Materials and Stones",
+    "type": "short"
+  },
+  {
+    "key": "process.4.image",
+    "group": "Custom design steps",
+    "label": "Step 4 photo",
+    "default": "/hero_gold_necklace.jpg",
+    "type": "image"
+  },
+  {
+    "key": "process.4.label",
+    "group": "Custom design steps",
+    "label": "Step 4 photo caption",
+    "default": "Step 4: Making and Delivery",
+    "type": "short"
+  },
+  {
+    "key": "home.imageAlt.051",
+    "group": "Homepage images",
+    "label": "Materials photo description",
+    "default": "Natural rough and cut gemstones in folded dealer parcel paper with jeweler tweezers",
+    "type": "short"
+  },
+  {
+    "key": "home.imageAlt.055",
+    "group": "Homepage images",
+    "label": "Consultation photo description",
+    "default": "Private jewelry consultation desk with emerald velvet tray, brass loupe, and ring mandrels",
+    "type": "short"
+  }
+]
