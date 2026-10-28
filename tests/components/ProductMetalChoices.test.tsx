@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { SiteContentProvider } from "@/components/cms/SiteContentProvider"
+import { defaultContent } from "@/lib/site-content"
 import ProductDetailClient, { type ProductFromDb } from "@/app/products/[slug]/product-detail-client"
 import { getCart } from "@/lib/cart"
 
@@ -45,7 +47,7 @@ it("shows owner-supplied availability, sizes, delivery, and care without fixed p
   expect(screen.getByText("Made to order")).toBeInTheDocument()
   expect(screen.getAllByText("45 cm or 50 cm")).toHaveLength(2)
   expect(screen.getAllByText("Collect after we confirm your order")).toHaveLength(2)
-  expect(screen.getByText("Wipe with a soft dry cloth")).toBeInTheDocument()
+  expect(screen.getAllByText("Wipe with a soft dry cloth")).toHaveLength(2)
   expect(screen.getByRole("button", { name: "Ask Us on WhatsApp" })).toBeInTheDocument()
 })
 
@@ -77,4 +79,13 @@ it("starts with the metal chosen in the catalogue, falling back to an offered op
   unmount()
   render(<ProductDetailClient product={{ ...product, metalOptions: ["Gold"] }} initialMetal="Silver" />)
   expect(screen.getByRole("radio", { name: "Gold" })).toBeChecked()
+})
+
+it("uses published general guidance and links to full delivery, care, and returns details", () => {
+  const document = { ...defaultContent, copy: { ...defaultContent.copy, "product.deliverySummary": "Ask about collection arrangements", "product.careSummary": "Speak to our team about aftercare", "product.returnsDetails": "Discuss changes with our team before ordering" } }
+  render(<SiteContentProvider document={document}><ProductDetailClient product={product} /></SiteContentProvider>)
+  expect(screen.getByText("Ask about collection arrangements")).toBeInTheDocument()
+  expect(screen.getByText("Speak to our team about aftercare")).toBeInTheDocument()
+  expect(screen.getByRole("link", { name: "Delivery, care & returns details ↓" })).toHaveAttribute("href", "#delivery-and-care")
+  expect(screen.getByText("Discuss changes with our team before ordering")).toBeInTheDocument()
 })

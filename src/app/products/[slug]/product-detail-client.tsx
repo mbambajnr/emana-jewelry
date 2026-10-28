@@ -1,5 +1,7 @@
 "use client"
 
+import { useSiteContent } from "@/components/cms/SiteContentProvider"
+
 import { availabilityLabel, type ProductInformation } from "@/lib/product-information"
 
 import { photosForMetal, productMetalOptions, type MetalOption } from "@/lib/product-options"
@@ -47,6 +49,7 @@ export interface ProductFromDb extends ProductInformation {
 
 
 export default function ProductDetailClient({ product, preview = false, relatedProducts, initialMetal }: { product: ProductFromDb; preview?: boolean; relatedProducts?: ReactNode; initialMetal?: MetalOption }) {
+  const { copy } = useSiteContent()
   useEffect(() => { if (!preview) recordProductView(product.slug) }, [product.slug, preview])
   const options = productMetalOptions(product.metalOptions)
   const [selectedMetal, setSelectedMetal] = useState<MetalOption | undefined>(initialMetal && options.includes(initialMetal) ? initialMetal : options[0])
@@ -113,7 +116,8 @@ export default function ProductDetailClient({ product, preview = false, relatedP
           <select id="product-quantity" value={quantity} className={styles.quantity} onChange={event => { setQuantity(Number(event.target.value)); setAdded(false) }}>{Array.from({ length: 10 }, (_, i) => <option key={i + 1} value={i + 1}>{i + 1}</option>)}</select>
           <button className={styles.quoteAction} onClick={requestQuote}>{added ? "Added to your quote request ✓" : "Add to Quote Request"}</button>
           <p className={styles.noPayment}>No payment is taken on this page.</p>
-          <div className={styles.delivery}><span aria-hidden="true">⌖</span><p><strong>Collection or delivery</strong><br />{product.deliveryNotes || "Pick up in Takoradi, or ask us about delivery to your location."}</p></div>
+          <div className={styles.delivery}><span aria-hidden="true">⌖</span><p className={styles.guidanceSummary}><strong>Collection or delivery</strong><br />{product.deliveryNotes || copy["product.deliverySummary"]}</p></div>
+          <div className={styles.aftercare}><strong>Care after your purchase</strong><p className={styles.guidanceSummary}>{product.careInstructions || copy["product.careSummary"]}</p><a href="#delivery-and-care">Delivery, care &amp; returns details ↓</a></div>
           {added && <p role="status" className={styles.addedMessage}>{preview ? "Preview only — no item was saved." : "Your piece has been added."} <Link href="/cart">View your request →</Link></p>}
           <button className={styles.saveAction} onClick={save} aria-pressed={wishlisted}>{wishlisted ? "♥ Saved to your wishlist" : "♡ Save for later"}</button>
           <p className={styles.support}>Prefer to speak with us?<br /><a href="tel:+233242186590">+233 24 218 6590</a></p>
@@ -138,10 +142,10 @@ export default function ProductDetailClient({ product, preview = false, relatedP
           {product.materials.map((material, i) => <div key={`metal-${i}`}><dt>{material.metal}</dt><dd>{[material.purity, material.weight].filter(Boolean).join(" · ")}</dd></div>)}
           {product.stones.map((stone, i) => <div key={`stone-${i}`}><dt>{stone.type}</dt><dd>{[stone.carat && `${stone.carat} ct`, stone.color, stone.clarity, stone.cut, stone.certification].filter(Boolean).join(" · ") || "Ask us for details"}</dd></div>)}
         </dl></section>
-        <section id="delivery-and-care" className={styles.detailSection}><span className={styles.eyebrow}>BEFORE YOU ORDER</span><h2>A little peace of mind</h2><details open><summary>Collection &amp; delivery</summary><p>{product.deliveryNotes || "Collect from our shop on Justmoh Ave, Takoradi. For delivery, speak with us about the cost and timing before confirming your order."}</p></details><details><summary>Sizing &amp; custom requests</summary><p>{product.sizeNotes || "Tell us your size or the changes you’d like. We’ll explain what is possible, the cost, and how long it will take."}</p></details><details><summary>Looking after your jewelry</summary><p>{product.careInstructions || "Ask us about care for the materials in your piece. We also offer cleaning and repairs at our Takoradi shop."}</p></details><Link className={styles.faqLink} href="/faq">More questions? Read our FAQs →</Link></section>
+        <section id="delivery-and-care" className={styles.detailSection}><span className={styles.eyebrow}>BEFORE YOU ORDER</span><h2>A little peace of mind</h2><details open><summary>Collection &amp; delivery</summary><p>{product.deliveryNotes || copy["product.deliveryDetails"]}</p></details><details><summary>Sizing &amp; custom requests</summary><p>{product.sizeNotes || copy["product.sizingDetails"]}</p></details><details><summary>Looking after your jewelry</summary><p>{product.careInstructions || copy["product.careDetails"]}</p></details><details><summary>Returns &amp; changes</summary><p>{copy["product.returnsDetails"]}</p></details><Link className={styles.faqLink} href="/faq">More questions? Read our FAQs →</Link></section>
       </div>
-      <section id="customer-reviews" className={styles.reviews}><h2>Customer reviews</h2>{product.reviews.length ? product.reviews.map(review => <article key={review.id} className={styles.review}><div><strong>{review.author}</strong><time>{review.date}</time></div><p aria-label={`${review.rating} out of 5 stars`} className={styles.reviewStars}>{"★".repeat(Math.max(0, Math.min(5, review.rating)))}</p><p>{review.text}</p></article>) : <p>No reviews for this piece yet. <a href="#request-panel">Speak with us if you’d like to know more.</a></p>}</section>
       {relatedProducts}
+      <section id="customer-reviews" className={styles.reviews}><h2>Customer reviews</h2>{product.reviews.length ? product.reviews.map(review => <article key={review.id} className={styles.review}><div><strong>{review.author}</strong><time>{review.date}</time></div><p aria-label={`${review.rating} out of 5 stars`} className={styles.reviewStars}>{"★".repeat(Math.max(0, Math.min(5, review.rating)))}</p><p>{review.text}</p></article>) : <p>No reviews for this piece yet. <a href="#request-panel">Speak with us if you’d like to know more.</a></p>}</section>
       {!preview && <RecentlyViewed excludeSlug={product.slug} />}
     </main>
     <Footer />

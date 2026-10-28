@@ -11,3 +11,5 @@
 
 .section { max-width: none; padding-inline: var(--content-inset); }
 @media (max-width: 480px) { .heading { align-items: flex-start; flex-wrap: wrap; gap: 12px; } .grid { gap: 16px; } }
+
+.heading > a { display: inline-flex; align-items: center; min-height: 44px; font-size: .85rem; color: var(--gold-dark); text-decoration: underline; text-underline-offset: 3px; }

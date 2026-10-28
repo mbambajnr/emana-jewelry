@@ -775,5 +775,47 @@
     "label": "Services photo description",
     "default": "Jewelry care services",
     "type": "short"
+  },
+  {
+    "key": "product.deliverySummary",
+    "group": "Product page guidance",
+    "label": "Collection and delivery summary",
+    "default": "Pick up in Takoradi, or ask us about delivery to your location.",
+    "type": "text"
+  },
+  {
+    "key": "product.deliveryDetails",
+    "group": "Product page guidance",
+    "label": "Collection and delivery details",
+    "default": "Collect from our shop on Justmoh Ave, Takoradi. For delivery, speak with us about the cost and timing before confirming your order.",
+    "type": "text"
+  },
+  {
+    "key": "product.careSummary",
+    "group": "Product page guidance",
+    "label": "Aftercare summary",
+    "default": "Ask us about cleaning, repairs, and care for this piece.",
+    "type": "text"
+  },
+  {
+    "key": "product.careDetails",
+    "group": "Product page guidance",
+    "label": "Aftercare details",
+    "default": "Ask us about care for the materials in your piece. We also offer cleaning and repairs at our Takoradi shop.",
+    "type": "text"
+  },
+  {
+    "key": "product.sizingDetails",
+    "group": "Product page guidance",
+    "label": "Sizing and custom requests",
+    "default": "Tell us your size or the changes you’d like. We’ll explain what is possible, the cost, and how long it will take.",
+    "type": "text"
+  },
+  {
+    "key": "product.returnsDetails",
+    "group": "Product page guidance",
+    "label": "Returns and changes guidance",
+    "default": "Please ask us about returns or changes before confirming your order, especially for a piece made to your size or design.",
+    "type": "text"
   }
 ]

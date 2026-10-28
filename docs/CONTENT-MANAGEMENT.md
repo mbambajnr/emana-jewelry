@@ -46,3 +46,9 @@ Back up both CMS tables together with the rest of the shop database. A Git push 
 In **Products → Add Product** or **Edit Product**, use **Availability, sizes & care**. Choose Available, Made to order, or Confirm availability. New products start with Confirm availability. Existing products retain their original availability until edited. Add optional size information, delivery notes, and care instructions; blank notes use the existing enquiry guidance. Continue using **Materials** for the actual metal, purity, finish, and weight rather than repeating them in another field. Saving a product updates the live product page immediately; product edits do not use the page-content draft workflow. Prices remain by enquiry.
 
 Deployments must run `npx prisma migrate deploy` and regenerate the Prisma client before starting the updated app. The product information migration adds nullable fields without changing existing records.
+
+## Product page guidance and related pieces
+
+Under **Website Content → Page Content → Product page guidance**, edit the general collection/delivery, aftercare, sizing, and returns guidance. Save Draft and Publish Changes when ready. Product-specific delivery notes, care instructions, and sizes take precedence over this general guidance. Keep delivery costs, timing, and returns terms accurate; the built-in wording asks customers to confirm arrangements and promises no fixed returns period or free delivery. The product page links from the enquiry panel to the full guidance.
+
+Related pieces show up to four other products: matching subcategory first, then the rest of the same collection, without duplicates or the current product. **View all jewelry** always opens the full catalogue. If there are no other pieces in the collection, the suggestions section stays hidden.

@@ -101,3 +101,8 @@
 .mobileWhatsapp { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 8px; background: #285c3b; color: white; border-radius: 6px; padding: 10px; font-size: .8rem; font-weight: 600; cursor: pointer; }
 .buyBox :focus-visible, .mobileEnquiry :focus-visible { outline: 3px solid var(--gold-dark); outline-offset: 3px; }
 @media (min-width: 768px) { .mobileEnquiry { display: none; } }
+
+.aftercare { padding: 16px 0; border-bottom: 1px solid #eee8df; margin-bottom: 16px; font-size: .8rem; }
+.aftercare p { margin-top: 6px; }
+.aftercare a { display: inline-flex; align-items: center; min-height: 44px; color: var(--gold-dark); text-decoration: underline; text-underline-offset: 3px; }
+.guidanceSummary { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }

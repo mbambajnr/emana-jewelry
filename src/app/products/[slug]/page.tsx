@@ -118,7 +118,7 @@ async function ProductContent({ slug, initialMetal }: { slug: string; initialMet
 
   if (!product) notFound()
 
-  return <ProductDetailClient key={`${product.id}:${initialMetal || "default"}`} initialMetal={initialMetal} product={{ ...product, price: 0, originalPrice: null }} relatedProducts={<Suspense fallback={null}><RelatedProducts slug={product.slug} category={product.category.slug} /></Suspense>} />
+  return <ProductDetailClient key={`${product.id}:${initialMetal || "default"}`} initialMetal={initialMetal} product={{ ...product, price: 0, originalPrice: null }} relatedProducts={<Suspense fallback={null}><RelatedProducts slug={product.slug} category={product.category.slug} subcategory={product.subcategory} /></Suspense>} />
 }
 
 async function ProductPageContent({ paramsPromise, searchParams }: { paramsPromise: Promise<{ slug: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
