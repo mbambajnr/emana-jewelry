@@ -22,3 +22,8 @@ export function photoMetal(value: unknown): MetalOption | null {
   if (!isMetalOption(value)) throw new Error("Photo metal must be Gold, Silver, or General.")
   return value
 }
+
+export function photosForMetal<T extends { url: string; metal?: string | null; sortOrder: number }>(images: readonly T[], metal?: MetalOption): T[] {
+  return images.filter(image => image.url && (!metal || !image.metal || image.metal === metal))
+    .sort((a, b) => (metal ? Number(b.metal === metal) - Number(a.metal === metal) : 0) || a.sortOrder - b.sortOrder)
+}

@@ -29,7 +29,7 @@ describe("product metal choices", () => {
     expect(screen.getByRole("img", { name: "Silver pendant" })).toBeInTheDocument()
     expect(screen.queryByRole("img", { name: "Gold pendant" })).not.toBeInTheDocument()
     await user.click(screen.getByRole("button", { name: "Add to Quote Request" }))
-    expect(getCart()).toEqual([expect.objectContaining({ slug: "pendant", metal: "Silver" })])
+    expect(getCart()).toEqual([expect.objectContaining({ slug: "pendant", metal: "Silver", image: "/silver.jpg" })])
     await user.click(screen.getByRole("button", { name: "Ask Us on WhatsApp" }))
     expect(new URL(String(open.mock.calls[0][0])).searchParams.get("text")).toContain("*Pendant* in Silver")
   })

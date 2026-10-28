@@ -1,6 +1,6 @@
 "use client"
 
-import { productMetalOptions, type MetalOption } from "@/lib/product-options"
+import { photosForMetal, productMetalOptions, type MetalOption } from "@/lib/product-options"
 import { recordProductView } from "@/lib/recently-viewed"
 import RecentlyViewed from "@/components/RecentlyViewed"
 import CatalogReturnLink from "@/components/CatalogReturnLink"
@@ -67,7 +67,7 @@ export default function ProductDetailClient({ product, preview = false, relatedP
   }
   const requestQuote = () => {
     if (preview) { setAdded(true); return }
-    addToCart({ slug: product.slug, name: product.name, image: product.images[0]?.url || "/hero_bg.png", price: product.price, quantity, metal })
+    addToCart({ slug: product.slug, name: product.name, image: photosForMetal(product.images, metal)[0]?.url || "/hero_bg.png", price: product.price, quantity, metal })
     setAdded(true)
   }
   const schema = {

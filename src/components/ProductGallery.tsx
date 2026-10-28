@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import type { MetalOption } from "@/lib/product-options"
+import { photosForMetal, type MetalOption } from "@/lib/product-options"
 import { youtubeVideoId } from "@/lib/product-media"
 import styles from "./ProductGallery.module.css"
 
@@ -18,8 +18,7 @@ export default function ProductGallery(props: GalleryProps) {
 }
 
 function Gallery({ name, images, youtubeUrl, metal }: GalleryProps) {
-  const photos = images.filter(image => image.url && (!metal || !image.metal || image.metal === metal))
-    .sort((a, b) => (metal ? Number(b.metal === metal) - Number(a.metal === metal) : 0) || a.sortOrder - b.sortOrder)
+  const photos = photosForMetal(images, metal)
   const missingVersion = metal && !images.some(image => image.url && image.metal === metal)
   const [selected, setSelected] = useState(0)
   const [video, setVideo] = useState(false)
