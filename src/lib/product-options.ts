@@ -16,3 +16,9 @@ export function validateMetalOptions(value: unknown): MetalOption[] {
   }
   return productMetalOptions(value)
 }
+
+export function photoMetal(value: unknown): MetalOption | null {
+  if (value === undefined || value === null || value === "") return null
+  if (!isMetalOption(value)) throw new Error("Photo metal must be Gold, Silver, or General.")
+  return value
+}

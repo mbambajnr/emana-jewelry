@@ -11,3 +11,11 @@ Quote items are identified by product slug plus selected metal. Gold and Silver 
 The selection appears in the client's quote list, saved admin inquiry, notification emails, and WhatsApp quote summaries. Historical requests without a metal remain unchanged. Wishlist entries continue to save the product rather than a metal variant.
 
 Deployment: run `npx prisma migrate deploy` and `npx prisma generate`. The migration adds one PostgreSQL text-array column. The existing numeric price fields stay unpriced; this feature does not introduce checkout or separate variant prices.
+
+## Matching photos to metal choices
+
+Upload real photos of each version in the product editor. Each photo row has a **Photo version** dropdown: Gold, Silver, or General photo. Photo labels stay attached when rows are reordered or removed. Existing images default to General photo; their metal is not guessed from filenames, product names, or the appearance of other photos.
+
+Selecting a metal on the product page resets the gallery and video state, shows that metal's first photo, and excludes photos labelled for the other metal. General photos remain available after the matching photos. Without a matching photo, the gallery explains that the chosen version's photos are missing. If there are no general photos either, it shows a placeholder rather than an unrelated metal photo. Upload and label both versions to enable a visible Gold/Silver photo change; the app does not recolour product images.
+
+Deploy the product-photo-metals migration before serving the updated product pages.

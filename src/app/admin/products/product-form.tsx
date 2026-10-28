@@ -27,7 +27,7 @@ export interface ProductData {
   categoryId?: string
   details?: { text: string }[]
   youtubeUrl?: string | null
-  images?: { url: string; alt?: string | null }[]
+  images?: { url: string; alt?: string | null; metal?: string | null }[]
   materials?: { metal: string; purity: string; weight?: string | null }[]
   stones?: {
     type: string
@@ -81,13 +81,15 @@ export default function ProductForm({
     product?.images?.map((i) => i.url) ?? [""],
   )
   const [imageAlts, setImageAlts] = useState<string[]>(product?.images?.map(image => image.alt || "") || [])
+  const [imageMetals, setImageMetals] = useState<string[]>(product?.images?.map(image => image.metal || "") || [])
   const dragIndex = useRef<number | null>(null)
   const moveImage = (from: number, to: number) => {
     if (to < 0 || to >= images.length || from === to) return
-    const nextImages = [...images], nextAlts = images.map((_, index) => imageAlts[index] || "")
+    const nextImages = [...images], nextAlts = images.map((_, index) => imageAlts[index] || ""), nextMetals = images.map((_, index) => imageMetals[index] || "")
     nextImages.splice(to, 0, nextImages.splice(from, 1)[0])
     nextAlts.splice(to, 0, nextAlts.splice(from, 1)[0])
-    setImages(nextImages); setImageAlts(nextAlts)
+    nextMetals.splice(to, 0, nextMetals.splice(from, 1)[0])
+    setImages(nextImages); setImageAlts(nextAlts); setImageMetals(nextMetals)
   }
   const [materials, setMaterials] = useState<
     { metal: string; purity: string; weight: string }[]
@@ -188,7 +190,7 @@ export default function ProductForm({
       ...form,
       metalOptions,
       details: details.filter((d) => d.trim()).map((text) => ({ text })),
-      images: images.map((url, index) => ({ url, alt: imageAlts[index] || "" })).filter(image => image.url.trim()),
+      images: images.map((url, index) => ({ url, alt: imageAlts[index] || "", metal: imageMetals[index] || null })).filter(image => image.url.trim()),
       materials: materials.filter((m) => m.metal && m.purity),
       stones: stones.filter((s) => s.type && s.carat),
     }
@@ -337,7 +339,9 @@ export default function ProductForm({
       {/* Images */}
       <fieldset className={styles.fieldset}>
         <legend className={styles.legend}>Product photos</legend>
-        <p className={styles.hint}>The first photo is your cover image. Drag photos to reorder them, or use the arrow buttons. Add a front view, a close-up, and a photo showing the piece being worn.</p>
+        <p className={styles.hint}>The first photo is your cover image. Drag photos to reorder them, or use the arrow buttons. Add a front view, a close-up, and a photo showing the piece being worn. Label each photo Gold, Silver, or General so the gallery can follow the client’s choice.</p>
+
+        {metalOptions.filter(option => !images.some((url, index) => url.trim() && imageMetals[index] === option)).map(option => <p key={option} className={styles.hint}>{option} photo not assigned yet. Upload a photo of that version and choose {option} under Photo version.</p>)}
 
         <div className={styles.uploadRow}>
           <input
@@ -382,6 +386,12 @@ export default function ProductForm({
               placeholder="Image URL or upload above"
             />
             <input className={styles.input} aria-label={`Photo ${i + 1} description`} placeholder="Describe this photo, e.g. Side view of the gold ring" value={imageAlts[i] || ""} onChange={event => setImageAlts(images.map((_, index) => index === i ? event.target.value : imageAlts[index] || ""))} />
+            <label className={styles.hint}>
+              Photo version
+              <select className={styles.input} aria-label={`Photo ${i + 1} metal`} value={imageMetals[i] || ""} onChange={event => setImageMetals(images.map((_, index) => index === i ? event.target.value : imageMetals[index] || ""))}>
+                <option value="">General photo</option><option value="Gold">Gold</option><option value="Silver">Silver</option>
+              </select>
+            </label>
             <button type="button" className={styles.mediaOrder} aria-label={`Move photo ${i + 1} earlier`} disabled={i === 0 || uploading} onClick={() => moveImage(i, i - 1)}>↑</button>
             <button type="button" className={styles.mediaOrder} aria-label={`Move photo ${i + 1} later`} disabled={i === images.length - 1 || uploading} onClick={() => moveImage(i, i + 1)}>↓</button>
             {images.length > 1 && (
@@ -389,7 +399,7 @@ export default function ProductForm({
                 type="button"
                 className={styles.removeBtn}
                 aria-label={`Remove photo ${i + 1}`}
-                onClick={() => { removeArrayItem(setImages, i); setImageAlts(images.map((_, index) => imageAlts[index] || "").filter((_, index) => index !== i)) }}
+                onClick={() => { removeArrayItem(setImages, i); setImageAlts(images.map((_, index) => imageAlts[index] || "").filter((_, index) => index !== i)); setImageMetals(images.map((_, index) => imageMetals[index] || "").filter((_, index) => index !== i)) }}
               >
                 &times;
               </button>

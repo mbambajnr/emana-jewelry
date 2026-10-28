@@ -29,7 +29,7 @@ export interface ProductFromDb {
   rating: number
   reviewCount: number
   category: { slug: string; name: string }
-  images: { url: string; alt?: string | null; sortOrder: number }[]
+  images: { url: string; alt?: string | null; metal?: string | null; sortOrder: number }[]
   materials: { metal: string; purity: string; weight: string | null }[]
   stones: {
     type: string
@@ -88,7 +88,7 @@ export default function ProductDetailClient({ product, preview = false, relatedP
       <CatalogReturnLink />
       <nav className={styles.breadcrumb} aria-label="Breadcrumb"><Link href="/collections">Collections</Link><span aria-hidden="true">›</span><Link href={`/collections/${product.category.slug}`}>{product.category.name}</Link><span aria-hidden="true">›</span><span aria-current="page">{product.name}</span></nav>
       <div className={styles.layout}>
-        <ProductGallery key={product.id} name={product.name} images={product.images} youtubeUrl={product.youtubeUrl} />
+        <ProductGallery key={product.id} metal={metal} name={product.name} images={product.images} youtubeUrl={product.youtubeUrl} />
         <section className={styles.info} aria-labelledby="product-title">
           <Link href={`/collections/${product.category.slug}`} className={styles.eyebrow}>EMANA JEWELRY / {product.subcategory || product.category.name}</Link>
           <h1 id="product-title" className={styles.title}>{product.name}</h1>

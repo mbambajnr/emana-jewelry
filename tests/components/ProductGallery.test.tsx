@@ -35,4 +35,19 @@ describe("Product gallery", () => {
     expect(screen.getByText(/Photo coming soon/)).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /Watch video/ })).not.toBeInTheDocument()
   })
+  it("does not show Silver photos when Gold photos are missing", () => {
+    render(<ProductGallery name="Pendant" metal="Gold" images={[{ url: "/silver.jpg", metal: "Silver", sortOrder: 0 }]} />)
+    expect(screen.getByRole("status")).toHaveTextContent("Gold photos haven’t been added yet")
+    expect(screen.queryByRole("img")).not.toBeInTheDocument()
+  })
+  it("puts matching photos before general photos and resets the gallery when metal changes", () => {
+    const photos = [{ url: "/general.jpg", alt: "General view", sortOrder: 0 }, { url: "/gold.jpg", alt: "Gold view", metal: "Gold", sortOrder: 2 }, { url: "/silver.jpg", alt: "Silver view", metal: "Silver", sortOrder: 1 }]
+    const { rerender } = render(<ProductGallery name="Pendant" metal="Gold" images={photos} />)
+    expect(screen.getByRole("img", { name: "Gold view" })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Next photo" }))
+    expect(screen.getByRole("img", { name: "General view" })).toBeInTheDocument()
+    rerender(<ProductGallery name="Pendant" metal="Silver" images={photos} />)
+    expect(screen.getByRole("img", { name: "Silver view" })).toBeInTheDocument()
+  })
+
 })

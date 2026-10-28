@@ -45,6 +45,7 @@ model Product {
 }
 
 model ProductImage {
+  metal     String?
   alt       String  @default("")
   id        String  @id @default(cuid())
   url       String

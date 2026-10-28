@@ -32,4 +32,12 @@ describe("admin product metal settings", () => {
     expect((await POST(request({ metalOptions: ["Gold"] }))).status).toBe(401)
     expect(mocks.create).not.toHaveBeenCalled()
   })
+  it("saves photo metal labels and rejects unsupported photo labels", async () => {
+    expect((await POST(request({ images: [{ url: "/gold.jpg", metal: "Gold" }] }))).status).toBe(201)
+    expect(mocks.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ images: { create: [expect.objectContaining({ metal: "Gold" })] } }) }))
+    mocks.create.mockClear()
+    expect((await POST(request({ images: [{ url: "/bad.jpg", metal: "Blue" }] }))).status).toBe(400)
+    expect(mocks.create).not.toHaveBeenCalled()
+  })
+
 })

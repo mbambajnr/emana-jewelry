@@ -21,4 +21,14 @@ describe("Product photo upload feedback", () => {
     fireEvent.error(screen.getByRole("img", { name: "Product photo 1 preview" }))
     expect(screen.getByRole("alert")).toHaveTextContent("This photo couldn’t be displayed")
   })
+  it("keeps photo version labels attached when reordering and removing images", () => {
+    render(<ProductForm categories={[]} product={{ images: [{ url: "/gold.jpg", metal: "Gold" }, { url: "/silver.jpg", metal: "Silver" }] }} />)
+    fireEvent.click(screen.getByRole("button", { name: "Move photo 2 earlier" }))
+    expect(screen.getByLabelText("Photo 1 URL")).toHaveValue("/silver.jpg")
+    expect(screen.getByLabelText("Photo 1 metal")).toHaveValue("Silver")
+    fireEvent.click(screen.getByRole("button", { name: "Remove photo 1" }))
+    expect(screen.getByLabelText("Photo 1 URL")).toHaveValue("/gold.jpg")
+    expect(screen.getByLabelText("Photo 1 metal")).toHaveValue("Gold")
+  })
+
 })

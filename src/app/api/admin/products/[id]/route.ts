@@ -1,4 +1,4 @@
-import { validateMetalOptions } from "@/lib/product-options"
+import { photoMetal, validateMetalOptions } from "@/lib/product-options"
 import { normalizeYoutubeUrl } from "@/lib/product-media"
 import { isAdminRequest } from "@/lib/admin-request"
 import { NextResponse } from "next/server"
@@ -29,8 +29,9 @@ export async function PUT(
         images: {
           deleteMany: {},
           create: (body.images ?? []).map(
-            (img: { url: string; alt?: string }, i: number) => ({
+            (img: { url: string; alt?: string; metal?: unknown }, i: number) => ({
               url: img.url,
+              metal: photoMetal(img.metal),
               alt: typeof img.alt === "string" ? img.alt.slice(0, 500) : "",
               sortOrder: i,
             }),

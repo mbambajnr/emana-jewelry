@@ -5,13 +5,12 @@ import ProductDetailClient, { type ProductFromDb } from "@/app/products/[slug]/p
 import { getCart } from "@/lib/cart"
 
 vi.mock("@/components/Footer", () => ({ default: () => null }))
-vi.mock("@/components/ProductGallery", () => ({ default: () => null }))
 vi.mock("@/components/RecentlyViewed", () => ({ default: () => null }))
 vi.mock("@/components/CatalogReturnLink", () => ({ default: () => null }))
 const product: ProductFromDb = {
   id: "piece", slug: "pendant", name: "Pendant", subcategory: null, metalOptions: ["Gold", "Silver"],
   price: 0, originalPrice: null, description: "A pendant", available: true, sku: "P1", rating: 0, reviewCount: 0,
-  category: { slug: "necklaces", name: "Necklaces" }, images: [], materials: [], stones: [], details: [], reviews: [],
+  category: { slug: "necklaces", name: "Necklaces" }, images: [{ url: "/gold.jpg", alt: "Gold pendant", metal: "Gold", sortOrder: 1 }, { url: "/silver.jpg", alt: "Silver pendant", metal: "Silver", sortOrder: 0 }], materials: [], stones: [], details: [], reviews: [],
 }
 
 beforeEach(() => {
@@ -25,7 +24,10 @@ describe("product metal choices", () => {
     const open = vi.spyOn(window, "open").mockReturnValue(null)
     const user = userEvent.setup()
     render(<ProductDetailClient product={product} />)
+    expect(screen.getByRole("img", { name: "Gold pendant" })).toBeInTheDocument()
     await user.click(screen.getByRole("radio", { name: "Silver" }))
+    expect(screen.getByRole("img", { name: "Silver pendant" })).toBeInTheDocument()
+    expect(screen.queryByRole("img", { name: "Gold pendant" })).not.toBeInTheDocument()
     await user.click(screen.getByRole("button", { name: "Add to Quote Request" }))
     expect(getCart()).toEqual([expect.objectContaining({ slug: "pendant", metal: "Silver" })])
     await user.click(screen.getByRole("button", { name: "Ask Us on WhatsApp" }))
