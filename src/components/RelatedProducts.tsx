@@ -9,7 +9,7 @@ export default async function RelatedProducts({ slug, category, subcategory }: {
   let products: DiscoveryProduct[] = []
   try {
     if (subcategory?.trim()) {
-      products = await prisma.product.findMany({ where: { ...where, subcategory: { equals: subcategory.trim(), mode: "insensitive" } }, take: 4, orderBy, select })
+      products = await prisma.product.findMany({ where: { ...where, subcategory: { equals: subcategory.trim() } }, take: 4, orderBy, select })
     }
     if (products.length < 4) {
       const more = await prisma.product.findMany({ where: { ...where, ...(products.length ? { id: { notIn: products.map(product => product.id) } } : {}) }, take: 4 - products.length, orderBy, select })

@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { render, screen, fireEvent } from "@testing-library/react"
 const mocks = vi.hoisted(() => ({ products: vi.fn() }))
 vi.mock("@/lib/db", () => ({ prisma: { product: { findMany: mocks.products } } }))
+vi.mock("next/server", () => ({ connection: async () => {} }))
 import FeaturedProducts from "@/components/FeaturedProducts"
 beforeEach(() => vi.resetAllMocks())
 describe("Homepage live catalog", () => {

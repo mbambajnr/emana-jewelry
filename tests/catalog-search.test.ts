@@ -6,7 +6,7 @@ describe("Catalog search", () => {
     const where = catalogWhere("rings", "silver signet")
     expect(where.category).toEqual({ slug: "rings" })
     expect(where.AND).toHaveLength(2)
-    expect(JSON.stringify(where)).toContain('"mode":"insensitive"')
+    expect(JSON.stringify(where)).not.toContain('"mode"')
     expect(JSON.stringify(where)).toContain('"materials"')
     expect(JSON.stringify(where)).toContain('"stones"')
   })
@@ -19,5 +19,5 @@ describe("Catalog search", () => {
 })
 
 it("filters by offered metal rather than words in the description", () => {
-  expect(catalogWhere("rings", "", "Silver")).toEqual({ category: { slug: "rings" }, metalOptions: { has: "Silver" } })
+  expect(catalogWhere("rings", "", "Silver")).toEqual({ category: { slug: "rings" }, metalOptions: { array_contains: "Silver" } })
 })

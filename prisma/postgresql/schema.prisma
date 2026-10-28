@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String
+  image       String
+  sortOrder   Int       @default(0)
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id             String         @id @default(cuid())
+  slug           String         @unique
+  name           String
+  youtubeUrl     String?
+  subcategory    String?
+  metalOptions   String[]       @default(["Gold", "Silver"])
+  price          Float
+  originalPrice  Float?
+  description    String
+  availabilityStatus String?
+  sizeNotes      String?
+  deliveryNotes  String?
+  careInstructions String?
+  available      Boolean        @default(true)
+  sku            String         @unique
+  rating         Float          @default(0)
+  reviewCount    Int            @default(0)
+  categoryId     String
+  category       Category       @relation(fields: [categoryId], references: [id])
+  images         ProductImage[]
+  materials      Material[]
+  stones         Stone[]
+  reviews        Review[]
+  details        ProductDetail[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model ProductImage {
+  metal     String?
+  alt       String  @default("")
+  id        String  @id @default(cuid())
+  url       String
+  sortOrder Int     @default(0)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Material {
+  id        String  @id @default(cuid())
+  metal     String
+  purity    String
+  weight    String?
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Stone {
+  id             String  @id @default(cuid())
+  type           String
+  carat          String
+  clarity        String?
+  color          String?
+  cut            String?
+  certification  String?
+  productId      String
+  product        Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductDetail {
+  id        String  @id @default(cuid())
+  text      String
+  sortOrder Int     @default(0)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id        String  @id @default(cuid())
+  author    String
+  rating    Int
+  text      String
+  date      String
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductView {
+  id String @id @default(cuid())
+  productSlug String
+  createdAt DateTime @default(now())
+  @@index([createdAt, productSlug])
+}
+
+model WhatsAppClick {
+  productSlug String?
+  metal String?
+  id        String   @id @default(cuid())
+  source    String
+  label     String?
+  product   String?
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  address   String
+  notes     String?
+  total     Float
+  items     Json
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Consultation {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  service   String
+  notes     String
+  format    String
+  date      String
+  status    String   @default("requested")
+  createdAt DateTime @default(now())
+}
+
+model SearchSettings {
+  id                 String   @id @default("site")
+  googleVerification String   @default("")
+  bingVerification   String   @default("")
+  updatedAt          DateTime @updatedAt
+}
+
+model SocialSettings {
+  id        String   @id @default("site")
+  instagram String   @default("")
+  facebook  String   @default("")
+  tiktok    String   @default("")
+  updatedAt DateTime @updatedAt
+}
+
+model RequestActivity {
+  id          String   @id @default(cuid())
+  requestKind String
+  requestId   String
+  fromStatus  String
+  toStatus    String
+  note        String
+  actor       String
+  createdAt   DateTime @default(now())
+  @@index([requestKind, requestId, createdAt])
+}
+
+model SiteContent {
+  id          String   @id @default("site")
+  draft       Json
+  published   Json
+  version     Int      @default(0)
+  publishedAt DateTime?
+  updatedAt   DateTime @updatedAt
+}
+
+model ContentRevision {
+  id        String   @id @default(cuid())
+  content   Json
+  action    String
+  actor     String
+  createdAt DateTime @default(now())
+  @@index([createdAt])
+}

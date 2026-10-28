@@ -13,12 +13,12 @@
     "admin:credentials": "node scripts/create-admin-credentials.mjs"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/adapter-mariadb": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@remotion/player": "^4.0.538",
     "@supabase/supabase-js": "^2.110.0",
+    "mariadb": "^3.4.5",
     "next": "16.2.7",
-    "pg": "^8.22.0",
     "prisma": "^7.8.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -36,7 +36,11 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.7",
     "jsdom": "^30.1.3",
+    "pg": "^8.23.1",
     "typescript": "^5",
     "vitest": "^5.0.5"
+  },
+  "engines": {
+    "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
   }
 }

@@ -16,7 +16,7 @@ describe("Related pieces", () => {
 it("prioritises matching subcategories and fills the remaining spaces without duplicates", async () => {
   mocks.products.mockResolvedValueOnce([{ id: "2", slug: "matching-pendant", name: "Matching Pendant", images: [] }]).mockResolvedValueOnce([{ id: "3", slug: "other-necklace", name: "Other Necklace", images: [] }])
   render(await RelatedProducts({ slug: "current", category: "necklaces", subcategory: "Pendant" }))
-  expect(mocks.products).toHaveBeenNthCalledWith(1, expect.objectContaining({ where: { slug: { not: "current" }, category: { slug: "necklaces" }, subcategory: { equals: "Pendant", mode: "insensitive" } }, take: 4 }))
+  expect(mocks.products).toHaveBeenNthCalledWith(1, expect.objectContaining({ where: { slug: { not: "current" }, category: { slug: "necklaces" }, subcategory: { equals: "Pendant" } }, take: 4 }))
   expect(mocks.products).toHaveBeenNthCalledWith(2, expect.objectContaining({ where: { slug: { not: "current" }, category: { slug: "necklaces" }, id: { notIn: ["2"] } }, take: 3 }))
   expect(screen.getAllByRole("heading", { level: 3 }).map(heading => heading.textContent)).toEqual(["Matching Pendant", "Other Necklace"])
   expect(screen.getByRole("link", { name: "View all jewelry →" })).toHaveAttribute("href", "/catalog")

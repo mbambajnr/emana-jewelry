@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db"
 import { isSameOrigin } from "@/lib/admin-request"
-import { isMetalOption } from "@/lib/product-options"
+import { isMetalOption, productMetalOptions } from "@/lib/product-options"
 
 export async function POST(request: Request) {
   if (!isSameOrigin(request)) return Response.json({ success: false }, { status: 403 })
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     let name = product || null
     if (productSlug) {
       const item = await prisma.product.findUnique({ where: { slug: productSlug }, select: { name: true, metalOptions: true } })
-      if (!item || (metal && !item.metalOptions.includes(metal))) return Response.json({ success: false }, { status: 400 })
+      if (!item || (metal && !productMetalOptions(item.metalOptions).includes(metal))) return Response.json({ success: false }, { status: 400 })
       name = item.name
     }
     await prisma.whatsAppClick.create({ data: { source, label: label || null, product: name, productSlug: productSlug || null, metal: metal || null } })

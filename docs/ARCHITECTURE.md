@@ -6,7 +6,7 @@ The owner quotes prices directly. The catalog therefore presents products and co
 
 ## Rendering and data
 
-Next.js App Router handles the storefront and admin in one application. Server-rendered components read PostgreSQL through Prisma; client components handle galleries, forms, menus, and browser storage. Suspense boundaries allow database-backed sections to load independently. Prisma relations hold product galleries, materials, stones, and collection membership.
+Next.js App Router handles the storefront and admin in one application. Server-rendered components read MySQL through Prisma; client components handle galleries, forms, menus, and browser storage. Suspense boundaries allow database-backed sections to load independently. Prisma relations hold product galleries, materials, stones, and collection membership.
 
 The full catalog uses URL parameters for category, search, and page so a filtered view can be linked or restored. Recently viewed items and favorites stay on the visitor's browser. Catalog scroll restoration uses session storage for the current tab. This avoids customer accounts but does not provide cross-device synchronization.
 

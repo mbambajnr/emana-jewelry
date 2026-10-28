@@ -12,24 +12,26 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
-        image: postgres:17
+      mysql:
+        image: mysql:8.4
         env:
-          POSTGRES_USER: emana_ci
-          POSTGRES_PASSWORD: emana_ci
-          POSTGRES_DB: emana_test
+          MYSQL_USER: emana_ci
+          MYSQL_PASSWORD: emana_ci
+          MYSQL_ROOT_PASSWORD: ci_root_password
+          MYSQL_DATABASE: emana_test
         ports:
-          - 5432:5432
+          - 3306:3306
         options: >-
-          --health-cmd "pg_isready -U emana_ci -d emana_test"
+          --health-cmd "mysqladmin ping -h 127.0.0.1 --silent"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
     env:
       NEXT_TELEMETRY_DISABLED: 1
+      RUN_MYSQL_INTEGRATION: "1"
       SESSION_SECRET: test-secret-key-32-chars-minimum-xyz
-      DATABASE_URL: "postgresql://emana_ci:emana_ci@localhost:5432/emana_test"
+      DATABASE_URL: "mysql://emana_ci:emana_ci@127.0.0.1:3306/emana_test"
 
     steps:
       - name: Checkout Code

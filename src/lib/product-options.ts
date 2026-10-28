@@ -5,8 +5,8 @@ export function isMetalOption(value: unknown): value is MetalOption {
   return value === "Gold" || value === "Silver"
 }
 
-export function productMetalOptions(value?: readonly string[]): MetalOption[] {
-  return value === undefined ? [...METAL_OPTIONS] : METAL_OPTIONS.filter(option => value.includes(option))
+export function productMetalOptions(value?: unknown): MetalOption[] {
+  return value === undefined ? [...METAL_OPTIONS] : Array.isArray(value) ? METAL_OPTIONS.filter(option => value.includes(option)) : []
 }
 
 export function validateMetalOptions(value: unknown): MetalOption[] {

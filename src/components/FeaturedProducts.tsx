@@ -1,7 +1,9 @@
+import { connection } from "next/server"
 import { prisma } from "@/lib/db"
 import ProductSnippets from "./ProductSnippets"
 
 export default async function FeaturedProducts() {
+  await connection()
   let products
   try {
     products = await prisma.product.findMany({

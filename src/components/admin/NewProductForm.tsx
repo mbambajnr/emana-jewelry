@@ -16,7 +16,7 @@ export default async function NewProductForm() {
     // fail while mapping its stack with the WASM compiler. Render the outage.
     return <section role="alert">
       <h2>We couldn’t load your collections</h2>
-      <p>The database is unavailable. Start PostgreSQL and apply the pending migrations, then refresh this page.</p>
+      <p>The database is unavailable. Start MySQL and apply the pending migrations, then refresh this page.</p>
       <p>Your existing products haven’t been changed. A working database is needed before a new product can be saved.</p>
       <Link href="/admin">Back to overview</Link>
     </section>

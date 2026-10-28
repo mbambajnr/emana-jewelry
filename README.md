@@ -37,7 +37,7 @@ Screenshots show local catalog data. See the deployment notes below for moving p
 
 ## Stack and structure
 
-Next.js 16 App Router, React 19, TypeScript, CSS Modules, Prisma 7, and PostgreSQL. Remotion renders the homepage slideshow. Production image uploads use Supabase Storage; optional notification emails use Resend. Vitest and Testing Library cover application logic and selected UI workflows.
+Next.js 16 App Router, React 19, TypeScript, CSS Modules, Prisma 7, and MySQL. Remotion renders the homepage slideshow. Production image uploads use Supabase Storage; optional notification emails use Resend. Vitest and Testing Library cover application logic and selected UI workflows.
 
 ```text
 src/app/          Pages, route handlers, and server actions
@@ -49,11 +49,13 @@ tests/            Unit and component tests
 docs/             Architecture and operating notes
 ```
 
+PostgreSQL-to-MySQL transfer and rollback instructions: [MySQL migration](docs/MYSQL-MIGRATION.md). The archived PostgreSQL schema and migration history are retained under `prisma/postgresql/`.
+
 Read [Architecture](docs/ARCHITECTURE.md) for the reasons behind the main choices and their limits.
 
 ## Run locally
 
-Use Node.js 24 and a running PostgreSQL database. Create an empty database for this project; do not reuse a database with unrelated tables.
+Use Node.js 24 (or a supported Node 20.19+/22.12+ release) and a running MySQL 8.0+ or MariaDB 10.6+ database. Create an empty database for this project; do not reuse a database with unrelated tables.
 
 ```sh
 npm ci
@@ -87,11 +89,11 @@ npm test
 npm run build
 ```
 
-GitHub Actions runs lint, TypeScript, tests, and a production build with a temporary PostgreSQL service. Component tests mock external integrations; they do not prove that production email, cloud storage, or WhatsApp delivery works. See [Verification](docs/VERIFICATION.md) for the manual checks.
+GitHub Actions runs lint, TypeScript, tests, and a production build with a temporary MySQL service. Component tests mock external integrations; they do not prove that production email, cloud storage, or WhatsApp delivery works. See [Verification](docs/VERIFICATION.md) for the manual checks.
 
 ## Deployment and current limits
 
-Apply migrations to a persistent PostgreSQL database and configure production environment variables before starting the app. Use `npm run build` and `npm start` for a Node deployment that supports Next.js server features.
+Apply migrations to a persistent MySQL database and configure production environment variables before starting the app. Use `npm run build` and `npm start` for a Node deployment that supports Next.js server features.
 
 - Production uploads require a public Supabase `product-images` bucket. Update `images.remotePatterns` in `next.config.ts` to match your storage hostname. The current allowlist is project-specific.
 - Local product rows and uploaded photos do not transfer through GitHub. Move images to durable storage and update their URLs before migrating catalog data. Local `/media/products/...` URLs return 404 in production.

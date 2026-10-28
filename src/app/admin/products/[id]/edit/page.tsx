@@ -49,7 +49,7 @@ async function EditFormWrapper({ params }: { params: Promise<{ id: string }> }) 
     if (dbProduct) product = dbProduct
     if (dbCategories && dbCategories.length > 0) categories = dbCategories
   } catch {
-    return <section role="alert"><h2>We couldn’t load this product</h2><p>The database is unavailable. Start PostgreSQL and apply the pending migrations, then refresh. Your product has not been changed.</p></section>
+    return <section role="alert"><h2>We couldn’t load this product</h2><p>The database is unavailable. Start MySQL and apply the pending migrations, then refresh. Your product has not been changed.</p></section>
   }
 
   if (!product) {

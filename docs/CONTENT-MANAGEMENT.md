@@ -1,6 +1,6 @@
 # Website content management
 
-Open **Admin → Website → Content, Services & FAQs** using the existing staff login. This is a structured CMS inside the application, backed by PostgreSQL.
+Open **Admin → Website → Content, Services & FAQs** using the existing staff login. This is a structured CMS inside the application, backed by MySQL.
 
 ## Editing and publishing
 
@@ -33,7 +33,7 @@ Writes include the editor's expected version. If another tab saves first, the se
 
 Draft/publication controls apply to this CMS document. Product edits and other existing admin settings retain their own save behavior. Publishing is atomic across the document's copy, FAQs, and service list. Notifications keep the existing delivery integration and saved-request workflow.
 
-Apply `npx prisma migrate deploy` and `npx prisma generate` when deploying. A new installation displays the built-in document until staff save or publish content. These CMS tables use PostgreSQL in development and production; they do not use the local-file fallback used by older social/search settings. Database failure prevents admin saves. The public content reader can fall back to built-in content during an outage; monitor failures and keep database backups.
+Apply `npx prisma migrate deploy` and `npx prisma generate` when deploying. A new installation displays the built-in document until staff save or publish content. These CMS tables use MySQL in development and production; they do not use the local-file fallback used by older social/search settings. Database failure prevents admin saves. The public content reader can fall back to built-in content during an outage; monitor failures and keep database backups.
 
 ## Extending the CMS
 

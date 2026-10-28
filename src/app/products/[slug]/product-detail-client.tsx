@@ -25,7 +25,7 @@ export interface ProductFromDb extends ProductInformation {
   slug: string
   name: string
   subcategory: string | null
-  metalOptions?: string[]
+  metalOptions?: unknown
   price: number
   originalPrice: number | null
   description: string

@@ -1,3 +1,4 @@
+import { connection } from "next/server"
 import { pageMetadata } from "@/lib/seo"
 
 export const metadata = pageMetadata("Jewelry Collections in Ghana", "Explore rings, necklaces, earrings, bracelets, wedding sets, and custom jewelry in a range of materials from Emana Jewelry in Takoradi. Ask us for a quote.", "/collections")
@@ -21,6 +22,7 @@ interface CollectionItem {
 }
 
 async function CollectionsGrid() {
+  await connection()
   let collectionsData: CollectionItem[] = []
   try {
     collectionsData = await prisma.category.findMany({

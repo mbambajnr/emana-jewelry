@@ -19,7 +19,7 @@ async function DashboardContent() {
       prisma.order.findMany({ where: { status: { notIn: ["completed", "cancelled"] } }, take: 6, orderBy: { createdAt: "desc" }, select: { id: true, name: true, status: true, createdAt: true } }),
       prisma.consultation.findMany({ where: { status: { in: ["requested", "confirmed"] }, date: { gte: new Date().toISOString().slice(0, 10) } }, take: 6, orderBy: { date: "asc" }, select: { id: true, name: true, date: true, status: true } }),
     ])
-  } catch { return <section role="alert" className={styles.section}><h2 className={styles.sectionTitle}>Your database needs attention</h2><p>We couldn’t load your business records. This does not mean there are no requests or appointments.</p><p style={{ marginTop: 12 }}>Start the configured PostgreSQL database and run the pending migrations, then refresh this page. No records have been changed.</p><Link href="/admin/social">Manage social links →</Link></section> }
+  } catch { return <section role="alert" className={styles.section}><h2 className={styles.sectionTitle}>Your database needs attention</h2><p>We couldn’t load your business records. This does not mean there are no requests or appointments.</p><p style={{ marginTop: 12 }}>Start the configured MySQL database and run the pending migrations, then refresh this page. No records have been changed.</p><Link href="/admin/social">Manage social links →</Link></section> }
   const [newRequests, openRequests, appointments, productCount, recentRequests, upcoming] = data
     return <>
       <div className={styles.stats}>{[

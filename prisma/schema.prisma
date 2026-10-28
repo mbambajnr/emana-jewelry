@@ -4,15 +4,15 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
 }
 
 model Category {
   id          String    @id @default(cuid())
   slug        String    @unique
-  name        String
-  description String
-  image       String
+  name        String @db.VarChar(300)
+  description String @db.Text
+  image       String @db.Text
   sortOrder   Int       @default(0)
   products    Product[]
   createdAt   DateTime  @default(now())
@@ -22,17 +22,17 @@ model Category {
 model Product {
   id             String         @id @default(cuid())
   slug           String         @unique
-  name           String
-  youtubeUrl     String?
+  name           String @db.VarChar(300)
+  youtubeUrl     String? @db.Text
   subcategory    String?
-  metalOptions   String[]       @default(["Gold", "Silver"])
+  metalOptions   Json           @default("[\"Gold\", \"Silver\"]")
   price          Float
   originalPrice  Float?
-  description    String
+  description    String @db.Text
   availabilityStatus String?
-  sizeNotes      String?
-  deliveryNotes  String?
-  careInstructions String?
+  sizeNotes      String? @db.Text
+  deliveryNotes  String? @db.Text
+  careInstructions String? @db.Text
   available      Boolean        @default(true)
   sku            String         @unique
   rating         Float          @default(0)
@@ -50,9 +50,9 @@ model Product {
 
 model ProductImage {
   metal     String?
-  alt       String  @default("")
+  alt       String  @default("") @db.VarChar(500)
   id        String  @id @default(cuid())
-  url       String
+  url       String @db.Text
   sortOrder Int     @default(0)
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -81,7 +81,7 @@ model Stone {
 
 model ProductDetail {
   id        String  @id @default(cuid())
-  text      String
+  text      String @db.Text
   sortOrder Int     @default(0)
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -91,7 +91,7 @@ model Review {
   id        String  @id @default(cuid())
   author    String
   rating    Int
-  text      String
+  text      String @db.Text
   date      String
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -108,19 +108,19 @@ model WhatsAppClick {
   productSlug String?
   metal String?
   id        String   @id @default(cuid())
-  source    String
-  label     String?
-  product   String?
+  source    String @db.VarChar(512)
+  label     String? @db.VarChar(512)
+  product   String? @db.VarChar(512)
   createdAt DateTime @default(now())
 }
 
 model Order {
   id        String   @id @default(cuid())
-  name      String
-  email     String
+  name      String @db.VarChar(300)
+  email     String @db.VarChar(254)
   phone     String
-  address   String
-  notes     String?
+  address   String @db.Text
+  notes     String? @db.Text
   total     Float
   items     Json
   status    String   @default("new")
@@ -130,11 +130,11 @@ model Order {
 
 model Consultation {
   id        String   @id @default(cuid())
-  name      String
-  email     String
+  name      String @db.VarChar(300)
+  email     String @db.VarChar(254)
   phone     String?
-  service   String
-  notes     String
+  service   String @db.Text
+  notes     String @db.Text
   format    String
   date      String
   status    String   @default("requested")
@@ -143,16 +143,16 @@ model Consultation {
 
 model SearchSettings {
   id                 String   @id @default("site")
-  googleVerification String   @default("")
-  bingVerification   String   @default("")
+  googleVerification String   @default("") @db.VarChar(512)
+  bingVerification   String   @default("") @db.VarChar(512)
   updatedAt          DateTime @updatedAt
 }
 
 model SocialSettings {
   id        String   @id @default("site")
-  instagram String   @default("")
-  facebook  String   @default("")
-  tiktok    String   @default("")
+  instagram String   @default("") @db.VarChar(2048)
+  facebook  String   @default("") @db.VarChar(2048)
+  tiktok    String   @default("") @db.VarChar(2048)
   updatedAt DateTime @updatedAt
 }
 
@@ -162,8 +162,8 @@ model RequestActivity {
   requestId   String
   fromStatus  String
   toStatus    String
-  note        String
-  actor       String
+  note        String @db.Text
+  actor       String @db.VarChar(254)
   createdAt   DateTime @default(now())
   @@index([requestKind, requestId, createdAt])
 }
@@ -181,7 +181,7 @@ model ContentRevision {
   id        String   @id @default(cuid())
   content   Json
   action    String
-  actor     String
+  actor     String @db.VarChar(254)
   createdAt DateTime @default(now())
   @@index([createdAt])
 }
