@@ -48,3 +48,24 @@ it("shows owner-supplied availability, sizes, delivery, and care without fixed p
   expect(screen.getByText("Wipe with a soft dry cloth")).toBeInTheDocument()
   expect(screen.getByRole("button", { name: "Ask Us on WhatsApp" })).toBeInTheDocument()
 })
+
+it("keeps the quick enquiry in sync with the selected metal", async () => {
+  const open = vi.spyOn(window, "open").mockReturnValue(null)
+  const user = userEvent.setup()
+  render(<ProductDetailClient product={product} />)
+  await user.click(screen.getByRole("radio", { name: "Silver" }))
+  expect(screen.getByRole("link", { name: "Change metal choice, currently Silver" })).toHaveAttribute("href", "#request-panel")
+  await user.click(screen.getByRole("button", { name: "Enquire on WhatsApp" }))
+  const message = new URL(String(open.mock.calls[0][0])).searchParams.get("text")
+  expect(message).toContain("*Pendant* in Silver")
+  expect(message).toContain("/products/pendant")
+})
+
+it("puts the enquiry controls before the longer description and disables enquiries in preview", () => {
+  render(<ProductDetailClient product={product} preview />)
+  const enquire = screen.getByRole("button", { name: "Ask Us on WhatsApp" })
+  const about = screen.getByRole("region", { name: "About this piece" })
+  expect(enquire.compareDocumentPosition(about) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  expect(enquire).toBeDisabled()
+  expect(screen.queryByRole("navigation", { name: "Quick product enquiry" })).not.toBeInTheDocument()
+})
