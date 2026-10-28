@@ -15,6 +15,8 @@ Images can be selected by existing website paths or uploaded through the authent
 
 ## Services
 
+To change the **Cleaning & Repairs / Jewelry Cleaning & Repair Services** homepage block, open the **Services** tab. The **Homepage services section** panel contains the small heading, main heading, introduction, photo, and photo description. Upload a replacement image there, check its preview, save the draft, and publish. Individual services are edited below that panel. A direct editor link is `/admin/content?tab=services`.
+
 Each service has a stable reference, name, description, appointment duration, type, and switches for enabled/homepage/appointments. Add a new service, save it, preview it, and publish it. That published list controls both homepage cards and the appointment dropdown. A service may appear on the homepage without being bookable, or be bookable without a homepage card.
 
 Disabling or removing a service from the published list stops new bookings for it. Existing appointments keep their saved service description. A request from an older browser tab is checked against the current published list before saving. Draft-only services cannot be booked through the public API. The existing custom-jewelry links choose the first available custom-design service.

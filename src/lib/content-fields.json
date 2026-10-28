@@ -768,5 +768,12 @@
     "label": "Consultation photo description",
     "default": "Private jewelry consultation desk with emerald velvet tray, brass loupe, and ring mandrels",
     "type": "short"
+  },
+  {
+    "key": "services.imageAlt",
+    "group": "Services section",
+    "label": "Services photo description",
+    "default": "Jewelry care services",
+    "type": "short"
   }
 ]

@@ -16,7 +16,7 @@ export default function HomeServices() {
       <p className={styles.sectionDesc}>{copy["services.description"]}</p>
     </div>
     <div className={styles.servicesContainer}>
-      <div className={styles.servicesVisual}><Image src={copy["services.image"]} alt="Jewelry care services" fill sizes="(max-width: 1200px) 100vw, 50vw" className={styles.servicesVisualImg} /></div>
+      <div className={styles.servicesVisual}><Image src={copy["services.image"]} alt={copy["services.imageAlt"]} fill sizes="(max-width: 1200px) 100vw, 50vw" className={styles.servicesVisualImg} /></div>
       <div className={styles.servicesInfo}><div className={styles.serviceItems}>
         {visible.map(service => <div key={service.id} className={styles.serviceItem}>
           <span className={styles.serviceIcon} aria-hidden="true">✧</span>
