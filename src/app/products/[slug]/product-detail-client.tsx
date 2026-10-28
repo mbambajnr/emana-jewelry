@@ -1,5 +1,7 @@
 "use client"
 
+import { availabilityLabel, type ProductInformation } from "@/lib/product-information"
+
 import { photosForMetal, productMetalOptions, type MetalOption } from "@/lib/product-options"
 import { recordProductView } from "@/lib/recently-viewed"
 import RecentlyViewed from "@/components/RecentlyViewed"
@@ -14,7 +16,7 @@ import { addToCart } from "@/lib/cart"
 import { addToWishlist, removeFromWishlist, isInWishlist } from "@/lib/wishlist"
 import styles from "./page.module.css"
 
-export interface ProductFromDb {
+export interface ProductFromDb extends ProductInformation {
   id: string
   youtubeUrl?: string | null
   slug: string
@@ -107,8 +109,8 @@ export default function ProductDetailClient({ product, preview = false, relatedP
           <span className={styles.boxEyebrow}>LET’S MAKE IT YOURS</span>
           <h2>Ask us for a price</h2>
           <p className={styles.priceNote}>We’ll confirm the price, your size, and availability before you decide.</p>
-          <p className={styles.availability}><span aria-hidden="true">●</span> {product.available ? "Available for inquiry" : "Ask about making this piece"}</p>
-          <div className={styles.delivery}><span aria-hidden="true">⌖</span><p><strong>Collection or delivery</strong><br />Pick up in Takoradi, or ask us about delivery to your location.</p></div>
+          <p className={styles.availability}><span aria-hidden="true">●</span> {availabilityLabel(product)}</p>
+          <div className={styles.delivery}><span aria-hidden="true">⌖</span><p><strong>Collection or delivery</strong><br />{product.deliveryNotes || "Pick up in Takoradi, or ask us about delivery to your location."}</p></div>
           {options.length > 0 && <fieldset className={styles.metalOptions} aria-describedby="metal-choice-note">
             <legend>Choose your metal</legend>
             <div>{options.map(option => <label key={option} className={styles.metalOption}>
@@ -131,10 +133,11 @@ export default function ProductDetailClient({ product, preview = false, relatedP
       <div className={styles.lowerGrid}>
         <section id="product-details" className={styles.detailSection}><span className={styles.eyebrow}>THE FINER DETAILS</span><h2>Know your piece</h2><dl className={styles.specifications}>
           <div><dt>Product reference</dt><dd>{product.sku}</dd></div><div><dt>Collection</dt><dd>{product.category.name}</dd></div><div><dt>Metal choices</dt><dd>{options.join(" or ")}</dd></div>
+          {product.sizeNotes && <div><dt>Sizes</dt><dd>{product.sizeNotes}</dd></div>}
           {product.materials.map((material, i) => <div key={`metal-${i}`}><dt>{material.metal}</dt><dd>{[material.purity, material.weight].filter(Boolean).join(" · ")}</dd></div>)}
           {product.stones.map((stone, i) => <div key={`stone-${i}`}><dt>{stone.type}</dt><dd>{[stone.carat && `${stone.carat} ct`, stone.color, stone.clarity, stone.cut, stone.certification].filter(Boolean).join(" · ") || "Ask us for details"}</dd></div>)}
         </dl></section>
-        <section id="delivery-and-care" className={styles.detailSection}><span className={styles.eyebrow}>BEFORE YOU ORDER</span><h2>A little peace of mind</h2><details open><summary>Collection &amp; delivery</summary><p>Collect from our shop on Justmoh Ave, Takoradi. For delivery, speak with us about the cost and timing before confirming your order.</p></details><details><summary>Sizing &amp; custom requests</summary><p>Tell us your size or the changes you’d like. We’ll explain what is possible, the cost, and how long it will take.</p></details><details><summary>Looking after your jewelry</summary><p>Ask us about care for the materials in your piece. We also offer cleaning and repairs at our Takoradi shop.</p></details><Link className={styles.faqLink} href="/faq">More questions? Read our FAQs →</Link></section>
+        <section id="delivery-and-care" className={styles.detailSection}><span className={styles.eyebrow}>BEFORE YOU ORDER</span><h2>A little peace of mind</h2><details open><summary>Collection &amp; delivery</summary><p>{product.deliveryNotes || "Collect from our shop on Justmoh Ave, Takoradi. For delivery, speak with us about the cost and timing before confirming your order."}</p></details><details><summary>Sizing &amp; custom requests</summary><p>{product.sizeNotes || "Tell us your size or the changes you’d like. We’ll explain what is possible, the cost, and how long it will take."}</p></details><details><summary>Looking after your jewelry</summary><p>{product.careInstructions || "Ask us about care for the materials in your piece. We also offer cleaning and repairs at our Takoradi shop."}</p></details><Link className={styles.faqLink} href="/faq">More questions? Read our FAQs →</Link></section>
       </div>
       <section id="customer-reviews" className={styles.reviews}><h2>Customer reviews</h2>{product.reviews.length ? product.reviews.map(review => <article key={review.id} className={styles.review}><div><strong>{review.author}</strong><time>{review.date}</time></div><p aria-label={`${review.rating} out of 5 stars`} className={styles.reviewStars}>{"★".repeat(Math.max(0, Math.min(5, review.rating)))}</p><p>{review.text}</p></article>) : <p>No reviews for this piece yet. <a href="#request-panel">Speak with us if you’d like to know more.</a></p>}</section>
       {relatedProducts}

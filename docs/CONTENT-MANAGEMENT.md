@@ -40,3 +40,9 @@ Apply `npx prisma migrate deploy` and `npx prisma generate` when deploying. A ne
 Add new fields to `src/lib/content-fields.json` with stable unique keys and bind the corresponding component to `useSiteContent()`. Keep existing keys stable: published documents and revisions refer to them. Missing newly added fields inherit their built-in defaults when a document is read. New section types or page layouts require implementation work; routine copy, image, FAQ, and service changes use the admin.
 
 Back up both CMS tables together with the rest of the shop database. A Git push transfers the application and schema migrations, not staff-authored content or uploaded images.
+
+## Product availability, sizes, delivery, and care
+
+In **Products → Add Product** or **Edit Product**, use **Availability, sizes & care**. Choose Available, Made to order, or Confirm availability. New products start with Confirm availability. Existing products retain their original availability until edited. Add optional size information, delivery notes, and care instructions; blank notes use the existing enquiry guidance. Continue using **Materials** for the actual metal, purity, finish, and weight rather than repeating them in another field. Saving a product updates the live product page immediately; product edits do not use the page-content draft workflow. Prices remain by enquiry.
+
+Deployments must run `npx prisma migrate deploy` and regenerate the Prisma client before starting the updated app. The product information migration adds nullable fields without changing existing records.

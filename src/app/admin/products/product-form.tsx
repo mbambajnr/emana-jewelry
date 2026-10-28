@@ -1,5 +1,7 @@
 "use client"
 
+import { AVAILABILITY_OPTIONS, type ProductInformation } from "@/lib/product-information"
+
 import { METAL_OPTIONS, productMetalOptions, type MetalOption } from "@/lib/product-options"
 
 import { normalizeYoutubeUrl } from "@/lib/product-media"
@@ -13,7 +15,7 @@ export interface CategoryOption {
   name: string
 }
 
-export interface ProductData {
+export interface ProductData extends ProductInformation {
   id?: string
   name?: string
   slug?: string
@@ -68,7 +70,10 @@ export default function ProductForm({
     subcategory: product?.subcategory ?? "",
     description: product?.description ?? "",
     sku: product?.sku ?? "",
-    available: product?.available ?? true,
+    availabilityStatus: product?.availabilityStatus ?? (product ? (product.available === false ? "made_to_order" : "available") : "confirm"),
+    sizeNotes: product?.sizeNotes ?? "",
+    deliveryNotes: product?.deliveryNotes ?? "",
+    careInstructions: product?.careInstructions ?? "",
     categoryId: product?.categoryId ?? categories[0]?.id ?? "",
   })
 
@@ -318,17 +323,24 @@ export default function ProductForm({
         />
       </div>
 
-      <div className={styles.field}>
-        <label className={styles.label}>
-          Available
-          <input
-            type="checkbox"
-            className={styles.checkbox}
-            checked={form.available}
-            onChange={(e) => update("available", e.target.checked)}
-          />
-        </label>
-      </div>
+      <fieldset className={styles.fieldset}>
+        <legend className={styles.legend}>Availability, sizes &amp; care</legend>
+        <p className={styles.hint}>These details appear on the product page. Leave optional notes empty to use the usual enquiry guidance. Describe the actual material and finish in Materials below.</p>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="availability-status">Availability</label>
+          <select id="availability-status" className={styles.select} value={form.availabilityStatus} onChange={event => update("availabilityStatus", event.target.value)}>
+            {Object.entries(AVAILABILITY_OPTIONS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+          </select>
+        </div>
+        {([
+          ["sizeNotes", "Size information", "For example, chain length or available ring sizes", 500],
+          ["deliveryNotes", "Delivery notes", "Collection options and delivery timing for this piece", 1000],
+          ["careInstructions", "Care instructions", "How to clean, wear, and store this piece", 2000],
+        ] as const).map(([key, label, placeholder, maxLength]) => <div className={styles.field} key={key}>
+          <label className={styles.label} htmlFor={key}>{label} (optional)</label>
+          <textarea id={key} className={styles.textarea} rows={3} maxLength={maxLength} placeholder={placeholder} value={form[key]} onChange={event => update(key, event.target.value)} />
+        </div>)}
+      </fieldset>
 
       <div className={styles.field}>
         <label className={styles.label} htmlFor="youtube-url">Product video (optional)</label>

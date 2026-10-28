@@ -32,3 +32,16 @@ describe("Product photo upload feedback", () => {
   })
 
 })
+
+it("loads and saves product information through the editor", async () => {
+  const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("{}", { status: 200 }))
+  const { container } = render(<ProductForm categories={[{ id: "rings", name: "Rings", slug: "rings" }]} product={{ id: "piece", name: "Ring", slug: "ring", sku: "R1", description: "A ring", categoryId: "rings", availabilityStatus: "made_to_order", sizeNotes: "Sizes 6 to 9", deliveryNotes: "Collect in store", careInstructions: "Soft cloth only" }} />)
+  expect(screen.getByLabelText("Availability")).toHaveValue("made_to_order")
+  expect(screen.getByLabelText("Size information (optional)")).toHaveValue("Sizes 6 to 9")
+  expect(screen.getByLabelText("Care instructions (optional)")).toHaveValue("Soft cloth only")
+  fireEvent.change(screen.getByLabelText("Availability"), { target: { value: "confirm" } })
+  fireEvent.change(screen.getByLabelText("Delivery notes (optional)"), { target: { value: "Ask us for delivery timing" } })
+  fireEvent.submit(container.querySelector("form")!)
+  await waitFor(() => expect(fetch).toHaveBeenCalled())
+  expect(JSON.parse(String(fetch.mock.calls[0][1]?.body))).toMatchObject({ availabilityStatus: "confirm", sizeNotes: "Sizes 6 to 9", deliveryNotes: "Ask us for delivery timing", careInstructions: "Soft cloth only" })
+})

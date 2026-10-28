@@ -39,3 +39,12 @@ describe("product metal choices", () => {
     expect(screen.getByRole("radio", { name: "Silver" })).toBeChecked()
   })
 })
+
+it("shows owner-supplied availability, sizes, delivery, and care without fixed pricing", () => {
+  render(<ProductDetailClient product={{ ...product, availabilityStatus: "made_to_order", sizeNotes: "45 cm or 50 cm", deliveryNotes: "Collect after we confirm your order", careInstructions: "Wipe with a soft dry cloth" }} />)
+  expect(screen.getByText("Made to order")).toBeInTheDocument()
+  expect(screen.getAllByText("45 cm or 50 cm")).toHaveLength(2)
+  expect(screen.getAllByText("Collect after we confirm your order")).toHaveLength(2)
+  expect(screen.getByText("Wipe with a soft dry cloth")).toBeInTheDocument()
+  expect(screen.getByRole("button", { name: "Ask Us on WhatsApp" })).toBeInTheDocument()
+})

@@ -1,3 +1,4 @@
+import { validateProductInformation } from "@/lib/product-information"
 import { photoMetal, validateMetalOptions } from "@/lib/product-options"
 import { normalizeYoutubeUrl } from "@/lib/product-media"
 import { isAdminRequest } from "@/lib/admin-request"
@@ -24,7 +25,8 @@ export async function PUT(
         subcategory: body.subcategory || null,
         description: body.description,
         sku: body.sku,
-        available: body.available ?? true,
+        available: body.available ?? undefined,
+        ...validateProductInformation(body),
         categoryId: body.categoryId,
         images: {
           deleteMany: {},

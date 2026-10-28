@@ -41,3 +41,28 @@ describe("admin product metal settings", () => {
   })
 
 })
+
+describe("product information", () => {
+  it("stores notes, trims text, and keeps legacy availability in sync", async () => {
+    const body = { availabilityStatus: "made_to_order", sizeNotes: "  45 cm chain  ", deliveryNotes: "Ask about delivery", careInstructions: "Use a soft cloth" }
+    expect((await POST(request(body))).status).toBe(201)
+    expect(mocks.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ ...body, sizeNotes: "45 cm chain", available: false }) }))
+    expect((await PUT(request({ availabilityStatus: "available", careInstructions: "" }, "PUT"), params)).status).toBe(200)
+    expect(mocks.update).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ available: true, careInstructions: null }) }))
+  })
+  it("rejects invalid statuses and oversized or non-text notes before writing", async () => {
+    for (const body of [{ availabilityStatus: "in_stock" }, { sizeNotes: 42 }, { deliveryNotes: "x".repeat(1001) }, { careInstructions: [] }]) {
+      expect((await POST(request(body))).status).toBe(400)
+      expect((await PUT(request(body, "PUT"), params)).status).toBe(400)
+    }
+    expect(mocks.create).not.toHaveBeenCalled()
+    expect(mocks.update).not.toHaveBeenCalled()
+  })
+  it("preserves information omitted by an older editor", async () => {
+    await PUT(request({}, "PUT"), params)
+    const data = mocks.update.mock.calls[0][0].data
+    expect(data).not.toHaveProperty("sizeNotes")
+    expect(data).not.toHaveProperty("availabilityStatus")
+    expect(data.available).toBeUndefined()
+  })
+})

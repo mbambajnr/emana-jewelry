@@ -29,6 +29,10 @@ model Product {
   price          Float
   originalPrice  Float?
   description    String
+  availabilityStatus String?
+  sizeNotes      String?
+  deliveryNotes  String?
+  careInstructions String?
   available      Boolean        @default(true)
   sku            String         @unique
   rating         Float          @default(0)

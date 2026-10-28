@@ -1,3 +1,4 @@
+import { validateProductInformation } from "@/lib/product-information"
 import { photoMetal, validateMetalOptions } from "@/lib/product-options"
 import { normalizeYoutubeUrl } from "@/lib/product-media"
 import { isAdminRequest } from "@/lib/admin-request"
@@ -22,6 +23,7 @@ export async function POST(request: Request) {
         description: body.description,
         sku: body.sku,
         available: body.available ?? true,
+        ...validateProductInformation(body),
         rating: 0,
         reviewCount: 0,
         categoryId: body.categoryId,
