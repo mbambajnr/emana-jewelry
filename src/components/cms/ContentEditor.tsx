@@ -72,6 +72,7 @@ export default function ContentEditor() {
     const id = `cms-${field.key}`
     return <div key={field.key} className={styles.field}>
       <label htmlFor={id}>{field.label}</label>
+      {field.type === "youtube" && <small>Paste a YouTube watch, Shorts, or share link. Save, preview, then publish. Leave blank to hide the video section.</small>}
       {field.type === "text" ? <textarea id={id} rows={4} value={document.copy[field.key]} onChange={event => change({ ...document, copy: { ...document.copy, [field.key]: event.target.value } })} /> : <input id={id} value={document.copy[field.key]} onChange={event => change({ ...document, copy: { ...document.copy, [field.key]: event.target.value } })} />}
       {field.type === "image" && <>
         <span>Upload or replace this image</span>

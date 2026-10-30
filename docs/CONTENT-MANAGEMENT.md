@@ -13,6 +13,10 @@ The editor includes homepage welcome copy, quick links, highlights, custom desig
 
 Images can be selected by existing website paths or uploaded through the authenticated media endpoint. For new hero images, upload compressed photos; the existing default hero retains its responsive pre-encoded WebP variants. Set `PRODUCT_IMAGE_DIRECTORY` to persistent storage outside the app checkout and copy existing uploads there before deployment, as described in `PRODUCTION-HARDENING.md`.
 
+## Shop introduction video
+
+In **Page Content → Shop introduction video**, paste the shop's YouTube link and edit the heading, introduction, and cover image. Save the draft, preview it, then publish. The section appears after featured products and recently viewed items, before custom jewelry. Leave the link blank to hide it. Visitors press play to load the YouTube player; it does not load on the initial page visit.
+
 ## Services
 
 To change the **Cleaning & Repairs / Jewelry Cleaning & Repair Services** homepage block, open the **Services** tab. The **Homepage services section** panel contains the small heading, main heading, introduction, photo, and photo description. Upload a replacement image there, check its preview, save the draft, and publish. Individual services are edited below that panel. A direct editor link is `/admin/content?tab=services`.

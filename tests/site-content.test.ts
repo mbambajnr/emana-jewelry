@@ -2,6 +2,14 @@ import { describe, expect, it } from "vitest"
 import { bookableServices, defaultContent, serviceValue, validateContent } from "@/lib/site-content"
 const copy = () => structuredClone(defaultContent)
 describe("website content validation", () => {
+  it("accepts an optional shop video, normalizes YouTube links and rejects other hosts", () => {
+    const document = copy()
+    expect(validateContent(document, true).copy["home.video.url"]).toBe("")
+    document.copy["home.video.url"] = "https://youtu.be/abcdefghijk"
+    expect(validateContent(document, true).copy["home.video.url"]).toBe("https://www.youtube.com/watch?v=abcdefghijk")
+    document.copy["home.video.url"] = "https://example.com/watch?v=abcdefghijk"
+    expect(() => validateContent(document, true)).toThrow(/YouTube/)
+  })
   it("starts with the current site and preserves legacy service references", () => {
     const parsed = validateContent(copy(), true)
     expect(parsed.copy["hero.0.title"]).toBe("Shop")

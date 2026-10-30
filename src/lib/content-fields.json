@@ -810,5 +810,33 @@
     "label": "Returns and changes guidance",
     "default": "Please ask us about returns or changes before confirming your order, especially for a piece made to your size or design.",
     "type": "text"
+  },
+  {
+    "key": "home.video.url",
+    "group": "Shop introduction video",
+    "label": "YouTube link (leave blank to hide this section)",
+    "default": "",
+    "type": "youtube"
+  },
+  {
+    "key": "home.video.title",
+    "group": "Shop introduction video",
+    "label": "Video heading",
+    "default": "Get to Know Emana Jewelry",
+    "type": "short"
+  },
+  {
+    "key": "home.video.description",
+    "group": "Shop introduction video",
+    "label": "Video introduction",
+    "default": "Take a look around our shop and meet the people behind your jewelry.",
+    "type": "text"
+  },
+  {
+    "key": "home.video.poster",
+    "group": "Shop introduction video",
+    "label": "Video cover image",
+    "default": "/consultation_desk.jpg",
+    "type": "image"
   }
 ]

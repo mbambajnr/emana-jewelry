@@ -4,6 +4,7 @@ import { useSiteContent } from "@/components/cms/SiteContentProvider";
 
 import HomeServices from "@/components/home/HomeServices";
 import RecentlyViewed from "@/components/RecentlyViewed";
+import ShopVideo from "@/components/home/ShopVideo";
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -102,6 +103,8 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
         {/* FEATURED PRODUCT SNIPPETS SECTION */}
         {featuredProducts}
         <RecentlyViewed />
+
+        <ShopVideo />
 
         {/* BESPOKE COMMISSIONS SECTION */}
         <section id="bespoke" className={`${styles.section} ${styles.customBuilder}`}>
