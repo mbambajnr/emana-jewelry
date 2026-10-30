@@ -11,7 +11,7 @@ Open **Admin → Website → Content, Services & FAQs** using the existing staff
 
 The editor includes homepage welcome copy, quick links, highlights, custom design steps, materials and consultation sections, hero slides and buttons, featured-product headings, footer description/newsletter copy, the store introduction, and homepage search title/description. The existing product, collection, social-link, and search-verification editors remain separate. Layout, navigation destinations, contact routing, opening hours, and policy pages remain code-managed in this version.
 
-Images can be selected by existing website paths or uploaded through the authenticated media endpoint. For new hero images, upload compressed photos; the existing default hero retains its responsive pre-encoded WebP variants. Development uploads remain local and must be migrated to production storage before deployment.
+Images can be selected by existing website paths or uploaded through the authenticated media endpoint. For new hero images, upload compressed photos; the existing default hero retains its responsive pre-encoded WebP variants. Set `PRODUCT_IMAGE_DIRECTORY` to persistent storage outside the app checkout and copy existing uploads there before deployment, as described in `PRODUCTION-HARDENING.md`.
 
 ## Services
 

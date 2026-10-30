@@ -14,11 +14,11 @@ The full catalog uses URL parameters for category, search, and page so a filtere
 
 Admin access uses a signed session cookie and one environment-configured email/password hash. Private data reads check the session; admin mutations also validate the request origin. This is suitable for the current single-owner workflow but is not a staff identity or permissions system.
 
-Inquiries and appointments are saved before success is returned. Stage changes record activity and compare the expected previous status to avoid silently overwriting a newer update. Notification emails run after persistence. Email failure does not erase the request; a durable outbox is still needed for reliable retries.
+Inquiries and appointments are saved before success is returned. Stage changes record activity and compare the expected previous status to avoid silently overwriting a newer update. Notification emails run after persistence. Email jobs are saved in the same transaction as the request. Failures remain in a durable outbox with backoff, worker leases, and staff-visible retries. The protected runner must be scheduled in production.
 
 ## Media and external services
 
-Development images are stored on disk in an ignored directory. Production uploads use a server-side Supabase service key and a public image bucket. These paths deliberately differ: a developer's filesystem is not durable hosting storage. YouTube embeds are deferred until a visitor chooses to play a video. WhatsApp opens a product-specific enquiry for the visitor to send.
+Development images are stored on disk in an ignored directory. Production uploads use a configured filesystem directory outside the app checkout; an explicitly selected Supabase bucket is also supported. The public media route serves the persistent filesystem in production. The image migration copies files without changing URLs. YouTube embeds are deferred until a visitor chooses to play a video. WhatsApp opens a product-specific enquiry for the visitor to send.
 
 Remotion supplies the animated hero, not a video rendering backend. Removing it later would be a storefront presentation change, not a database migration.
 
@@ -26,4 +26,4 @@ Remotion supplies the animated hero, not a video rendering backend. Removing it 
 
 The app keeps a single deployable service rather than splitting the admin, API, and storefront into independent services. At this scale that simplifies shared validation, deployment, and maintenance. The tradeoff is a shared release and failure boundary.
 
-Before a public launch, verify production storage and email, establish backup/restore procedures, add shared rate limits and monitoring, and review the existing sample-data fallback behavior. Multi-user staff roles and durable notifications should follow actual operating needs.
+Before a public launch, verify production storage and email, establish backup/restore procedures, configure the trusted proxy identity header, notification runner, and monitoring, and review the existing sample-data fallback behavior. Multi-user staff roles and durable notifications should follow actual operating needs.

@@ -434,13 +434,6 @@
     "type": "text"
   },
   {
-    "key": "footer.002",
-    "group": "Footer",
-    "label": "Newsletter introduction",
-    "default": "Leave your email to hear about new jewelry, gemstones, and ideas for your next piece.",
-    "type": "short"
-  },
-  {
     "key": "store.001",
     "group": "Store introduction",
     "label": "Small heading",

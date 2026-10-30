@@ -19,7 +19,7 @@ export function availabilityLabel(product: ProductInformation & { available: boo
 }
 
 // Omitted fields remain unchanged for older clients; empty text clears a field.
-export function validateProductInformation(body: Record<string, unknown>) {
+export function validateProductInformation(body: { availabilityStatus?: unknown; sizeNotes?: unknown; deliveryNotes?: unknown; careInstructions?: unknown }) {
   const result: ProductInformation & { available?: boolean } = {}
   if (body.availabilityStatus !== undefined) {
     if (typeof body.availabilityStatus !== "string" || !Object.hasOwn(AVAILABILITY_OPTIONS, body.availabilityStatus)) {

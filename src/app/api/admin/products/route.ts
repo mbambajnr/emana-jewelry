@@ -1,3 +1,5 @@
+import { boundedJson, RequestError } from "@/lib/request-safety"
+import { productInput } from "@/lib/product-input"
 import { validateProductInformation } from "@/lib/product-information"
 import { photoMetal, validateMetalOptions } from "@/lib/product-options"
 import { normalizeYoutubeUrl } from "@/lib/product-media"
@@ -8,25 +10,25 @@ import { prisma } from "@/lib/db"
 export async function POST(request: Request) {
   if (!await isAdminRequest(request)) return NextResponse.json({ error: "Admin sign-in required" }, { status: 401 })
   try {
-    const body = await request.json()
+    const body = productInput(await boundedJson(request, 262144), true)
     const youtubeUrl = normalizeYoutubeUrl(body.youtubeUrl)
 
     const product = await prisma.product.create({
       data: {
         youtubeUrl,
         metalOptions: validateMetalOptions(body.metalOptions),
-        slug: body.slug,
-        name: body.name,
+        slug: body.slug!,
+        name: body.name!,
         subcategory: body.subcategory || null,
         price: 0,
         originalPrice: null,
-        description: body.description,
-        sku: body.sku,
+        description: body.description!,
+        sku: body.sku!,
         available: body.available ?? true,
         ...validateProductInformation(body),
         rating: 0,
         reviewCount: 0,
-        categoryId: body.categoryId,
+        categoryId: body.categoryId!,
         images: {
           create: (body.images ?? []).map(
             (img: { url: string; alt?: string; metal?: unknown }, i: number) => ({
@@ -85,6 +87,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(product, { status: 201 })
   } catch (err) {
+    if (err instanceof RequestError) return NextResponse.json({ error: err.message }, { status: err.status })
     const message = err instanceof Error ? err.message : "Failed to create product"
     return NextResponse.json({ error: message }, { status: 400 })
   }

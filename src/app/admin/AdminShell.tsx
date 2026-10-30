@@ -28,6 +28,7 @@ export default function AdminShell({
           <span className={styles.groupLabel}>Client Care</span>
           <Link href="/admin/orders" aria-current={pathname === "/admin/orders" ? "page" : undefined} className={styles.navLink}>Customer Requests</Link>
           <Link href="/admin/consultations" aria-current={pathname === "/admin/consultations" ? "page" : undefined} className={styles.navLink}>Appointments</Link>
+          <Link href="/admin/notifications" aria-current={pathname === "/admin/notifications" ? "page" : undefined} className={styles.navLink}>Email Delivery</Link>
           <span className={styles.groupLabel}>Reports</span>
           <Link href="/admin/analytics" aria-current={pathname === "/admin/analytics" ? "page" : undefined} className={styles.navLink}>WhatsApp Activity</Link>
           <span className={styles.groupLabel}>Settings</span>

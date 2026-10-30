@@ -1,6 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { submissionKey } from "@/lib/submission-key"
+
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import Header from "@/components/Header"
@@ -28,6 +30,7 @@ export default function CartPage() {
     items: CartItem[]
     total: number
   } | null>(null)
+  const requestRef = useRef<{ body: string; key: string } | null>(null)
   const [error, setError] = useState("")
 
   useEffect(() => {
@@ -54,10 +57,12 @@ export default function CartPage() {
     setSubmitting(true)
     setError("")
     try {
+      const body = JSON.stringify({ ...form, items: items.map(item => ({ slug: item.slug, quantity: item.quantity, ...(item.metal ? { metal: item.metal } : {}) })) })
+      requestRef.current = submissionKey(requestRef.current, body)
       const res = await fetch("/api/orders", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, items, total }),
+        headers: { "Content-Type": "application/json", "Idempotency-Key": requestRef.current.key },
+        body,
       })
       const data = await res.json()
       if (!res.ok) {

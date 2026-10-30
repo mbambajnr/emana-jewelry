@@ -16,6 +16,7 @@ export interface CategoryOption {
 }
 
 export interface ProductData extends ProductInformation {
+  version?: number
   id?: string
   name?: string
   slug?: string
@@ -193,6 +194,7 @@ export default function ProductForm({
 
     const body = {
       ...form,
+      ...(isEdit ? { version: product.version ?? 0 } : {}),
       metalOptions,
       details: details.filter((d) => d.trim()).map((text) => ({ text })),
       images: images.map((url, index) => ({ url, alt: imageAlts[index] || "", metal: imageMetals[index] || null })).filter(image => image.url.trim()),

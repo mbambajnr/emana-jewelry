@@ -1,8 +1,10 @@
 "use client"
 
+import { submissionKey } from "@/lib/submission-key"
+
 import { useSiteContent } from "@/components/cms/SiteContentProvider"
 import { bookableServices, serviceValue, serviceLabel } from "@/lib/site-content"
-import { useState, useEffect, useMemo, type FormEvent } from "react"
+import { useRef, useState, useEffect, useMemo, type FormEvent } from "react"
 import styles from "./ConsultationBooking.module.css"
 
 interface FormData {
@@ -116,6 +118,7 @@ export default function ConsultationBooking() {
     return Object.keys(errs).length === 0
   }
 
+  const requestRef = useRef<{ body: string; key: string } | null>(null)
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (preview || !validate()) return
@@ -124,19 +127,9 @@ export default function ConsultationBooking() {
     setServerError("")
 
     try {
-      const res = await fetch("/api/consultations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name.trim(),
-          email: form.email.trim(),
-          phone: form.phone.trim() || undefined,
-          service: form.service,
-          notes: form.notes.trim(),
-          format: form.format,
-          date: form.date,
-        }),
-      })
+      const body = JSON.stringify({ name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim() || undefined, service: form.service, notes: form.notes.trim(), format: form.format, date: form.date })
+      requestRef.current = submissionKey(requestRef.current, body)
+      const res = await fetch("/api/consultations", { method: "POST", headers: { "Content-Type": "application/json", "Idempotency-Key": requestRef.current.key }, body })
 
       const data = await res.json()
       if (!res.ok) {

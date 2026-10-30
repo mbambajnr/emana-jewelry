@@ -37,7 +37,7 @@ Screenshots show local catalog data. See the deployment notes below for moving p
 
 ## Stack and structure
 
-Next.js 16 App Router, React 19, TypeScript, CSS Modules, Prisma 7, and MySQL. Remotion renders the homepage slideshow. Production image uploads use Supabase Storage; optional notification emails use Resend. Vitest and Testing Library cover application logic and selected UI workflows.
+Next.js 16 App Router, React 19, TypeScript, CSS Modules, Prisma 7, and MySQL. Remotion renders the homepage slideshow. Production image uploads use a configured persistent filesystem directory (or an explicitly selected Supabase bucket); optional notification emails use Resend. Vitest and Testing Library cover application logic and selected UI workflows.
 
 ```text
 src/app/          Pages, route handlers, and server actions
@@ -95,11 +95,11 @@ GitHub Actions runs lint, TypeScript, tests, and a production build with a tempo
 
 Apply migrations to a persistent MySQL database and configure production environment variables before starting the app. Use `npm run build` and `npm start` for a Node deployment that supports Next.js server features.
 
-- Production uploads require a public Supabase `product-images` bucket. Update `images.remotePatterns` in `next.config.ts` to match your storage hostname. The current allowlist is project-specific.
-- Local product rows and uploaded photos do not transfer through GitHub. Move images to durable storage and update their URLs before migrating catalog data. Local `/media/products/...` URLs return 404 in production.
-- Search verification and social links use local files in development and database records in production. Configure the live values through the admin.
-- Admin authentication currently uses one configured staff account. Separate staff accounts, roles, shared rate limiting, monitoring, and backup automation remain launch work.
-- Email is best-effort after a request is saved, without a durable retry queue. Sender and recipient details currently belong to Emana; changing them requires a code/configuration review.
+- Configure `PRODUCT_IMAGE_DIRECTORY` outside the deployment folder for persistent filesystem uploads. Keep its contents across releases and back them up with MySQL. Supabase remains optional via `IMAGE_STORAGE=supabase`. See [production hardening](docs/PRODUCTION-HARDENING.md).
+- Product rows and photo files do not transfer through GitHub. `scripts/migrate-image-storage.mjs` copies and verifies existing photos without changing their URLs. Production `/media/products/...` serving requires the persistent directory configuration.
+- Search verification and social links use MySQL in both development and production. Configure them through the admin.
+- Admin authentication uses one configured staff account, shared MySQL-backed rate limits, and credential-bound sessions. Separate staff roles, deployment monitoring, and backup automation remain operational work.
+- Notification jobs are saved atomically with requests, retried with leases and provider idempotency keys, and visible under Admin → Email Delivery. Configure the protected scheduled runner for automatic recovery without new customer traffic. Sender and recipient details remain Emana-specific.
 - Some collection/product routes retain sample-data fallbacks when database queries fail. The full catalog and admin do not provide an offline production database replacement.
 - Payment processing and customer accounts are outside the current scope.
 

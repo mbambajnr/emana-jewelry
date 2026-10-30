@@ -1,3 +1,4 @@
+import { isSameOrigin } from "@/lib/admin-request"
 import { NextResponse } from "next/server"
 import { revalidateTag } from "next/cache"
 import { verifySession } from "@/lib/auth"
@@ -11,12 +12,12 @@ async function authorized() {
 export async function GET() {
   if (!await authorized()) return NextResponse.json({ error: "Please sign in as the admin." }, { status: 401 })
   try {
-    return NextResponse.json({ links: await readSocialLinks(), local: process.env.NODE_ENV !== "production" }, { headers: { "Cache-Control": "no-store" } })
+    return NextResponse.json({ links: await readSocialLinks(), local: false }, { headers: { "Cache-Control": "no-store" } })
   } catch { return NextResponse.json({ error: "We couldn’t load your links. Check the database connection and migrations, then try again." }, { status: 503 }) }
 }
 export async function PUT(request: Request) {
   if (!await authorized()) return NextResponse.json({ error: "Please sign in as the admin." }, { status: 401 })
-  if (request.headers.get("origin") !== new URL(request.url).origin) return NextResponse.json({ error: "Please save from the admin page." }, { status: 403 })
+  if (!isSameOrigin(request)) return NextResponse.json({ error: "Please save from the admin page." }, { status: 403 })
   let links
   try { links = parseSocialLinks(await request.json()) }
   catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : "Please check your links." }, { status: 400 }) }

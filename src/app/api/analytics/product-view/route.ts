@@ -1,9 +1,11 @@
+import { publicGuard, RequestError } from "@/lib/request-safety"
 import { prisma } from "@/lib/db"
 import { isSameOrigin } from "@/lib/admin-request"
 
 export async function POST(request: Request) {
   if (!isSameOrigin(request)) return Response.json({ success: false }, { status: 403 })
   try {
+    await publicGuard(request, "analytics")
     const raw = await request.text()
     if (raw.length > 2000) return Response.json({ success: false }, { status: 400 })
     let body
@@ -14,5 +16,5 @@ export async function POST(request: Request) {
     if (!product) return Response.json({ success: false }, { status: 404 })
     await prisma.productView.create({ data: { productSlug: product.slug } })
     return Response.json({ success: true })
-  } catch { return Response.json({ success: false }, { status: 503 }) }
+  } catch (error) { return Response.json({ success: false }, { status: error instanceof RequestError ? error.status : 503 }) }
 }

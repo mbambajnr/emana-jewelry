@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 const mocks = vi.hoisted(() => ({ same: vi.fn(), find: vi.fn(), view: vi.fn(), click: vi.fn() }))
 vi.mock("@/lib/admin-request", () => ({ isSameOrigin: mocks.same }))
 vi.mock("@/lib/db", () => ({ prisma: { product: { findUnique: mocks.find }, productView: { create: mocks.view }, whatsAppClick: { create: mocks.click } } }))
+vi.mock("@/lib/request-safety", async original => ({ ...await original<typeof import("@/lib/request-safety")>(), publicGuard: vi.fn() }))
 import { POST as view } from "@/app/api/analytics/product-view/route"
 import { POST as click } from "@/app/api/analytics/whatsapp-click/route"
 const req = (body: unknown) => new Request("http://localhost:3000/api/analytics/product-view", { method: "POST", body: JSON.stringify(body) })

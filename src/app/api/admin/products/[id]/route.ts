@@ -1,3 +1,5 @@
+import { boundedJson, RequestError } from "@/lib/request-safety"
+import { productInput } from "@/lib/product-input"
 import { validateProductInformation } from "@/lib/product-information"
 import { photoMetal, validateMetalOptions } from "@/lib/product-options"
 import { normalizeYoutubeUrl } from "@/lib/product-media"
@@ -12,23 +14,25 @@ export async function PUT(
   if (!await isAdminRequest(request)) return NextResponse.json({ error: "Admin sign-in required" }, { status: 401 })
   try {
     const { id } = await params
-    const body = await request.json()
-    const youtubeUrl = normalizeYoutubeUrl(body.youtubeUrl)
+    const body = productInput(await boundedJson(request, 262144))
+    if (body.version === undefined) throw new RequestError("Reload this product before saving; a version reference is required.", 409)
+    const youtubeUrl = body.youtubeUrl === undefined ? undefined : normalizeYoutubeUrl(body.youtubeUrl)
 
     const product = await prisma.product.update({
-      where: { id },
+      where: { id, version: body.version },
       data: {
+        version: { increment: 1 },
         youtubeUrl,
         metalOptions: body.metalOptions === undefined ? undefined : validateMetalOptions(body.metalOptions),
         slug: body.slug,
         name: body.name,
-        subcategory: body.subcategory || null,
+        subcategory: body.subcategory === undefined ? undefined : body.subcategory || null,
         description: body.description,
         sku: body.sku,
         available: body.available ?? undefined,
         ...validateProductInformation(body),
         categoryId: body.categoryId,
-        images: {
+        images: body.images === undefined ? undefined : {
           deleteMany: {},
           create: (body.images ?? []).map(
             (img: { url: string; alt?: string; metal?: unknown }, i: number) => ({
@@ -39,7 +43,7 @@ export async function PUT(
             }),
           ),
         },
-        details: {
+        details: body.details === undefined ? undefined : {
           deleteMany: {},
           create: (body.details ?? []).map(
             (d: { text: string }, i: number) => ({
@@ -48,7 +52,7 @@ export async function PUT(
             }),
           ),
         },
-        materials: {
+        materials: body.materials === undefined ? undefined : {
           deleteMany: {},
           create: (body.materials ?? []).map(
             (m: { metal: string; purity: string; weight?: string }) => ({
@@ -58,7 +62,7 @@ export async function PUT(
             }),
           ),
         },
-        stones: {
+        stones: body.stones === undefined ? undefined : {
           deleteMany: {},
           create: (body.stones ?? []).map(
             (s: {
@@ -90,6 +94,8 @@ export async function PUT(
 
     return NextResponse.json(product)
   } catch (err) {
+    if ((err as { code?: string }).code === "P2025") return NextResponse.json({ error: "This product changed in another tab. Reload it before saving. Your edits have not been applied." }, { status: 409 })
+    if (err instanceof RequestError) return NextResponse.json({ error: err.message }, { status: err.status })
     const message = err instanceof Error ? err.message : "Failed to update product"
     return NextResponse.json({ error: message }, { status: 400 })
   }

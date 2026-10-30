@@ -20,6 +20,7 @@ model Category {
 }
 
 model Product {
+  version Int @default(0)
   id             String         @id @default(cuid())
   slug           String         @unique
   name           String @db.VarChar(300)
@@ -115,6 +116,8 @@ model WhatsAppClick {
 }
 
 model Order {
+  requestKey String? @unique @db.VarChar(64)
+  requestFingerprint String? @db.VarChar(64)
   id        String   @id @default(cuid())
   name      String @db.VarChar(300)
   email     String @db.VarChar(254)
@@ -129,6 +132,8 @@ model Order {
 }
 
 model Consultation {
+  requestKey String? @unique @db.VarChar(64)
+  requestFingerprint String? @db.VarChar(64)
   id        String   @id @default(cuid())
   name      String @db.VarChar(300)
   email     String @db.VarChar(254)
@@ -184,4 +189,27 @@ model ContentRevision {
   actor     String @db.VarChar(254)
   createdAt DateTime @default(now())
   @@index([createdAt])
+}
+
+model RateBucket {
+  key String @id @db.VarChar(191)
+  count Int
+  expiresAt DateTime
+  @@index([expiresAt])
+}
+
+model NotificationJob {
+  id String @id @default(cuid())
+  kind String @db.VarChar(40)
+  recordId String @db.VarChar(191)
+  status String @default("pending") @db.VarChar(20)
+  attempts Int @default(0)
+  nextAttemptAt DateTime @default(now())
+  lockedUntil DateTime?
+  lockToken String? @db.VarChar(64)
+  lastError String? @db.VarChar(300)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([kind, recordId])
+  @@index([status, nextAttemptAt])
 }

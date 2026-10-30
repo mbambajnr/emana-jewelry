@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  partialPrefetching: false,
   async headers() {
     return [{
       source: "/hero/optimized/:path*",
@@ -10,6 +11,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
+    maximumResponseBody: 10 * 1024 * 1024,
     remotePatterns: [
       {
         protocol: "https",

@@ -1,3 +1,4 @@
+import { canonicalReference } from "@/lib/request-safety"
 import { prisma } from "@/lib/db"
 export async function GET(request: Request) {
   let slugs: string[]
@@ -11,7 +12,7 @@ export async function GET(request: Request) {
   if (!slugs.length) return Response.json([])
   try {
     const products = await prisma.product.findMany({ where: { slug: { in: slugs } }, select: { id: true, slug: true, name: true, images: { orderBy: { sortOrder: "asc" }, take: 2, select: { url: true, alt: true } } } })
-    const bySlug = new Map(products.map(product => [product.slug, product]))
-    return Response.json(slugs.flatMap(slug => bySlug.has(slug) ? [bySlug.get(slug)!] : []), { headers: { "Cache-Control": "no-store" } })
+    const bySlug = new Map(products.map(product => [canonicalReference(product.slug), product]))
+    return Response.json(slugs.flatMap(slug => bySlug.has(canonicalReference(slug)) ? [bySlug.get(canonicalReference(slug))!] : []), { headers: { "Cache-Control": "no-store" } })
   } catch { return Response.json({ error: "Products temporarily unavailable" }, { status: 503 }) }
 }

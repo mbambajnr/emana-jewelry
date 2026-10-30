@@ -1,18 +1,23 @@
 vi.mock("@/lib/content-store", () => ({ readPublishedContent: mocks.content }))
 import { beforeEach, describe, expect, it, vi } from "vitest"
-const mocks = vi.hoisted(() => ({ content: vi.fn(), products: vi.fn(), order: vi.fn(), booking: vi.fn(), list: vi.fn(), admin: vi.fn(), after: vi.fn(), notifyOrder: vi.fn(), confirmOrder: vi.fn(), notifyBooking: vi.fn() }))
-vi.mock("@/lib/db", () => ({ prisma: { product: { findMany: mocks.products }, order: { create: mocks.order }, consultation: { create: mocks.booking, findMany: mocks.list } } }))
+const mocks = vi.hoisted(() => ({ content: vi.fn(), products: vi.fn(), order: vi.fn(), booking: vi.fn(), savedOrder: vi.fn(), savedBooking: vi.fn(), queue: vi.fn(), list: vi.fn(), admin: vi.fn(), after: vi.fn(), notifyOrder: vi.fn(), confirmOrder: vi.fn(), notifyBooking: vi.fn() }))
+vi.mock("@/lib/db", () => {
+  const client = { product: { findMany: mocks.products }, order: { create: mocks.order, findUnique: mocks.savedOrder }, consultation: { create: mocks.booking, findMany: mocks.list, findUnique: mocks.savedBooking }, notificationJob: { createMany: mocks.queue } }
+  return { prisma: { ...client, $transaction: (callback: (tx: typeof client) => unknown) => callback(client) } }
+})
+vi.mock("@/lib/request-safety", async original => ({ ...await original<typeof import("@/lib/request-safety")>(), publicGuard: vi.fn() }))
 vi.mock("@/lib/admin-request", () => ({ adminSession: mocks.admin }))
 vi.mock("@/lib/notifications", () => ({ sendOrderNotification: mocks.notifyOrder, sendOrderConfirmation: mocks.confirmOrder, sendConsultationNotification: mocks.notifyBooking }))
 vi.mock("next/server", async importOriginal => ({ ...await importOriginal<typeof import("next/server")>(), after: mocks.after }))
 import { defaultContent } from "@/lib/site-content"
 import { POST as inquiry } from "@/app/api/orders/route"
 import { POST as appointment, GET as listAppointments } from "@/app/api/consultations/route"
-const post = (value: unknown) => new Request("http://localhost:3000/api/test", { method: "POST", body: JSON.stringify(value), headers: { "Content-Type": "application/json" } })
+const post = (value: unknown, key = crypto.randomUUID()) => new Request("http://localhost:3000/api/test", { method: "POST", body: JSON.stringify(value), headers: { "Content-Type": "application/json", "Idempotency-Key": key } })
 const order = { name: "Ama", email: "ama@example.com", phone: "0241234567", address: "Takoradi", items: [{ slug: "ring", quantity: 2, price: 1, name: "Tampered name" }] }
 const booking = { name: "Ama", email: "ama@example.com", service: "Bespoke Design Walkthrough (30 Mins)", format: "Private Atelier (Takoradi - Justmoh Ave)", date: "2099-05-10", notes: "A new ring" }
 beforeEach(() => {
   vi.resetAllMocks()
+  mocks.savedOrder.mockResolvedValue(null); mocks.savedBooking.mockResolvedValue(null); mocks.queue.mockResolvedValue({ count: 1 })
   mocks.content.mockResolvedValue(defaultContent)
   mocks.products.mockResolvedValue([{ slug: "ring", name: "Real Ring", price: 200, images: [{ url: "/ring.jpg" }] }])
   mocks.order.mockResolvedValue({ id: "saved-order" })
@@ -83,4 +88,20 @@ describe("Appointment requests", () => {
     expect((await listAppointments()).status).toBe(401)
     expect(mocks.list).not.toHaveBeenCalled()
   })
+})
+
+it("replays a request reference without inserting or sending another enquiry", async () => {
+  const key = crypto.randomUUID()
+  expect((await inquiry(post(order, key))).status).toBe(201)
+  const fingerprint = mocks.order.mock.calls[0][0].data.requestFingerprint
+  mocks.savedOrder.mockResolvedValue({ id: "saved-order", requestFingerprint: fingerprint })
+  expect((await inquiry(post(order, key))).status).toBe(201)
+  expect(mocks.order).toHaveBeenCalledTimes(1)
+  expect(mocks.queue).toHaveBeenCalledTimes(1)
+  expect((await inquiry(post({ ...order, address: "Changed address" }, key))).status).toBe(409)
+})
+it("resolves alternate-cased references to the canonical product and rejects duplicate variants", async () => {
+  expect((await inquiry(post({ ...order, items: [{ slug: "RING", quantity: 1, metal: "Silver" }] }))).status).toBe(201)
+  expect(mocks.order.mock.calls[0][0].data.items[0].slug).toBe("ring")
+  expect((await inquiry(post({ ...order, items: [{ slug: "RING", quantity: 1, metal: "Silver" }, { slug: "ring", quantity: 1, metal: "Silver" }] }))).status).toBe(400)
 })

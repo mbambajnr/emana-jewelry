@@ -54,7 +54,7 @@ export function buildOrderConciergeMessage(details: ConciergeOrderDetails): stri
   }
 
   parts.push("")
-  parts.push("Please let me know what’s available, the sizes, and how I can pay and arrange delivery. I’d also like to know about the certificates.")
+  parts.push("Please let me know what’s available, the sizes, and how I can pay and arrange delivery.")
   parts.push("Thank you!")
 
   return parts.join("\n")

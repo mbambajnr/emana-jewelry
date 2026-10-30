@@ -1,40 +1,45 @@
-import { productMetalOptions } from "@/lib/product-options"
+import { productMetalOptions, photosForMetal } from "@/lib/product-options"
 import { after, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
-import { sendOrderNotification, sendOrderConfirmation } from "@/lib/notifications"
+import { orderJobs, processNotifications } from "@/lib/notification-jobs"
+import { boundedJson, publicGuard, RequestError, submissionIdentity, confirmFingerprint, canonicalReference } from "@/lib/request-safety"
 import { email, InputError, quoteItems, text } from "@/lib/request-validation"
 
 export async function POST(request: Request) {
-  let input
+  let identity: ReturnType<typeof submissionIdentity> | undefined
   try {
-    const body = await request.json()
-    input = { name: text(body.name, "your name"), email: email(body.email), phone: text(body.phone, "your phone number", 50), address: text(body.address, "your address", 1000), notes: text(body.notes, "your notes", 4000, true), items: quoteItems(body.items) }
-  } catch (error) { return NextResponse.json({ error: error instanceof InputError ? error.message : "Please check your request." }, { status: 400 }) }
-  try {
-    const products = await prisma.product.findMany({ where: { slug: { in: input.items.map(item => item.slug) } }, include: { images: { take: 1, orderBy: { sortOrder: "asc" } } } })
-    if (products.length !== new Set(input.items.map(item => item.slug)).size) return NextResponse.json({ error: "A piece in your request is no longer listed. Please refresh your cart." }, { status: 400 })
-    for (const item of input.items) {
-      const product = products.find(product => product.slug === item.slug)!
-      if (item.metal && !productMetalOptions(product.metalOptions).includes(item.metal)) {
-        return NextResponse.json({ error: `${item.metal} is no longer an option for ${product.name}. Please open the product and update your request.` }, { status: 400 })
-      }
-    }
+    await publicGuard(request, "inquiry")
+    const body = await boundedJson(request)
+    const input = { name: text(body.name, "your name"), email: email(body.email), phone: text(body.phone, "your phone number", 50), address: text(body.address, "your address", 1000), notes: text(body.notes, "your notes", 4000, true), items: quoteItems(body.items) }
+    identity = submissionIdentity(request, input)
+    const existing = await prisma.order.findUnique({ where: { requestKey: identity.requestKey } })
+    if (existing) { confirmFingerprint(existing, identity.requestFingerprint); return NextResponse.json({ success: true, id: existing.id }, { status: 201 }) }
+    const products = await prisma.product.findMany({ where: { slug: { in: input.items.map(item => item.slug) } }, include: { images: { orderBy: { sortOrder: "asc" } } } })
+    const used = new Set<string>()
     const items = input.items.map(item => {
-      const product = products.find(product => product.slug === item.slug)!
-      return { slug: product.slug, name: product.name, image: product.images[0]?.url || "/hero_bg.png", price: 0, quantity: item.quantity, ...(item.metal ? { metal: item.metal } : {}) }
+      const product = products.find(product => canonicalReference(product.slug) === canonicalReference(item.slug))
+      if (!product) throw new RequestError("A piece in your request is no longer listed. Please refresh your cart.")
+      const key = `${product.id || product.slug}:${item.metal || ""}`
+      if (used.has(key)) throw new RequestError("Please remove repeated product and metal selections.")
+      used.add(key)
+      if (item.metal && !productMetalOptions(product.metalOptions).includes(item.metal)) throw new RequestError(`${item.metal} is no longer an option for ${product.name}. Please update your request.`)
+      return { slug: product.slug, name: product.name, image: photosForMetal(product.images, item.metal)[0]?.url || "/hero_bg.png", price: 0, quantity: item.quantity, ...(item.metal ? { metal: item.metal } : {}) }
     })
-    // Legacy numeric fields stay zero; this is an unpriced inquiry, not a free order.
-    const total = 0
-    const order = await prisma.order.create({ data: { name: input.name, email: input.email, phone: input.phone, address: input.address, notes: input.notes || null, items, total, status: "new" } })
-    after(async () => {
-      await Promise.allSettled([
-        sendOrderNotification({ ...input, notes: input.notes || null, items, total, id: order.id }),
-        sendOrderConfirmation({ name: input.name, email: input.email, items }),
-      ]).then(results => { if (results.some(result => result.status === "rejected")) console.warn("A saved inquiry notification could not be sent.") })
+    const order = await prisma.$transaction(async tx => {
+      const saved = await tx.order.create({ data: { ...identity!, name: input.name, email: input.email, phone: input.phone, address: input.address, notes: input.notes || null, items, total: 0, status: "new" } })
+      await tx.notificationJob.createMany({ data: orderJobs(saved.id) })
+      return saved
     })
+    after(async () => { try { await processNotifications(10, order.id) } catch { console.warn("Notification queue will need another attempt.") } })
     return NextResponse.json({ success: true, id: order.id }, { status: 201 })
-  } catch {
-    console.warn("Inquiry could not be saved.")
-    return NextResponse.json({ error: "We couldn’t save your request. Please try again or contact us on WhatsApp. Nothing has been confirmed." }, { status: 503 })
+  } catch (error) {
+    if ((error as { code?: string }).code === "P2002" && identity) {
+      try {
+        const saved = await prisma.order.findUnique({ where: { requestKey: identity.requestKey } })
+        if (saved) { confirmFingerprint(saved, identity.requestFingerprint); return NextResponse.json({ success: true, id: saved.id }, { status: 201 }) }
+      } catch (conflict) { if (conflict instanceof RequestError) return NextResponse.json({ error: conflict.message }, { status: conflict.status }) }
+    }
+    const status = error instanceof RequestError ? error.status : error instanceof InputError ? 400 : 503
+    return NextResponse.json({ error: error instanceof RequestError || error instanceof InputError ? error.message : "We couldn’t save your request. Please try again or contact us on WhatsApp. Nothing has been confirmed." }, { status, ...(status === 429 ? { headers: { "Retry-After": "900" } } : {}) })
   }
 }

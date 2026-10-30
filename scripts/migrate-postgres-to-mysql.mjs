@@ -55,7 +55,7 @@ try {
     for (const [table, expected] of snapshots) {
       const actual = await target.query(`SELECT * FROM \`${table}\` ORDER BY \`id\``)
       const byId = new Map(actual.map(row => [row.id, normalize(row, table)]))
-      if (actual.length !== expected.length || expected.some(row => !isDeepStrictEqual(normalize(row, table), byId.get(row.id)))) throw new Error(`Verification failed for ${table}; target copy rolled back.`)
+      if (actual.length !== expected.length || expected.some(row => !isDeepStrictEqual(normalize(row, table), Object.fromEntries(Object.keys(row).map(key => [key, byId.get(row.id)?.[key]]))))) throw new Error(`Verification failed for ${table}; target copy rolled back.`)
     }
     if (copy) { await target.commit(); targetOpen = false }
     console.log(copy ? 'Copy committed after every field was verified. PostgreSQL remains unchanged.' : 'Every field matches the PostgreSQL snapshot. Neither database was changed.')

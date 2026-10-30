@@ -2,9 +2,9 @@ import { Resend } from "resend"
 import type { CartItem } from "./cart"
 
 const escapeHtml = (value: string) => value.replace(/[<>&"']/g, character => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&#39;" })[character]!)
-async function sendEmail(payload: Parameters<Resend["emails"]["send"]>[0]) {
+async function sendEmail(payload: Parameters<Resend["emails"]["send"]>[0], idempotencyKey?: string) {
   if (!process.env.RESEND_API_KEY) throw new Error("Email delivery is not configured")
-  const response = await new Resend(process.env.RESEND_API_KEY).emails.send(payload)
+  const response = await new Resend(process.env.RESEND_API_KEY).emails.send(payload, idempotencyKey ? { idempotencyKey } : undefined)
   if (response.error) throw new Error("Email delivery failed")
 }
 const adminEmail = "emanagold6590@gmail.com"
@@ -18,7 +18,7 @@ export async function sendOrderNotification(order: {
   notes: string | null
   total: number
   items: CartItem[]
-}) {
+}, idempotencyKey?: string) {
   const itemsHtml = order.items
     .map(
       (i) =>
@@ -66,14 +66,14 @@ export async function sendOrderNotification(order: {
         </p>
       </div>
     `,
-  })
+  }, idempotencyKey)
 }
 
 export async function sendOrderConfirmation(order: {
   name: string
   email: string
   items: CartItem[]
-}) {
+}, idempotencyKey?: string) {
   const itemsHtml = order.items
     .map(
       (i) =>
@@ -107,7 +107,7 @@ export async function sendOrderConfirmation(order: {
         <p style="color: #c5a880; font-weight: 500;">— Emana Jewelry</p>
       </div>
     `,
-  })
+  }, idempotencyKey)
 }
 
 export async function sendConsultationNotification(booking: {
@@ -118,7 +118,7 @@ export async function sendConsultationNotification(booking: {
   format: string
   date: string
   notes: string
-}) {
+}, idempotencyKey?: string) {
   const formattedDate = new Date(booking.date).toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
@@ -147,5 +147,5 @@ export async function sendConsultationNotification(booking: {
         </p>
       </div>
     `,
-  })
+  }, idempotencyKey)
 }

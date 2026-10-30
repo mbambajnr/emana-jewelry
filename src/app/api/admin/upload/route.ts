@@ -1,6 +1,6 @@
 import { isAdminRequest } from "@/lib/admin-request"
 import { NextResponse } from "next/server"
-import { storeLocalProductImage } from "@/lib/local-product-images"
+import { storeLocalProductImage, validImageBytes } from "@/lib/local-product-images"
 
 export async function POST(request: Request) {
   if (!await isAdminRequest(request)) return NextResponse.json({ error: "Admin sign-in required" }, { status: 401 })
@@ -18,7 +18,9 @@ export async function POST(request: Request) {
     const fileName = `${crypto.randomUUID()}.${ext}`
     const buffer = Buffer.from(await file.arrayBuffer())
 
-    if (process.env.NODE_ENV !== "production") {
+    if (!validImageBytes(buffer, ext)) return NextResponse.json({ error: "This file does not contain a supported image." }, { status: 400 })
+
+    if (process.env.IMAGE_STORAGE !== "supabase") {
       const url = await storeLocalProductImage(buffer, ext)
       return NextResponse.json({ url })
     }

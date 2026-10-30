@@ -1,3 +1,4 @@
+import { publicGuard, RequestError } from "@/lib/request-safety"
 import { prisma } from "@/lib/db"
 import { isSameOrigin } from "@/lib/admin-request"
 import { isMetalOption, productMetalOptions } from "@/lib/product-options"
@@ -5,6 +6,7 @@ import { isMetalOption, productMetalOptions } from "@/lib/product-options"
 export async function POST(request: Request) {
   if (!isSameOrigin(request)) return Response.json({ success: false }, { status: 403 })
   try {
+    await publicGuard(request, "analytics")
     const raw = await request.text()
     if (raw.length > 2000) return Response.json({ success: false }, { status: 400 })
     let body
@@ -22,5 +24,5 @@ export async function POST(request: Request) {
     }
     await prisma.whatsAppClick.create({ data: { source, label: label || null, product: name, productSlug: productSlug || null, metal: metal || null } })
     return Response.json({ success: true })
-  } catch { return Response.json({ success: false }, { status: 503 }) }
+  } catch (error) { return Response.json({ success: false }, { status: error instanceof RequestError ? error.status : 503 }) }
 }

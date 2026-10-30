@@ -4,7 +4,7 @@ vi.mock("@/lib/admin-request", () => ({ isAdminRequest: mocks.admin }))
 vi.mock("@/lib/db", () => ({ prisma: { product: { create: mocks.create, update: mocks.update } } }))
 import { POST } from "@/app/api/admin/products/route"
 import { PUT } from "@/app/api/admin/products/[id]/route"
-const request = (body: unknown, method = "POST") => new Request("http://localhost:3000/api/admin/products", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+const request = (body: unknown, method = "POST") => new Request("http://localhost:3000/api/admin/products", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(method === "POST" ? { name: "Piece", slug: "piece", description: "A piece", sku: "P1", categoryId: "rings", ...(body as object) } : { version: 0, ...(body as object) }) })
 const params = { params: Promise.resolve({ id: "piece" }) }
 beforeEach(() => { vi.resetAllMocks(); mocks.admin.mockResolvedValue(true); mocks.create.mockResolvedValue({ id: "piece" }); mocks.update.mockResolvedValue({ id: "piece" }) })
 
@@ -65,4 +65,13 @@ describe("product information", () => {
     expect(data).not.toHaveProperty("availabilityStatus")
     expect(data.available).toBeUndefined()
   })
+})
+
+it("preserves omitted gallery data and rejects stale product versions", async () => {
+  await PUT(request({ name: "Updated name" }, "PUT"), params)
+  expect(mocks.update.mock.calls[0][0]).toMatchObject({ where: { id: "piece", version: 0 }, data: { version: { increment: 1 } } })
+  expect(mocks.update.mock.calls[0][0].data.images).toBeUndefined()
+  expect(mocks.update.mock.calls[0][0].data.materials).toBeUndefined()
+  mocks.update.mockRejectedValue({ code: "P2025" })
+  expect((await PUT(request({ name: "Stale name" }, "PUT"), params)).status).toBe(409)
 })
