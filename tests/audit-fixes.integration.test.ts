@@ -1,5 +1,6 @@
 import { afterAll, expect, it, vi } from "vitest"
 const send = vi.hoisted(() => ({ owner: vi.fn(), client: vi.fn(), consultation: vi.fn() }))
+vi.mock("@/lib/content-store", async () => ({ readPublishedContent: async () => (await import("@/lib/site-content")).defaultContent }))
 vi.mock("@/lib/notifications", () => ({ sendOrderNotification: send.owner, sendOrderConfirmation: send.client, sendConsultationNotification: send.consultation }))
 vi.mock("@/lib/admin-request", async original => ({ ...await original<typeof import("@/lib/admin-request")>(), isAdminRequest: async () => true }))
 vi.mock("@/lib/request-safety", async original => ({ ...await original<typeof import("@/lib/request-safety")>(), publicGuard: vi.fn() }))

@@ -838,5 +838,12 @@
     "label": "Video cover image",
     "default": "/consultation_desk.jpg",
     "type": "image"
+  },
+  {
+    "key": "offer.percent",
+    "group": "Website offer",
+    "label": "Jewelry discount percentage (leave blank to turn off)",
+    "default": "10",
+    "type": "percent"
   }
 ]

@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db"
 import { orderJobs, processNotifications } from "@/lib/notification-jobs"
 import { boundedJson, publicGuard, RequestError, submissionIdentity, confirmFingerprint, canonicalReference } from "@/lib/request-safety"
 import { email, InputError, quoteItems, text } from "@/lib/request-validation"
+import { readPublishedContent } from "@/lib/content-store"
+import { websiteDiscount, offerRecord } from "@/lib/website-offer"
 
 export async function POST(request: Request) {
   let identity: ReturnType<typeof submissionIdentity> | undefined
@@ -25,8 +27,10 @@ export async function POST(request: Request) {
       if (item.metal && !productMetalOptions(product.metalOptions).includes(item.metal)) throw new RequestError(`${item.metal} is no longer an option for ${product.name}. Please update your request.`)
       return { slug: product.slug, name: product.name, image: photosForMetal(product.images, item.metal)[0]?.url || "/hero_bg.png", price: 0, quantity: item.quantity, ...(item.metal ? { metal: item.metal } : {}) }
     })
+    const discount = websiteDiscount((await readPublishedContent()).copy)
+    const notes = [input.notes, discount ? offerRecord(discount) : ""].filter(Boolean).join("\n\n") || null
     const order = await prisma.$transaction(async tx => {
-      const saved = await tx.order.create({ data: { ...identity!, name: input.name, email: input.email, phone: input.phone, address: input.address, notes: input.notes || null, items, total: 0, status: "new" } })
+      const saved = await tx.order.create({ data: { ...identity!, name: input.name, email: input.email, phone: input.phone, address: input.address, notes, items, total: 0, status: "new" } })
       await tx.notificationJob.createMany({ data: orderJobs(saved.id) })
       return saved
     })

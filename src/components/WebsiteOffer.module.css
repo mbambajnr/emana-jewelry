@@ -1,0 +1,7 @@
+.banner, .compact { border: 1px solid var(--gold-primary); background: var(--bg-deep); color: var(--text-primary); border-radius: 10px; padding: 20px; }
+.banner { margin: 32px var(--content-inset); display: flex; align-items: flex-start; flex-direction: column; gap: 20px; }
+.banner strong { font-size: clamp(1.2rem, 3vw, 1.6rem); line-height: 1.4; }
+.banner p, .compact p { line-height: 1.7; color: var(--text-secondary); margin-top: 8px; font-size: .95rem; }
+.banner a { flex-shrink: 0; min-height: 44px; padding: 12px 18px; background: var(--gold-dark); color: #fff; border-radius: 5px; text-decoration: none; }
+.compact { margin: 16px 0; font-size: .95rem; }
+@media (min-width: 768px) { .banner { flex-direction: row; align-items: center; justify-content: space-between; padding: 28px; } .banner p { max-width: 720px; } }

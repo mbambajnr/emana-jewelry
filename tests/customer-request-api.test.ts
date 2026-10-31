@@ -24,6 +24,17 @@ beforeEach(() => {
   mocks.booking.mockResolvedValue({ ...booking, id: "saved-booking", status: "requested" })
 })
 describe("Customer inquiry persistence", () => {
+  it("records the published website offer with the enquiry and ignores a client-supplied discount", async () => {
+    expect((await inquiry(post({ ...order, notes: "Please call me.", discountPercent: 99 }))).status).toBe(201)
+    expect(mocks.order).toHaveBeenCalledWith({ data: expect.objectContaining({ notes: expect.stringContaining("Website offer: 10%") }) })
+    expect(mocks.order.mock.calls[0][0].data.notes).toContain("Please call me.")
+    expect(mocks.order.mock.calls[0][0].data.notes).not.toContain("99%")
+  })
+  it("does not record an offer after it has been turned off", async () => {
+    mocks.content.mockResolvedValue({ ...defaultContent, copy: { ...defaultContent.copy, "offer.percent": "" } })
+    expect((await inquiry(post({ ...order, notes: "Please call me." }))).status).toBe(201)
+    expect(mocks.order).toHaveBeenCalledWith({ data: expect.objectContaining({ notes: "Please call me." }) })
+  })
   it("uses catalog names and saves an unpriced inquiry regardless of supplied prices", async () => {
     expect((await inquiry(post(order))).status).toBe(201)
     expect(mocks.order).toHaveBeenCalledWith({ data: expect.objectContaining({ total: 0, status: "new", items: [expect.objectContaining({ name: "Real Ring", price: 0, quantity: 2 })] }) })

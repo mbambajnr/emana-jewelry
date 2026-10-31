@@ -17,6 +17,12 @@ Images can be selected by existing website paths or uploaded through the authent
 
 In **Page Content → Shop introduction video**, paste the shop's YouTube link and edit the heading, introduction, and cover image. Save the draft, preview it, then publish. The section appears after featured products and recently viewed items, before custom jewelry. Leave the link blank to hide it. Visitors press play to load the YouTube player; it does not load on the initial page visit.
 
+## Website jewelry offer
+
+In **Page Content → Website offer**, change the percentage or leave it blank to turn the offer off. Save and publish. The initial offer is 10% off the confirmed jewelry price for website orders; delivery is quoted separately. The homepage, product pages, quote page, and product WhatsApp enquiries use the published percentage. Service and consultation enquiries do not promise this discount.
+
+The website requests quotes rather than taking payment. Staff apply the discount to the confirmed jewelry price. Form enquiries retain the offer active at submission in their request notes, alongside the customer's notes; find it under **Customer Requests → Request notes & offer**. Owner notification emails include these notes. A later CMS change does not rewrite saved enquiries. WhatsApp-only enquiries carry the offer in the message, but do not create a customer-request record automatically. No minimum spend, expiry, or stacking rules have been introduced.
+
 ## Services
 
 To change the **Cleaning & Repairs / Jewelry Cleaning & Repair Services** homepage block, open the **Services** tab. The **Homepage services section** panel contains the small heading, main heading, introduction, photo, and photo description. Upload a replacement image there, check its preview, save the draft, and publish. Individual services are edited below that panel. A direct editor link is `/admin/content?tab=services`.

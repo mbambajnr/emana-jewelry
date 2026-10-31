@@ -12,6 +12,7 @@ import CatalogReturnLink from "@/components/CatalogReturnLink"
 import { useEffect, useState, type ReactNode } from "react"
 import Link from "next/link"
 import ProductGallery from "@/components/ProductGallery"
+import WebsiteOffer from "@/components/WebsiteOffer"
 import Footer from "@/components/Footer"
 import { WhatsappButton } from "@/components/WhatsappButton"
 import { absoluteUrl, jsonLdString } from "@/lib/seo"
@@ -102,6 +103,7 @@ export default function ProductDetailClient({ product, preview = false, relatedP
         <ProductGallery key={product.id} metal={metal} name={product.name} images={product.images} youtubeUrl={product.youtubeUrl} />
         <aside id="request-panel" className={styles.buyBox} aria-label="Request a quote">
           <h2>Interested in this piece?</h2>
+          <WebsiteOffer compact />
           <p className={styles.priceNote}>Choose your metal and ask us for the price. We’ll confirm the details with you.</p>
           <p className={styles.availability}><span aria-hidden="true">●</span> {availabilityLabel(product)}</p>
           {options.length > 0 && <fieldset className={styles.metalOptions} aria-describedby="metal-choice-note">

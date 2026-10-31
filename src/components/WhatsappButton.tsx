@@ -1,6 +1,8 @@
 "use client"
 
 import { productTrackingDetails } from "@/lib/product-analytics"
+import { useSiteContent } from "@/components/cms/SiteContentProvider"
+import { websiteDiscount } from "@/lib/website-offer"
 import type { MetalOption } from "@/lib/product-options"
 import { type MouseEvent } from "react"
 import {
@@ -24,6 +26,7 @@ export function WhatsappButton({
   iconSize?: number
   label?: string
 }) {
+  const { copy } = useSiteContent()
   const handleClick = (e: MouseEvent<HTMLSpanElement>) => {
     e.preventDefault()
     e.stopPropagation()
@@ -33,7 +36,7 @@ export function WhatsappButton({
         ? productUrl
         : `${origin}${productUrl}`
       : productUrl
-    const message = buildProductInquiryConciergeMessage(productName, fullUrl, metal)
+    const message = buildProductInquiryConciergeMessage(productName, fullUrl, metal, websiteDiscount(copy))
     const href = getWhatsAppConciergeUrl(message)
     window.open(href, "_blank", "noopener,noreferrer")
 

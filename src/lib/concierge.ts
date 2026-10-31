@@ -1,6 +1,7 @@
 import { analyticsAllowed } from "./product-analytics"
 import type { MetalOption } from "./product-options"
 import { absoluteUrl } from "./seo"
+import { offerMessage } from "./website-offer"
 
 export const CONCIERGE_PHONE = "233242186590"
 export const CONCIERGE_DISPLAY_PHONE = "+233 24 218 6590"
@@ -16,6 +17,7 @@ export interface ConciergeItem {
 }
 
 export interface ConciergeOrderDetails {
+  discountPercent?: number | null
   orderId?: string
   customerName?: string
   customerPhone?: string
@@ -55,6 +57,7 @@ export function buildOrderConciergeMessage(details: ConciergeOrderDetails): stri
 
   parts.push("")
   parts.push("Please let me know what’s available, the sizes, and how I can pay and arrange delivery.")
+  if (details.discountPercent) parts.push(offerMessage(details.discountPercent))
   parts.push("Thank you!")
 
   return parts.join("\n")
@@ -67,11 +70,13 @@ export function buildProductInquiryConciergeMessage(
   productName: string,
   productUrl?: string,
   metal?: MetalOption,
+  discountPercent?: number | null,
 ): string {
   const parts = [
     `Hello Emana, I’m interested in the *${productName}*${metal ? ` in ${metal}` : ""}.`,
     "Please, how much is it?",
   ]
+  if (discountPercent) parts.push(offerMessage(discountPercent))
   if (productUrl) {
     let url = productUrl
     try {

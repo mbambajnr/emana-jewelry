@@ -1,6 +1,9 @@
 "use client"
 
 import { submissionKey } from "@/lib/submission-key"
+import { useSiteContent } from "@/components/cms/SiteContentProvider"
+import WebsiteOffer from "@/components/WebsiteOffer"
+import { websiteDiscount } from "@/lib/website-offer"
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
@@ -18,6 +21,8 @@ import {
 import styles from "./page.module.css"
 
 export default function CartPage() {
+  const { copy } = useSiteContent()
+  const discountPercent = websiteDiscount(copy)
   const [items, setItems] = useState<CartItem[]>([])
   const [checkoutMode, setCheckoutMode] = useState<"choose" | "whatsapp" | "form">("choose")
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", notes: "" })
@@ -46,6 +51,7 @@ export default function CartPage() {
   const buildWhatsAppMessage = () => {
     return getWhatsAppConciergeUrl(
       buildOrderConciergeMessage({
+        discountPercent,
         items,
         total,
       })
@@ -83,6 +89,7 @@ export default function CartPage() {
     const waFollowUpUrl = submittedSummary && createdOrderId
       ? getWhatsAppConciergeUrl(
           buildOrderConciergeMessage({
+            discountPercent,
             orderId: createdOrderId,
             customerName: submittedSummary.name,
             customerPhone: submittedSummary.phone,
@@ -142,6 +149,7 @@ export default function CartPage() {
       <main className={styles.main}>
         <div className={styles.container}>
           <h1 className={styles.title}>Request Quote</h1>
+          <WebsiteOffer compact />
 
           {items.length === 0 ? (
             <div className={styles.empty}>

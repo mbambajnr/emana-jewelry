@@ -5,6 +5,7 @@ import { useSiteContent } from "@/components/cms/SiteContentProvider";
 import HomeServices from "@/components/home/HomeServices";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import ShopVideo from "@/components/home/ShopVideo";
+import WebsiteOffer from "@/components/WebsiteOffer";
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -101,6 +102,7 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
         </section>
 
         {/* FEATURED PRODUCT SNIPPETS SECTION */}
+        <WebsiteOffer />
         {featuredProducts}
         <RecentlyViewed />
 

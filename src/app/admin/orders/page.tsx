@@ -109,7 +109,7 @@ async function OrderList() {
                       </ul>
                     </details>
                   </td>
-                  <td className={styles.total}>Owner to quote</td>
+                  <td className={styles.total}>Owner to quote{o.notes && <details><summary>Request notes &amp; offer</summary><p style={{ whiteSpace: "pre-wrap" }}>{o.notes}</p></details>}</td>
                   <td>
                     <RequestWorkflow kind="inquiry" id={o.id} status={o.status} />
                   </td>

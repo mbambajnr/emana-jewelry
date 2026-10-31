@@ -48,7 +48,8 @@ export function validateContent(value: unknown, publish = false): SiteDocument {
   if (!record(value) || !record(value.copy) || !Array.isArray(value.services) || !Array.isArray(value.faqs) || value.services.length > 40 || value.faqs.length > 40 || JSON.stringify(value).length > 200000) throw new Error("Please check the website content.")
   const copy: Record<string, string> = {}
   for (const field of fields) {
-    const content = text(value.copy[field.key] ?? field.default, field.label, field.type === "image" ? 1500 : field.type === "short" ? 300 : 5000, field.type !== "youtube")
+    const content = text(value.copy[field.key] ?? field.default, field.label, field.type === "image" ? 1500 : field.type === "short" ? 300 : 5000, !["youtube", "percent"].includes(field.type))
+    if (field.type === "percent" && content && !/^(?:[1-9]|[1-9][0-9]|100)$/.test(content)) throw new Error("Please enter a whole discount percentage from 1 to 100, or leave it blank.")
     if (field.type === "youtube") {
       copy[field.key] = normalizeYoutubeUrl(content) || ""
       continue
