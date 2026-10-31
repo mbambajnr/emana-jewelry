@@ -30,6 +30,7 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
       <main className={styles.main}>
         {/* REMOTION HERO SECTION */}
         <RemotionHeroSection />
+        <WebsiteOffer />
 
         <section className={styles.businessIntro} aria-labelledby="business-title">
           <h1 id="business-title">{copy["home.001"]}</h1>
@@ -102,7 +103,6 @@ export default function Home({ featuredProducts }: { featuredProducts: React.Rea
         </section>
 
         {/* FEATURED PRODUCT SNIPPETS SECTION */}
-        <WebsiteOffer />
         {featuredProducts}
         <RecentlyViewed />
 

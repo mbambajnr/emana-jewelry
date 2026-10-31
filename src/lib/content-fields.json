@@ -845,5 +845,19 @@
     "label": "Jewelry discount percentage (leave blank to turn off)",
     "default": "10",
     "type": "percent"
+  },
+  {
+    "key": "offer.image",
+    "group": "Website offer",
+    "label": "Homepage offer photo",
+    "default": "/hero_gold_necklace.jpg",
+    "type": "image"
+  },
+  {
+    "key": "offer.imageAlt",
+    "group": "Website offer",
+    "label": "Homepage offer photo description",
+    "default": "Gold necklace with Adinkra motifs on a linen display",
+    "type": "short"
   }
 ]

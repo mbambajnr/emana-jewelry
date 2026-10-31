@@ -1,7 +1,15 @@
-.banner, .compact { border: 1px solid var(--gold-primary); background: var(--bg-deep); color: var(--text-primary); border-radius: 10px; padding: 20px; }
-.banner { margin: 32px var(--content-inset); display: flex; align-items: flex-start; flex-direction: column; gap: 20px; }
-.banner strong { font-size: clamp(1.2rem, 3vw, 1.6rem); line-height: 1.4; }
-.banner p, .compact p { line-height: 1.7; color: var(--text-secondary); margin-top: 8px; font-size: .95rem; }
-.banner a { flex-shrink: 0; min-height: 44px; padding: 12px 18px; background: var(--gold-dark); color: #fff; border-radius: 5px; text-decoration: none; }
-.compact { margin: 16px 0; font-size: .95rem; }
-@media (min-width: 768px) { .banner { flex-direction: row; align-items: center; justify-content: space-between; padding: 28px; } .banner p { max-width: 720px; } }
+.banner { display: grid; margin: 32px var(--content-inset) 48px; overflow: hidden; background: #f1ebe0; border: 1px solid #e1d6c3; border-radius: 4px; color: #211c17; }
+.visual { position: relative; aspect-ratio: 16 / 10; order: 2; overflow: hidden; }
+.image { object-fit: cover; object-position: center; }
+.content { padding: 32px 24px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+.eyebrow { color: #6c5225; font-size: .72rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 20px; }
+.content h2 { font-family: var(--font-serif); font-size: clamp(2.3rem, 5vw, 4.2rem); line-height: 1.06; letter-spacing: -.035em; font-weight: 400; }
+.content h2 span { color: #785c2d; }
+.description { max-width: 390px; margin: 20px 0 24px; color: #51493f; font-size: .96rem; line-height: 1.8; }
+.action { display: inline-flex; align-items: center; justify-content: space-between; gap: 40px; min-height: 48px; padding: 14px 22px; background: #2e251b; color: #fff; font-size: .9rem; font-weight: 600; text-decoration: none; border: 1px solid #2e251b; transition: background .2s; }
+.action:hover { background: #59452a; }
+.action:focus-visible { outline: 3px solid #785c2d; outline-offset: 4px; }
+.terms { max-width: 340px; margin-top: 18px; color: #62594d; font-size: .78rem; line-height: 1.7; }
+.compact { border: 1px solid var(--gold-primary); background: var(--bg-deep); color: var(--text-primary); border-radius: 10px; padding: 20px; margin: 16px 0; font-size: .95rem; }
+.compact p { line-height: 1.7; color: var(--text-secondary); margin-top: 8px; font-size: .95rem; }
+@media (min-width: 768px) { .banner { grid-template-columns: 1fr 1fr; margin-top: 40px; margin-bottom: 64px; } .visual { order: 0; aspect-ratio: auto; min-height: 450px; } .content { padding: clamp(32px, 4vw, 64px); } }

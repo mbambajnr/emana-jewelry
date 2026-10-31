@@ -23,6 +23,8 @@ In **Page Content → Website offer**, change the percentage or leave it blank t
 
 The website requests quotes rather than taking payment. Staff apply the discount to the confirmed jewelry price. Form enquiries retain the offer active at submission in their request notes, alongside the customer's notes; find it under **Customer Requests → Request notes & offer**. Owner notification emails include these notes. A later CMS change does not rewrite saved enquiries. WhatsApp-only enquiries carry the offer in the message, but do not create a customer-request record automatically. No minimum spend, expiry, or stacking rules have been introduced.
 
+The homepage presents the offer directly below the hero, with a jewelry photo and a **Shop Jewelry** link to the full catalog. Change the photo and its description in the same **Website offer** group. The headline uses the published percentage automatically. Catalog, product, and quote pages keep the smaller offer reminder.
+
 ## Services
 
 To change the **Cleaning & Repairs / Jewelry Cleaning & Repair Services** homepage block, open the **Services** tab. The **Homepage services section** panel contains the small heading, main heading, introduction, photo, and photo description. Upload a replacement image there, check its preview, save the draft, and publish. Individual services are edited below that panel. A direct editor link is `/admin/content?tab=services`.
