@@ -23,6 +23,8 @@ To change the **Cleaning & Repairs / Jewelry Cleaning & Repair Services** homepa
 
 Each service has a stable reference, name, description, appointment duration, type, and switches for enabled/homepage/appointments. Add a new service, save it, preview it, and publish it. That published list controls both homepage cards and the appointment dropdown. A service may appear on the homepage without being bookable, or be bookable without a homepage card.
 
+Each enabled, published service also appears in `/services` and has its own `/services/{id}` page and sitemap entry. Edit **Service page details** to explain the work, suitable materials, and what a customer should bring. Disabled services lose their public pages. Page details can be edited in the draft, but the public service routes show the published version.
+
 Disabling or removing a service from the published list stops new bookings for it. Existing appointments keep their saved service description. A request from an older browser tab is checked against the current published list before saving. Draft-only services cannot be booked through the public API. The existing custom-jewelry links choose the first available custom-design service.
 
 ## History and concurrent editing

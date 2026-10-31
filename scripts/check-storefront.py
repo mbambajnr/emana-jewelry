@@ -61,6 +61,8 @@ product_paths = [urllib.parse.urlsplit(url).path for url in urls if "/products/"
 assert product_paths, "Expected at least one product in the production database"
 assert not any("/admin" in url or "/api/" in url for url in urls)
 paths = ["/", "/catalog", "/catalog?metal=Silver&sort=name", product_paths[0] + "?metal=Silver", "/faq", "/privacy"]
+service_paths = [urllib.parse.urlsplit(url).path for url in urls if "/services/" in url]
+paths += ["/services", *service_paths]
 result = {"environment": "local production build; not a Lighthouse or mobile-network benchmark", "sitemap_urls": len(urls), "pages": []}
 for path in paths:
     body, _, cold = get(path)
@@ -70,6 +72,11 @@ for path in paths:
     assert page.canonical and page.canonical.startswith("https://"), (path, "Missing public canonical")
     if path.startswith("/products/"):
         assert "?" not in page.canonical and len(page.schemas) >= 2
+    if path.startswith("/services/"):
+        nodes = [node for schema in page.schemas for node in schema.get("@graph", [schema])]
+        assert any(node.get("@type") == "Service" for node in nodes), (path, "Missing service schema")
+        assert any(node.get("@type") == "BreadcrumbList" for node in nodes), (path, "Missing service breadcrumb")
+        assert urllib.parse.urlsplit(page.canonical).path == path
     if "metal=" in path and path.startswith("/catalog"):
         assert "noindex" in page.robots
     warm = [get(path)[2] for _ in range(3)]

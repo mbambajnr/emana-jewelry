@@ -38,7 +38,7 @@ export default function LocationWidget() {
           <div className={styles.infoCard}>
             <div className={styles.badge}>
               <span className={styles.pulseDot} />
-              Takoradi Store Open
+              Our Takoradi Shop
             </div>
 
             <div className={styles.addressBlock}>
@@ -70,7 +70,7 @@ export default function LocationWidget() {
                 </li>
                 <li>
                   <span>Saturday</span>
-                  <strong>10:00 AM – 5:00 PM</strong>
+                  <strong>9:00 AM – 6:00 PM</strong>
                 </li>
                 <li>
                   <span>Sunday</span>

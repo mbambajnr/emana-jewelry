@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next"
 import { staticProducts, collections as staticCollections } from "@/lib/products"
+import { publishedContent } from "./content-store"
+import { publicServices, servicePath } from "./service-pages"
 
 export async function getSitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelry.com"
@@ -28,6 +30,7 @@ export async function getSitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const staticPages = [
+    { url: `${siteUrl}/services`, changeFrequency: "weekly" as const, priority: 0.8 },
     { url: siteUrl, changeFrequency: "weekly" as const, priority: 1 },
     { url: `${siteUrl}/catalog`, changeFrequency: "weekly" as const, priority: 0.9 },
     { url: `${siteUrl}/collections`, changeFrequency: "weekly" as const, priority: 0.9 },
@@ -50,5 +53,7 @@ export async function getSitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  return [...staticPages, ...collectionPages, ...productPages]
+  const { services } = await publishedContent()
+  const servicePages = publicServices(services).map(service => ({ url: `${siteUrl}${servicePath(service.id)}` }))
+  return [...staticPages, ...collectionPages, ...productPages, ...servicePages]
 }

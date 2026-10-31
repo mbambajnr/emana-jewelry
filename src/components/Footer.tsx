@@ -44,6 +44,7 @@ export default function Footer() {
             <li><Link href="/#custom-jewelry-form" className={styles.link}>Custom Jewelry</Link></li>
             <li><Link href="/#sourcing" className={styles.link}>Materials Chosen With Care</Link></li>
             <li><Link href="/#services" className={styles.link}>Cleaning &amp; Repairs</Link></li>
+            <li><Link href="/services" className={styles.link}>All Jewelry Services</Link></li>
             <li><Link href="/#consultation" className={styles.link}>Private Consultation</Link></li>
             <li><Link href="/#atelier-location" className={styles.link}>Takoradi Store &amp; Map</Link></li>
             <li><a href="https://wa.me/233242186590" target="_blank" rel="noopener noreferrer" className={styles.link}>Chat With Us on WhatsApp</a></li>

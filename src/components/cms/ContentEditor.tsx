@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import { contentFields, type ServiceContent, type SiteDocument } from "@/lib/site-content"
+import { servicePageText, servicePath } from "@/lib/service-pages"
 import styles from "./ContentEditor.module.css"
 interface Revision { id: string; action: string; actor: string; createdAt: string }
 export default function ContentEditor() {
@@ -106,6 +107,8 @@ export default function ContentEditor() {
       {document.services.map((service, index) => <details key={service.id} className={styles.card} open={newServiceId === service.id || undefined}><summary>{service.title}{!service.enabled ? " · Hidden" : ""}</summary><div className={styles.fields}>
         <label className={styles.field}>Service name<input value={service.title} onChange={event => editService(service.id, { title: event.target.value })} /></label>
         <label className={styles.field}>Description<textarea rows={4} value={service.description} onChange={event => editService(service.id, { description: event.target.value })} /></label>
+        <label className={styles.field}>Service page details<textarea rows={8} maxLength={6000} value={service.pageText ?? servicePageText(service)} onChange={event => editService(service.id, { pageText: event.target.value })} /></label>
+        <p>Published, enabled services have a page at <code>{servicePath(service.id)}</code>. Use the description for the summary and these details to explain the service. Turning a service off removes its public page.</p>
         <label className={styles.field}>Appointment duration (minutes)<input type="number" min={5} max={480} value={service.duration} onChange={event => editService(service.id, { duration: Number(event.target.value) })} /></label>
         <label className={styles.field}>Service type<select value={service.kind} onChange={event => editService(service.id, { kind: event.target.value as ServiceContent["kind"] })}><option value="care">Cleaning or repairs</option><option value="custom">Custom designs</option><option value="advice">Advice or consultation</option></select></label>
         <div className={styles.switches}>{[["enabled", "Enabled"], ["showOnHomepage", "Show on homepage"], ["bookable", "Allow appointments"]].map(([key, label]) => <label key={key}><input type="checkbox" checked={Boolean(service[key as keyof ServiceContent])} onChange={event => editService(service.id, { [key]: event.target.checked })} />{label}</label>)}</div>

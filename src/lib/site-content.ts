@@ -13,6 +13,7 @@ export interface ServiceContent {
   bookable: boolean
   kind: "custom" | "care" | "advice"
   legacyValue?: string
+  pageText?: string
 }
 export interface SiteDocument {
   copy: Record<string, string>
@@ -68,8 +69,9 @@ export function validateContent(value: unknown, publish = false): SiteDocument {
     seen.add(id)
     if (!Number.isInteger(item.duration) || Number(item.duration) < 5 || Number(item.duration) > 480 || !["custom", "care", "advice"].includes(String(item.kind))) throw new Error("Choose a service duration from 5 to 480 minutes and a service type.")
     const enabled = bool(item.enabled)
+    const pageText = item.pageText === undefined ? undefined : text(item.pageText, "the service page details", 6000, false)
     const original = defaultContent.services.find(service => service.id === id)
-    return { id, title: text(item.title, "the service name", 160), description: text(item.description, "the service description", 3000, publish && enabled), duration: Number(item.duration), enabled, showOnHomepage: bool(item.showOnHomepage), bookable: bool(item.bookable), kind: item.kind as ServiceContent["kind"], ...(original?.legacyValue ? { legacyValue: original.legacyValue } : {}) }
+    return { id, title: text(item.title, "the service name", 160), description: text(item.description, "the service description", 3000, publish && enabled), duration: Number(item.duration), enabled, showOnHomepage: bool(item.showOnHomepage), bookable: bool(item.bookable), kind: item.kind as ServiceContent["kind"], ...(pageText === undefined ? {} : { pageText }), ...(original?.legacyValue ? { legacyValue: original.legacyValue } : {}) }
   })
   const faqs = value.faqs.map(item => {
     if (!record(item)) throw new Error("Please check the FAQs.")

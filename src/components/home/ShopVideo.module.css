@@ -1,4 +1,4 @@
-.section { padding: 56px 4%; background: var(--bg-secondary, #111); }
+.section { padding: 56px 4%; background: var(--bg-deep); }
 .inner { max-width: 1000px; margin: 0 auto; }
 .heading { max-width: 640px; margin: 0 auto 28px; text-align: center; }
 .heading h2 { font-size: clamp(1.6rem, 4vw, 2.5rem); line-height: 1.2; margin-bottom: 12px; }

@@ -27,7 +27,7 @@ export const businessSchema = {
   address: { "@type": "PostalAddress", streetAddress: "Justmoh Ave", addressLocality: "Takoradi", addressRegion: "Western Region", addressCountry: "GH" },
   openingHoursSpecification: [
     { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "18:00" },
-    { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "10:00", closes: "17:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "09:00", closes: "18:00" },
   ],
   hasOfferCatalog: { "@type": "OfferCatalog", name: "Jewelry and Services", itemListElement: ["Custom Jewelry Design", "Jewelry Cleaning and Polishing", "Ring Resizing and Repairs", "Gemstone Sourcing"].map(name => ({ "@type": "Offer", itemOffered: { "@type": "Service", name } })) },
 }

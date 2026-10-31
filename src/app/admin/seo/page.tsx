@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, type FormEvent } from "react"
+import Link from "next/link"
 import { SITE_URL, absoluteUrl } from "@/lib/seo"
 import type { SearchVerification } from "@/lib/search-verification"
 import styles from "./seo.module.css"
@@ -64,5 +65,6 @@ export default function SearchSettingsPage() {
       </fieldset>
     </form>}
     <section className={styles.card}><h2>After verification</h2><ol><li>In each search account, open <strong>Sitemaps</strong> and submit <strong>{absoluteUrl("/sitemap.xml")}</strong>.</li><li>Ask Google to inspect your homepage and request indexing.</li><li>Keep your Google Business Profile address, opening hours, and phone number up to date.</li></ol><p>Search reports and ownership status are shown in Google and Bing. Saving a code here does not connect their reporting APIs or guarantee search placement. These same crawlable pages and business details support AI search discovery.</p><p>Keep verification codes in place after verification. Clearing a field and saving removes that tag and may affect ownership verification.</p></section>
+    <section className={styles.card}><h2>Service pages and local discovery</h2><p><Link href="/services">View the service directory</Link>. Enabled services published in Website Content each have a page with a title, canonical address, service information, and a sitemap entry. Edit their summaries and page details in <Link href="/admin/content?tab=services">Services</Link>.</p><p>Keep the shop’s Google Business Profile details consistent with the website: Justmoh Ave, Takoradi, Ghana; +233 24 218 6590; Monday–Saturday, 9am–6pm. Add official profiles under <Link href="/admin/social">Social Media</Link>; those links also identify the business in homepage structured data.</p><p>After deployment, inspect a product and service URL in Search Console, test the homepage in PageSpeed Insights on mobile, and check structured data in Google’s Rich Results Test. Repeat after significant content or hosting changes. Local response times do not measure real mobile performance.</p></section>
   </div>
 }
