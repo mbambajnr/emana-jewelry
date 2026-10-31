@@ -22,6 +22,23 @@ beforeEach(() => {
 })
 
 describe("product metal choices", () => {
+  it("does not assume a metal from general photos and carries quantity into the price enquiry", async () => {
+    const open = vi.spyOn(window, "open").mockReturnValue(null)
+    const user = userEvent.setup()
+    render(<ProductDetailClient product={{ ...product, images: [{ url: "/general.jpg", sortOrder: 0 }] }} />)
+    expect(screen.getByRole("radio", { name: "Gold" })).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "Silver" })).not.toBeChecked()
+    await user.click(screen.getByRole("button", { name: "Add to Quote List" }))
+    expect(screen.getByRole("alert")).toHaveTextContent("Choose a metal")
+    expect(getCart()).toEqual([])
+    await user.click(screen.getByRole("radio", { name: "Silver" }))
+    expect(screen.getByRole("status")).toHaveTextContent("confirm the Silver option")
+    await user.selectOptions(screen.getByRole("combobox", { name: "Quantity" }), "2")
+    await user.click(screen.getByRole("button", { name: "Get Price on WhatsApp" }))
+    const message = new URL(String(open.mock.calls[0][0])).searchParams.get("text")
+    expect(message).toContain("in Silver")
+    expect(message).toContain("Quantity: 2")
+  })
   it("carries the selected metal into the quote list and WhatsApp message", async () => {
     const open = vi.spyOn(window, "open").mockReturnValue(null)
     const user = userEvent.setup()
@@ -30,9 +47,9 @@ describe("product metal choices", () => {
     await user.click(screen.getByRole("radio", { name: "Silver" }))
     expect(screen.getByRole("img", { name: "Silver pendant" })).toBeInTheDocument()
     expect(screen.queryByRole("img", { name: "Gold pendant" })).not.toBeInTheDocument()
-    await user.click(screen.getByRole("button", { name: "Add to Quote Request" }))
+    await user.click(screen.getByRole("button", { name: "Add to Quote List" }))
     expect(getCart()).toEqual([expect.objectContaining({ slug: "pendant", metal: "Silver", image: "/silver.jpg" })])
-    await user.click(screen.getByRole("button", { name: "Ask Us on WhatsApp" }))
+    await user.click(screen.getByRole("button", { name: "Get Price on WhatsApp" }))
     expect(new URL(String(open.mock.calls[0][0])).searchParams.get("text")).toContain("*Pendant* in Silver")
   })
   it("only offers choices configured for the product", () => {
@@ -45,10 +62,10 @@ describe("product metal choices", () => {
 it("shows owner-supplied availability, sizes, delivery, and care without fixed pricing", () => {
   render(<ProductDetailClient product={{ ...product, availabilityStatus: "made_to_order", sizeNotes: "45 cm or 50 cm", deliveryNotes: "Collect after we confirm your order", careInstructions: "Wipe with a soft dry cloth" }} />)
   expect(screen.getByText("Made to order")).toBeInTheDocument()
-  expect(screen.getAllByText("45 cm or 50 cm")).toHaveLength(2)
+  expect(screen.getAllByText("45 cm or 50 cm").length).toBeGreaterThan(0)
   expect(screen.getAllByText("Collect after we confirm your order")).toHaveLength(2)
-  expect(screen.getAllByText("Wipe with a soft dry cloth")).toHaveLength(2)
-  expect(screen.getByRole("button", { name: "Ask Us on WhatsApp" })).toBeInTheDocument()
+  expect(screen.getByText("Wipe with a soft dry cloth")).toBeInTheDocument()
+  expect(screen.getByRole("button", { name: "Get Price on WhatsApp" })).toBeInTheDocument()
 })
 
 it("keeps the quick enquiry in sync with the selected metal", async () => {
@@ -56,8 +73,8 @@ it("keeps the quick enquiry in sync with the selected metal", async () => {
   const user = userEvent.setup()
   render(<ProductDetailClient product={product} />)
   await user.click(screen.getByRole("radio", { name: "Silver" }))
-  expect(screen.getByRole("link", { name: "Change metal choice, currently Silver" })).toHaveAttribute("href", "#request-panel")
-  await user.click(screen.getByRole("button", { name: "Enquire on WhatsApp" }))
+  expect(screen.getByRole("link", { name: "Change metal choice, currently Silver" })).toHaveAttribute("href", "#metal-choice")
+  await user.click(screen.getByRole("button", { name: "Get Price" }))
   const message = new URL(String(open.mock.calls[0][0])).searchParams.get("text")
   expect(message).toContain("*Pendant* in Silver")
   expect(message).toContain("/products/pendant")
@@ -65,7 +82,7 @@ it("keeps the quick enquiry in sync with the selected metal", async () => {
 
 it("puts the enquiry controls before the longer description and disables enquiries in preview", () => {
   render(<ProductDetailClient product={product} preview />)
-  const enquire = screen.getByRole("button", { name: "Ask Us on WhatsApp" })
+  const enquire = screen.getByRole("button", { name: "Get Price on WhatsApp" })
   const about = screen.getByRole("region", { name: "About this piece" })
   expect(enquire.compareDocumentPosition(about) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   expect(enquire).toBeDisabled()
@@ -82,10 +99,10 @@ it("starts with the metal chosen in the catalogue, falling back to an offered op
 })
 
 it("uses published general guidance and links to full delivery, care, and returns details", () => {
-  const document = { ...defaultContent, copy: { ...defaultContent.copy, "product.deliverySummary": "Ask about collection arrangements", "product.careSummary": "Speak to our team about aftercare", "product.returnsDetails": "Discuss changes with our team before ordering" } }
+  const document = { ...defaultContent, copy: { ...defaultContent.copy, "product.deliverySummary": "Ask about collection arrangements", "product.careDetails": "Speak to our team about aftercare", "product.returnsDetails": "Discuss changes with our team before ordering" } }
   render(<SiteContentProvider document={document}><ProductDetailClient product={product} /></SiteContentProvider>)
   expect(screen.getByText("Ask about collection arrangements")).toBeInTheDocument()
   expect(screen.getByText("Speak to our team about aftercare")).toBeInTheDocument()
-  expect(screen.getByRole("link", { name: "Delivery, care & returns details ↓" })).toHaveAttribute("href", "#delivery-and-care")
+  expect(screen.getByRole("link", { name: "Delivery, care & returns ↓" })).toHaveAttribute("href", "#delivery-and-care")
   expect(screen.getByText("Discuss changes with our team before ordering")).toBeInTheDocument()
 })

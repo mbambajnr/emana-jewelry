@@ -15,6 +15,7 @@ export function WhatsappButton({
   productName,
   productUrl,
   metal,
+  quantity = 1,
   className,
   iconSize = 18,
   label,
@@ -22,6 +23,7 @@ export function WhatsappButton({
   productName: string
   productUrl: string
   metal?: MetalOption
+  quantity?: number
   className?: string
   iconSize?: number
   label?: string
@@ -36,7 +38,7 @@ export function WhatsappButton({
         ? productUrl
         : `${origin}${productUrl}`
       : productUrl
-    const message = buildProductInquiryConciergeMessage(productName, fullUrl, metal, websiteDiscount(copy))
+    const message = buildProductInquiryConciergeMessage(productName, fullUrl, metal, websiteDiscount(copy), quantity)
     const href = getWhatsAppConciergeUrl(message)
     window.open(href, "_blank", "noopener,noreferrer")
 

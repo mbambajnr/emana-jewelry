@@ -71,12 +71,14 @@ export function buildProductInquiryConciergeMessage(
   productUrl?: string,
   metal?: MetalOption,
   discountPercent?: number | null,
+  quantity = 1,
 ): string {
   const parts = [
     `Hello Emana, I’m interested in the *${productName}*${metal ? ` in ${metal}` : ""}.`,
     "Please, how much is it?",
   ]
   if (discountPercent) parts.push(offerMessage(discountPercent))
+  if (Number.isInteger(quantity) && quantity > 1 && quantity <= 10) parts.push(`Quantity: ${quantity}`)
   if (productUrl) {
     let url = productUrl
     try {

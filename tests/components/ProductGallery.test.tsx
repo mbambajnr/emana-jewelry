@@ -37,7 +37,7 @@ describe("Product gallery", () => {
   })
   it("does not show Silver photos when Gold photos are missing", () => {
     render(<ProductGallery name="Pendant" metal="Gold" images={[{ url: "/silver.jpg", metal: "Silver", sortOrder: 0 }]} />)
-    expect(screen.getByRole("status")).toHaveTextContent("Gold photos haven’t been added yet")
+    expect(screen.getByRole("status")).toHaveTextContent("Please ask us for a photo of the Gold version.")
     expect(screen.queryByRole("img")).not.toBeInTheDocument()
   })
   it("puts matching photos before general photos and resets the gallery when metal changes", () => {

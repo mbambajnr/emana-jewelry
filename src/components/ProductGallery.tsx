@@ -46,7 +46,7 @@ function Gallery({ name, images, youtubeUrl, metal }: GalleryProps) {
   const selectPhoto = (index: number) => { setSelected(index); setVideo(false); setPlaying(false) }
 
   return <section className={styles.gallery} aria-label={`${name} photos and video`}>
-    {missingVersion && <p className={styles.versionNotice} role="status">{metal} photos haven’t been added yet.{photos.length ? " Showing general photos." : " Please ask us for a photo of this version."}</p>}
+    {missingVersion && <p className={styles.versionNotice} role="status">{photos.length ? `Reference photos only. Please ask us to confirm the ${metal} option before ordering.` : `Please ask us for a photo of the ${metal} version.`}</p>}
     <div className={styles.thumbnails} aria-label="Choose a photo or video">
       {photos.map((image, index) => <button type="button" key={`${image.url}-${index}`} className={`${styles.thumbnail} ${!video && index === selected ? styles.selected : ""}`} aria-label={`View photo ${index + 1} of ${name}`} aria-pressed={!video && index === selected} onClick={() => selectPhoto(index)}>
         <Image src={failedImages.includes(image.url) ? "/hero_bg.png" : image.url} alt="" fill sizes="64px" className={styles.thumbnailImage} />
