@@ -5,6 +5,7 @@ import { consumeLimit, trustedClient, RequestError } from "@/lib/request-safety"
 import { redirect } from "next/navigation"
 import { createSession, deleteSession, verifyPassword } from "@/lib/auth"
 import { startAdminOtp, verifyAdminOtp, resendAdminOtp, cancelAdminOtp, OtpError } from "@/lib/admin-otp"
+import { readAdminPasswordHash } from "@/lib/admin-credentials"
 
 const CHALLENGE_COOKIE = "admin_login_challenge"
 async function clearChallengeCookie() {
@@ -34,8 +35,9 @@ export async function login(_prev: unknown, formData: FormData): Promise<LoginSt
         return { step: "code", message: "A new code has been sent. Use the latest email; your previous code no longer works." }
       }
       const code = formData.get("code")
+      const verifiedPasswordHash = await readAdminPasswordHash()
       verifiedEmail = await verifyAdminOtp(store.get(CHALLENGE_COOKIE)?.value, typeof code === "string" ? code.trim() : "")
-      await createSession(verifiedEmail)
+      await createSession(verifiedEmail, verifiedPasswordHash)
       await clearChallengeCookie()
     } catch (error) {
       const restart = error instanceof OtpError && error.restart
@@ -47,9 +49,9 @@ export async function login(_prev: unknown, formData: FormData): Promise<LoginSt
   const email = formData.get("email") as string
   const password = formData.get("password") as string
   const adminEmail = process.env.ADMIN_EMAIL
-  const adminHash = process.env.ADMIN_PASSWORD_HASH
+  let adminHash: string | undefined
 
-  if (typeof email !== "string" || typeof password !== "string" || !email || email.length > 254 || !password || password.length > 1024 || !adminEmail || !adminHash) {
+  if (typeof email !== "string" || typeof password !== "string" || !email || email.length > 254 || !password || password.length > 1024 || !adminEmail || !process.env.ADMIN_PASSWORD_HASH) {
     return { step: "password", error: "Invalid credentials" }
   }
 
@@ -60,7 +62,8 @@ export async function login(_prev: unknown, formData: FormData): Promise<LoginSt
     if (client) await consumeLimit("login-client", client, 12)
   } catch (error) { return { step: "password", error: safeError(error) } }
 
-  const passwordValid = await verifyPassword(password, adminHash)
+  let passwordValid = false
+  try { adminHash = await readAdminPasswordHash(); passwordValid = await verifyPassword(password, adminHash) } catch { return { step: "password", error: "Sign-in is temporarily unavailable." } }
   if (email !== adminEmail || !passwordValid) return { step: "password", error: "Invalid credentials" }
   try {
     await deleteSession()

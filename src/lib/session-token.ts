@@ -5,22 +5,22 @@ async function key() {
   if (!process.env.SESSION_SECRET || process.env.SESSION_SECRET.length < 32 || !process.env.ADMIN_PASSWORD_HASH) throw new Error("Admin authentication is not configured")
   return crypto.subtle.importKey("raw", new TextEncoder().encode(process.env.SESSION_SECRET), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"])
 }
-async function credentialVersion(signingKey: CryptoKey) {
-  return encode(new Uint8Array(await crypto.subtle.sign("HMAC", signingKey, new TextEncoder().encode(`admin-credentials:${process.env.ADMIN_PASSWORD_HASH}`))))
+async function credentialVersion(signingKey: CryptoKey, passwordHash: string) {
+  return encode(new Uint8Array(await crypto.subtle.sign("HMAC", signingKey, new TextEncoder().encode(`admin-credentials:${passwordHash}`))))
 }
-export async function issueAdminToken(email: string, expiresAt: number) {
+export async function issueAdminToken(email: string, expiresAt: number, passwordHash = process.env.ADMIN_PASSWORD_HASH!) {
   const signingKey = await key()
-  const data = new TextEncoder().encode(JSON.stringify({ email, expiresAt, authentication: "password-email-otp-v1", credentialVersion: await credentialVersion(signingKey) }))
+  const data = new TextEncoder().encode(JSON.stringify({ email, expiresAt, authentication: "password-email-otp-v1", credentialVersion: await credentialVersion(signingKey, passwordHash) }))
   return `${encode(data)}.${encode(new Uint8Array(await crypto.subtle.sign("HMAC", signingKey, data)))}`
 }
-export async function readAdminToken(token: string) {
+export async function readAdminToken(token: string, passwordHash = process.env.ADMIN_PASSWORD_HASH!) {
   try {
     const parts = token.split(".")
     if (parts.length !== 2 || token.length > 3000) return null
     const signingKey = await key(), data = decode(parts[0])
     if (!await crypto.subtle.verify("HMAC", signingKey, decode(parts[1]), data)) return null
     const payload = JSON.parse(new TextDecoder().decode(data))
-    if (payload.authentication !== "password-email-otp-v1" || typeof payload.expiresAt !== "number" || !Number.isFinite(payload.expiresAt) || payload.expiresAt <= Date.now() || payload.email !== process.env.ADMIN_EMAIL || payload.credentialVersion !== await credentialVersion(signingKey)) return null
+    if (payload.authentication !== "password-email-otp-v1" || typeof payload.expiresAt !== "number" || !Number.isFinite(payload.expiresAt) || payload.expiresAt <= Date.now() || payload.email !== process.env.ADMIN_EMAIL || payload.credentialVersion !== await credentialVersion(signingKey, passwordHash)) return null
     return { email: String(payload.email) }
   } catch { return null }
 }

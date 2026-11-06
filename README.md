@@ -72,6 +72,8 @@ Keep the password in a password manager and copy the printed `ADMIN_PASSWORD_HAS
 
 Admin sign-in also requires an eight-digit email code. Configure `RESEND_API_KEY` and a verified sender before signing in; codes go only to `ADMIN_EMAIL`. The sender defaults to `notifications@emanajewelry.com`, with an optional `ADMIN_OTP_FROM` override. Codes expire after 10 minutes and cannot be bypassed when delivery fails. See [admin email verification](docs/ADMIN-EMAIL-OTP.md) for setup and recovery.
 
+After signing in, use **Settings → Security & Password** to change your password with your current password and an email confirmation code. The active hash is saved in MySQL and survives app restarts. Keep `ADMIN_PASSWORD_HASH` unchanged during ordinary deployments; changing it is an explicit operator recovery/reset operation. Successful password changes sign out existing sessions.
+
 ```sh
 npx prisma generate
 npx prisma migrate deploy

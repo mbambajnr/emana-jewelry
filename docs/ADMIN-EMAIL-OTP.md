@@ -2,6 +2,8 @@
 
 Admin access now requires the configured email and password, followed by an eight-digit code sent to `ADMIN_EMAIL`. No customer accounts are added. Password-only sessions issued before this release are rejected, so staff need to sign in again after deployment.
 
+The active password verifier is stored in MySQL. `ADMIN_PASSWORD_HASH` supplies the initial password and a trusted operator recovery path. Ordinary password changes are made in **Admin → Settings → Security & Password**, with the current password and a separate email confirmation code. The new password persists across restarts and deployments without editing server files.
+
 ## Delivery setup
 
 - Apply the MySQL migration with `npx prisma migrate deploy`, run `npx prisma generate`, then rebuild and restart every app process.
@@ -19,11 +21,15 @@ Admin access now requires the configured email and password, followed by an eigh
 5. The code is tied to the browser's HttpOnly pending cookie. Starting another successful password challenge replaces the previous one. Only one correct concurrent verification can consume a challenge.
 6. Refreshing the login page shows the password form again. Use it to start over if necessary; a pending cookie never authorizes admin access.
 
-Only keyed hashes of codes are stored. Pending tokens are hashed in MySQL, and challenges are bound to the current password verifier, email, and session secret. Changing credentials and restarting the app invalidates pending codes and sessions. Old expired challenge rows are cleaned when a new challenge starts. OTP values and raw pending tokens must never be logged or included in analytics.
+Only keyed hashes of codes are stored. Pending tokens are hashed in MySQL, and challenges are bound to the current password verifier, email, and session secret. Password changes immediately invalidate older sessions and pending codes on the next authorization check. Server configuration changes require every app process to restart with the same environment. Old expired challenge rows are cleaned when a new challenge starts. OTP values and raw pending tokens must never be logged or included in analytics.
+
+Password-change codes are separate from login codes and cannot substitute for them. The pending new password is salted and hashed before staging; its verifier is bound to the challenge. Confirmation consumes the code and changes the password in one database transaction. Concurrent or repeated confirmations cannot apply another password. The current password remains valid if confirmation or email delivery fails.
 
 ## Recovery and limits
 
-If the email cannot be reached, use the trusted server administrator to restore email delivery or the configured mailbox. There is no web-accessible bypass. Do not reset credentials or switch the receiving address based solely on a message from someone claiming to be staff. Changes to the receiving email or password need trusted server access and an app restart.
+If the email cannot be reached, use the trusted server administrator to restore email delivery or the configured mailbox. There is no web-accessible OTP bypass. Do not reset credentials or switch the receiving address based solely on a message from someone claiming to be staff.
+
+For operator password recovery, generate a fresh password/hash with `npm run admin:credentials`, replace `ADMIN_PASSWORD_HASH`, and restart every app instance with the same environment. A changed bootstrap hash deliberately resets the stored verifier on the next credential read. Keep that environment value unchanged for ordinary deployments so an admin's saved password is retained. Changing `ADMIN_EMAIL` selects a different configured identity; a new address starts from the bootstrap password unless it already has a credential record. Session-secret rotation preserves the active database password. Include the credential table in protected database backups.
 
 Email verification improves the password-only flow but depends on mailbox security and is not phishing-resistant. Protect the receiving mailbox with strong authentication. See [OWASP's OTP handling guidance](https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html).
 

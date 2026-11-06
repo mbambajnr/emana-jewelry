@@ -1,0 +1,14 @@
+.page { max-width: 560px; }
+.page h1 { margin-bottom: 16px; }
+.page p { color: var(--text-secondary); line-height: 1.7; font-size: .9rem; }
+.form { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; padding: 24px; background: var(--bg-elevated); border: 1px solid var(--card-border); border-radius: 10px; }
+.form label { font-weight: 600; font-size: .9rem; }
+.form input { min-width: 0; width: 100%; min-height: 48px; padding: 12px; border: 1px solid #b8afa0; border-radius: 5px; background: var(--input-bg); color: var(--text-primary); font: inherit; }
+.form button { min-height: 48px; padding: 12px 18px; background: var(--gold-dark); color: #fff; border: 1px solid var(--gold-dark); border-radius: 5px; font: inherit; cursor: pointer; }
+.form .secondary { background: transparent; color: var(--text-primary); border-color: #b8afa0; }
+.form button:disabled { opacity: .6; cursor: not-allowed; }
+.form :focus-visible { outline: 3px solid var(--gold-dark); outline-offset: 3px; }
+.notice, .error { padding: 12px; margin-top: 16px; border-radius: 5px; }
+.notice { background: var(--bg-deep); }
+.page .error { color: #a12626; background: #fff0ed; }
+@media (max-width: 480px) { .form { padding: 16px; } }

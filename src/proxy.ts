@@ -1,5 +1,6 @@
 import { readAdminToken } from "./lib/session-token"
 import { NextRequest, NextResponse } from "next/server"
+import { readAdminPasswordHash } from "./lib/admin-credentials"
 
 const SESSION_NAME = "admin_session"
 
@@ -15,12 +16,13 @@ export async function proxy(request: NextRequest) {
     pathname === "/robots.txt" ||
     pathname === "/sitemap.xml"
 
-  if (isStaticAsset) {
+  if (isStaticAsset || !isAdminRoute) {
     return NextResponse.next()
   }
 
   const token = request.cookies.get(SESSION_NAME)?.value
-  const session = token ? await readAdminToken(token) : null
+  let session = null
+  try { session = token ? await readAdminToken(token, await readAdminPasswordHash()) : null } catch { /* Fail closed if credentials cannot be read. */ }
   const isAuthenticated = session !== null && session.email === process.env.ADMIN_EMAIL
 
   if (isAdminRoute && !isLoginPage && !isAuthenticated) {

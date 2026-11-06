@@ -1,5 +1,5 @@
 import { expect, it, vi } from "vitest"
-import { createHmac } from "node:crypto"
+import { createHmac, createHash } from "node:crypto"
 const mail = vi.hoisted(() => ({ send: vi.fn() }))
 vi.mock("@/lib/notifications", () => ({ sendAdminLoginCode: mail.send }))
 
@@ -7,13 +7,14 @@ it.skipIf(process.env.RUN_MYSQL_INTEGRATION !== "1")("enforces the admin email c
   const { prisma } = await import("@/lib/db")
   const { startAdminOtp, verifyAdminOtp, resendAdminOtp } = await import("@/lib/admin-otp")
   const secret = "otp-integration-test-secret-at-least-32-characters"
-  const ids: string[] = [], buckets: string[] = []
+  const ids: string[] = [], buckets: string[] = [], credentialIds: string[] = []
   const configure = () => {
     const email = `otp-${crypto.randomUUID()}@example.invalid`
     vi.stubEnv("ADMIN_EMAIL", email); vi.stubEnv("ADMIN_PASSWORD_HASH", "test-salt:test-verifier")
     vi.stubEnv("SESSION_SECRET", secret); vi.stubEnv("RESEND_API_KEY", "test-not-real")
     const hmac = (value: string) => createHmac("sha256", secret).update(value).digest("hex")
     const id = hmac(`admin-otp-owner:${email}`); ids.push(id)
+    credentialIds.push(createHash("sha256").update(email).digest("hex"))
     for (const offset of [-1, 0, 1]) buckets.push(`admin-code-send:${hmac(`admin-code-send:${email}:${Math.floor(Date.now() / 900000) + offset}`)}`)
     mail.send.mockReset(); mail.send.mockResolvedValue(undefined)
     return id
@@ -66,6 +67,7 @@ it.skipIf(process.env.RUN_MYSQL_INTEGRATION !== "1")("enforces the admin email c
     await expect(verifyAdminOtp("b".repeat(64), "00000000")).rejects.toThrow()
   } finally {
     await prisma.adminLoginChallenge.deleteMany({ where: { id: { in: ids } } })
+    await prisma.adminCredential.deleteMany({ where: { id: { in: credentialIds } } })
     await prisma.rateBucket.deleteMany({ where: { key: { in: buckets } } })
     vi.unstubAllEnvs(); await prisma.$disconnect()
   }

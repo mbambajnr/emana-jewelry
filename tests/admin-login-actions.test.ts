@@ -3,6 +3,7 @@ const mocks = vi.hoisted(() => ({ password: vi.fn(), session: vi.fn(), removeSes
 vi.mock("next/headers", () => ({ headers: async () => new Headers(), cookies: async () => ({ get: () => ({ value: mocks.token }), set: mocks.set, delete: mocks.clear }) }))
 vi.mock("next/navigation", () => ({ redirect: mocks.redirect }))
 vi.mock("@/lib/auth", () => ({ verifyPassword: mocks.password, createSession: mocks.session, deleteSession: mocks.removeSession }))
+vi.mock("@/lib/admin-credentials", () => ({ readAdminPasswordHash: async () => process.env.ADMIN_PASSWORD_HASH }))
 vi.mock("@/lib/admin-otp", () => ({ startAdminOtp: mocks.start, verifyAdminOtp: mocks.verify, resendAdminOtp: mocks.resend, cancelAdminOtp: mocks.cancel, OtpError: class extends Error { constructor(message: string, public restart = false) { super(message) } } }))
 vi.mock("@/lib/request-safety", () => ({ consumeLimit: mocks.limit, trustedClient: () => null, RequestError: class extends Error {} }))
 import { login } from "@/app/actions/auth"
@@ -29,7 +30,7 @@ it("creates the session only after the browser-bound OTP succeeds", async () => 
   mocks.verify.mockResolvedValue("owner@example.invalid")
   await expect(login({ step: "password" }, form({ intent: "verify", code: "12345678" }))).rejects.toThrow("redirect-to-admin")
   expect(mocks.verify).toHaveBeenCalledWith(mocks.token, "12345678")
-  expect(mocks.session).toHaveBeenCalledWith("owner@example.invalid")
+  expect(mocks.session).toHaveBeenCalledWith("owner@example.invalid", "test-password-verifier")
 })
 it("does not trust client step state or allow failed codes to create sessions", async () => {
   mocks.verify.mockRejectedValue(new OtpError("Expired", true))

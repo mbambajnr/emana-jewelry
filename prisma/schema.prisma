@@ -208,7 +208,15 @@ model AdminLoginChallenge {
   attempts Int @default(0)
   delivered Boolean @default(false)
   consumedAt DateTime?
+  pendingPasswordHash String? @db.VarChar(256)
   @@index([expiresAt])
+}
+
+model AdminCredential {
+  id String @id @db.VarChar(64)
+  passwordHash String @db.VarChar(256)
+  bootstrapVersion String @db.VarChar(64)
+  updatedAt DateTime @updatedAt
 }
 
 model NotificationJob {
