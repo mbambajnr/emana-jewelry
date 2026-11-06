@@ -11,10 +11,20 @@ export default function AdminLoginPage() {
     <div className={styles.page}>
       <div className={styles.card}>
         <h1 className={styles.title}>Admin Login</h1>
+        <p className={styles.intro}>{state?.step === "code" ? "Enter the code sent to your admin email." : "Sign in with your password, then confirm the code sent to your email."}</p>
+        {state?.message && <p className={styles.notice} role="status">{state.message}</p>}
         {state?.error && (
-          <p className={styles.error}>{state.error}</p>
+          <p className={styles.error} role="alert">{state.error}</p>
         )}
         <form action={action} className={styles.form}>
+          {state?.step === "code" ? <>
+            <div className={styles.field}><label htmlFor="code" className={styles.label}>Sign-in code</label><input key={state.message} id="code" name="code" type="text" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{8}" maxLength={8} minLength={8} required autoFocus className={`${styles.input} ${styles.code}`} aria-describedby="code-help" /></div>
+            <p id="code-help" className={styles.help}>Use the latest eight-digit code. You have five attempts. Check spam if the email hasn’t arrived.</p>
+            <button type="submit" name="intent" value="verify" disabled={pending} className={styles.button}>{pending ? "Please wait…" : "Verify & Sign In"}</button>
+            <button type="submit" name="intent" value="resend" formNoValidate disabled={pending} className={styles.secondary}>Send a new code</button>
+            <p className={styles.help}>Wait one minute between codes. Requesting another code does not extend this sign-in’s 10-minute time limit.</p>
+            <button type="submit" name="intent" value="restart" formNoValidate disabled={pending} className={styles.secondary}>Back to email & password</button>
+          </> : <>
           <div className={styles.field}>
             <label htmlFor="email" className={styles.label}>Email</label>
             <input
@@ -38,8 +48,9 @@ export default function AdminLoginPage() {
             />
           </div>
           <button type="submit" disabled={pending} className={styles.button}>
-            {pending ? "Signing In…" : "Sign In"}
+            {pending ? "Checking…" : "Continue"}
           </button>
+          </>}
         </form>
       </div>
     </div>

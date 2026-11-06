@@ -9,6 +9,15 @@ async function sendEmail(payload: Parameters<Resend["emails"]["send"]>[0], idemp
 }
 const adminEmail = "emanagold6590@gmail.com"
 
+export async function sendAdminLoginCode(email: string, code: string, expiresAt: Date) {
+  await sendEmail({
+    from: process.env.ADMIN_OTP_FROM || "Emana Jewelry <notifications@emanajewelry.com>",
+    to: email,
+    subject: "Your Emana admin sign-in code",
+    text: `Your Emana Jewelry admin sign-in code is ${code}. It expires at ${expiresAt.toISOString()}. Use it only on your admin sign-in page. Never share this code. If you did not request it, change your admin password and contact your site administrator.`,
+  })
+}
+
 export async function sendOrderNotification(order: {
   id: string
   name: string

@@ -198,6 +198,19 @@ model RateBucket {
   @@index([expiresAt])
 }
 
+model AdminLoginChallenge {
+  id String @id @db.VarChar(64)
+  tokenHash String @db.VarChar(64)
+  codeHash String @db.VarChar(64)
+  credentialVersion String @db.VarChar(64)
+  expiresAt DateTime
+  lastSentAt DateTime
+  attempts Int @default(0)
+  delivered Boolean @default(false)
+  consumedAt DateTime?
+  @@index([expiresAt])
+}
+
 model NotificationJob {
   id String @id @default(cuid())
   kind String @db.VarChar(40)

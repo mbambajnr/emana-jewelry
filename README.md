@@ -70,6 +70,8 @@ npm run admin:credentials
 
 Keep the password in a password manager and copy the printed `ADMIN_PASSWORD_HASH` into `.env`. The command generates values only; it does not edit `.env` or change an existing account. Restart the app after changing configuration.
 
+Admin sign-in also requires an eight-digit email code. Configure `RESEND_API_KEY` and a verified sender before signing in; codes go only to `ADMIN_EMAIL`. The sender defaults to `notifications@emanajewelry.com`, with an optional `ADMIN_OTP_FROM` override. Codes expire after 10 minutes and cannot be bypassed when delivery fails. See [admin email verification](docs/ADMIN-EMAIL-OTP.md) for setup and recovery.
+
 ```sh
 npx prisma generate
 npx prisma migrate deploy

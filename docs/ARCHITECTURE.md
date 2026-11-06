@@ -12,7 +12,7 @@ The full catalog uses URL parameters for category, search, and page so a filtere
 
 ## Staff access and requests
 
-Admin access uses a signed session cookie and one environment-configured email/password hash. Private data reads check the session; admin mutations also validate the request origin. This is suitable for the current single-owner workflow but is not a staff identity or permissions system.
+Admin access requires an environment-configured email/password hash followed by a browser-bound, single-use email code. Challenges store keyed code hashes in MySQL, expire after 10 minutes, and enforce attempt and resend limits. A signed session cookie is issued only after verification; sessions from the earlier password-only flow are rejected. Private data reads check the session; admin mutations also validate the request origin. This supports the current single-owner workflow, with no separate staff roles. See `ADMIN-EMAIL-OTP.md` for delivery setup and recovery.
 
 Inquiries and appointments are saved before success is returned. Stage changes record activity and compare the expected previous status to avoid silently overwriting a newer update. Notification emails run after persistence. Email jobs are saved in the same transaction as the request. Failures remain in a durable outbox with backoff, worker leases, and staff-visible retries. The protected runner must be scheduled in production.
 
