@@ -74,6 +74,8 @@ Admin sign-in also requires an eight-digit email code. Configure `RESEND_API_KEY
 
 After signing in, use **Settings → Security & Password** to change your password with your current password and an email confirmation code. The active hash is saved in MySQL and survives app restarts. Keep `ADMIN_PASSWORD_HASH` unchanged during ordinary deployments; changing it is an explicit operator recovery/reset operation. Successful password changes sign out existing sessions.
 
+If you forget the current password, use **Forgot password?** on the admin sign-in page. Email recovery requires the configured mailbox's reset code and does not bypass the normal email code at the next login.
+
 ```sh
 npx prisma generate
 npx prisma migrate deploy

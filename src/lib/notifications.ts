@@ -9,12 +9,23 @@ async function sendEmail(payload: Parameters<Resend["emails"]["send"]>[0], idemp
 }
 const adminEmail = "emanagold6590@gmail.com"
 
-export async function sendAdminLoginCode(email: string, code: string, expiresAt: Date, purpose: "login" | "password-change" = "login") {
+export async function sendAdminLoginCode(email: string, code: string, expiresAt: Date, purpose: "login" | "password-change" | "password-reset" = "login") {
+  const action = purpose === "login" ? "sign-in" : purpose === "password-change" ? "password change" : "password reset"
+  const page = purpose === "login" ? "admin sign-in" : purpose === "password-change" ? "admin Security settings" : "Forgot password"
   await sendEmail({
     from: process.env.ADMIN_OTP_FROM || "Emana Jewelry <notifications@emanajewelry.com>",
     to: email,
-    subject: purpose === "login" ? "Your Emana admin sign-in code" : "Confirm your Emana admin password change",
-    text: `Your Emana Jewelry admin ${purpose === "login" ? "sign-in" : "password change"} code is ${code}. It expires at ${expiresAt.toISOString()}. Use it only on the ${purpose === "login" ? "admin sign-in" : "admin Security settings"} page. Never share this code. If you did not request it, contact your site administrator.`,
+    subject: `Your Emana admin ${action} code`,
+    text: `Your Emana Jewelry admin ${action} code is ${code}. It expires at ${expiresAt.toISOString()}. Use it only on the ${page} page. Never share this code. If you did not request it, contact your site administrator.`,
+  })
+}
+
+export async function sendAdminPasswordResetNotice(email: string) {
+  await sendEmail({
+    from: process.env.ADMIN_OTP_FROM || "Emana Jewelry <notifications@emanajewelry.com>",
+    to: email,
+    subject: "Your Emana admin password has been reset",
+    text: "Your Emana Jewelry admin password was reset through email recovery. Existing admin sessions have been signed out. Sign in through the usual admin page with your new password and the email sign-in code. If you did not make this change, contact your site administrator immediately. Your password is never sent by email.",
   })
 }
 

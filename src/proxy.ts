@@ -9,6 +9,7 @@ export async function proxy(request: NextRequest) {
 
   const isAdminRoute = pathname.startsWith("/admin")
   const isLoginPage = pathname === "/admin/login"
+  const isRecoveryPage = pathname === "/admin/forgot-password"
   const isStaticAsset =
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
@@ -25,7 +26,7 @@ export async function proxy(request: NextRequest) {
   try { session = token ? await readAdminToken(token, await readAdminPasswordHash()) : null } catch { /* Fail closed if credentials cannot be read. */ }
   const isAuthenticated = session !== null && session.email === process.env.ADMIN_EMAIL
 
-  if (isAdminRoute && !isLoginPage && !isAuthenticated) {
+  if (isAdminRoute && !isLoginPage && !isRecoveryPage && !isAuthenticated) {
     const loginUrl = new URL("/admin/login", request.url)
     loginUrl.searchParams.set("from", pathname)
     return NextResponse.redirect(loginUrl)

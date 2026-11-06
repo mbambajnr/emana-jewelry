@@ -5,7 +5,7 @@ import { consumeLimit } from "./request-safety"
 import { sendAdminLoginCode } from "./notifications"
 import { readAdminPasswordHash } from "./admin-credentials"
 import type { Prisma } from "@/generated/prisma/client"
-export type OtpPurpose = "login" | "password-change"
+export type OtpPurpose = "login" | "password-change" | "password-reset"
 
 export const OTP_LIFETIME = 10 * 60 * 1000
 export class OtpError extends Error {
@@ -35,7 +35,7 @@ async function deliver(token: string, code: string, expiresAt: Date, purpose: Ot
     throw new OtpError("We couldn’t send your code. Please sign in again shortly, or contact the site administrator.", true)
   }
 }
-export async function startAdminOtp(purpose: OtpPurpose = "login", pendingPasswordHash?: string, expectedPasswordHash?: string) {
+export async function startAdminOtp(purpose: OtpPurpose = "login", pendingPasswordHash?: string, expectedPasswordHash?: string, browserToken?: string) {
   const config = await settings(purpose), now = new Date()
   if (expectedPasswordHash && config.password !== expectedPasswordHash) throw new OtpError("Your credentials changed. Sign in again.", true)
   await consumeLimit("admin-code-send", config.email, 5)
@@ -44,7 +44,8 @@ export async function startAdminOtp(purpose: OtpPurpose = "login", pendingPasswo
   try {
     await prisma.adminLoginChallenge.upsert({ where: { id: config.id }, create: { id: config.id, tokenHash: "", codeHash: "", credentialVersion: "", expiresAt: new Date(0), lastSentAt: new Date(0) }, update: {} })
   } catch (error) { if ((error as { code?: string }).code !== "P2002") throw error }
-  const token = randomBytes(32).toString("hex"), code = newCode(), expiresAt = new Date(now.getTime() + OTP_LIFETIME)
+  if (browserToken && !/^[a-f0-9]{64}$/.test(browserToken)) throw new OtpError("Please start again.", true)
+  const token = browserToken || randomBytes(32).toString("hex"), code = newCode(), expiresAt = new Date(now.getTime() + OTP_LIFETIME)
   const claimed = await prisma.adminLoginChallenge.updateMany({ where: { id: config.id, OR: [{ lastSentAt: { lte: new Date(now.getTime() - 60000) } }, { credentialVersion: { not: config.version } }] }, data: { tokenHash: digest(token), codeHash: codeHash(config, token, code), credentialVersion: config.version, expiresAt, lastSentAt: now, attempts: 0, consumedAt: null, delivered: false, pendingPasswordHash: pendingPasswordHash || null } })
   if (claimed.count !== 1) throw new OtpError("Please wait a minute before requesting another code.", true)
   await deliver(token, code, expiresAt, purpose)

@@ -4,6 +4,18 @@ Admin access now requires the configured email and password, followed by an eigh
 
 The active password verifier is stored in MySQL. `ADMIN_PASSWORD_HASH` supplies the initial password and a trusted operator recovery path. Ordinary password changes are made in **Admin → Settings → Security & Password**, with the current password and a separate email confirmation code. The new password persists across restarts and deployments without editing server files.
 
+## Forgotten passwords
+
+Use **Forgot password?** on `/admin/login`, or open `/admin/forgot-password`. Enter the configured admin email, then enter the reset code and a new password twice. Recovery does not require the old password. It still requires access to the configured admin mailbox; the form cannot choose another recipient.
+
+Recovery codes are separate from sign-in and password-change codes, with the same 10-minute expiry, five-attempt limit, and resend cooldown. No password, session, or existing login code is changed merely by requesting recovery. A valid reset code is consumed in the same database transaction that replaces the password. Completion revokes existing access and pending codes through the credential version. It does not sign the user in automatically.
+
+Validly formatted email submissions receive the same message and pending-cookie format regardless of whether they match the owner. Account matching and delivery run after the response; public resend and invalid-code responses do not disclose account membership. Shared site, trusted-client (when configured), and address limits constrain requests. The email transport must work; a generic request acknowledgement is not delivery confirmation.
+
+A confirmation email without the password is attempted after a successful reset. That notice is best-effort and does not roll back a completed reset if delivery fails. The normal login and password-change flows still require their own email codes. If the mailbox itself is compromised or unavailable, use the trusted operator recovery procedure below; a web form cannot establish ownership of an inaccessible mailbox.
+
+See [OWASP's password-recovery guidance](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html).
+
 ## Delivery setup
 
 - Apply the MySQL migration with `npx prisma migrate deploy`, run `npx prisma generate`, then rebuild and restart every app process.

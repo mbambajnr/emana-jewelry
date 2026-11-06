@@ -100,3 +100,6 @@
   margin-bottom: 0.5rem;
   text-align: center;
 }
+
+.authLinks { display: flex; justify-content: center; margin-top: 16px; }
+.authLinks a { display: inline-flex; align-items: center; min-height: 44px; color: var(--gold-dark); text-decoration: underline; text-underline-offset: 4px; font-size: .9rem; }

@@ -11,7 +11,7 @@ export default function AdminShell({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
-  if (pathname === "/admin/login" || pathname === "/admin/content/preview") return <>{children}</>
+  if (pathname === "/admin/login" || pathname === "/admin/forgot-password" || pathname === "/admin/content/preview") return <>{children}</>
   return (
     <div className={styles.layout}>
       <aside className={styles.sidebar}>

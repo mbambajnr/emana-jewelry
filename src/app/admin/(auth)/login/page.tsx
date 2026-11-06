@@ -1,6 +1,7 @@
 "use client"
 
 import { useActionState } from "react"
+import Link from "next/link"
 import { login } from "@/app/actions/auth"
 import styles from "./login.module.css"
 
@@ -52,6 +53,7 @@ export default function AdminLoginPage() {
           </button>
           </>}
         </form>
+        <nav className={styles.authLinks} aria-label="Sign-in help"><Link href="/admin/forgot-password">Forgot password?</Link></nav>
       </div>
     </div>
   )
