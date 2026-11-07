@@ -1,0 +1,16 @@
+.setup { margin: 32px auto; padding: 20px; width: 100%; box-sizing: border-box; }
+.controls { border: 0; padding: 0; margin: 0; min-width: 0; display: grid; gap: 28px; }
+.step { min-width: 0; display: grid; gap: 18px; }
+.step + .step { border-top: 1px solid var(--card-border); padding-top: 24px; }
+.heading { font-size: 1.1rem; line-height: 1.4; margin: 0; }
+.field { display: grid; gap: 8px; min-width: 0; }
+.field p, .step > p { margin: 0; }
+.field select { width: 100%; min-width: 0; min-height: 48px; padding: 12px; border: 1px solid #b8afa0; border-radius: 5px; background: var(--input-bg); color: var(--text-primary); font: inherit; }
+.help, .advanced { font-size: .9rem; line-height: 1.6; }
+.help summary, .advanced summary { cursor: pointer; padding: 10px 0; font-weight: 600; }
+.help ol { padding-left: 22px; margin: 8px 0; }
+.help li + li { margin-top: 10px; }
+.advanced .field { margin-top: 16px; }
+.continue { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 18px; box-sizing: border-box; border-radius: 5px; background: var(--gold-dark); color: #fff; text-decoration: none; }
+.back { margin-top: 24px; }
+@media (min-width: 640px) { .setup { margin-top: 48px; padding: 24px; } }
