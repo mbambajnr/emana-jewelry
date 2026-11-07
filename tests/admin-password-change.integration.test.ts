@@ -13,7 +13,7 @@ it.skipIf(process.env.RUN_MYSQL_INTEGRATION !== "1")("persists confirmed passwor
   const email = `password-${crypto.randomUUID()}@example.invalid`, secret = "password-change-integration-secret-with-32-characters"
   const current = "Original test password 123!", next = "A different test password 456!", final = "Final test password 789!"
   const bootstrap = await hashPassword(current)
-  vi.stubEnv("ADMIN_EMAIL", email); vi.stubEnv("ADMIN_PASSWORD_HASH", bootstrap); vi.stubEnv("SESSION_SECRET", secret); vi.stubEnv("RESEND_API_KEY", "test-not-real")
+  vi.stubEnv("ADMIN_EMAIL", email); vi.stubEnv("ADMIN_PASSWORD_HASH", bootstrap); vi.stubEnv("SESSION_SECRET", secret); vi.stubEnv("RESEND_API_KEY", "test-not-real"); vi.stubEnv("EMAIL_PROVIDER", "resend")
   const identity = credentialIdentity(), hmac = (value: string) => createHmac("sha256", secret).update(value).digest("hex")
   const ids = [hmac(`admin-otp-owner:${email}`), hmac(`admin-otp-owner:${email}:password-change`)]
   const buckets = [-1, 0, 1].map(offset => `admin-code-send:${hmac(`admin-code-send:${email}:${Math.floor(Date.now() / 900000) + offset}`)}`)

@@ -1,12 +1,7 @@
-import { Resend } from "resend"
+import { sendEmail } from "./mail-transport"
 import type { CartItem } from "./cart"
 
 const escapeHtml = (value: string) => value.replace(/[<>&"']/g, character => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&#39;" })[character]!)
-async function sendEmail(payload: Parameters<Resend["emails"]["send"]>[0], idempotencyKey?: string) {
-  if (!process.env.RESEND_API_KEY) throw new Error("Email delivery is not configured")
-  const response = await new Resend(process.env.RESEND_API_KEY).emails.send(payload, idempotencyKey ? { idempotencyKey } : undefined)
-  if (response.error) throw new Error("Email delivery failed")
-}
 const adminEmail = "emanagold6590@gmail.com"
 
 export async function sendAdminLoginCode(email: string, code: string, expiresAt: Date, purpose: "login" | "password-change" | "password-reset" = "login") {

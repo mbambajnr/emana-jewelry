@@ -11,7 +11,7 @@ it.skipIf(process.env.RUN_MYSQL_INTEGRATION !== "1")("enforces the admin email c
   const configure = () => {
     const email = `otp-${crypto.randomUUID()}@example.invalid`
     vi.stubEnv("ADMIN_EMAIL", email); vi.stubEnv("ADMIN_PASSWORD_HASH", "test-salt:test-verifier")
-    vi.stubEnv("SESSION_SECRET", secret); vi.stubEnv("RESEND_API_KEY", "test-not-real")
+    vi.stubEnv("SESSION_SECRET", secret); vi.stubEnv("RESEND_API_KEY", "test-not-real"); vi.stubEnv("EMAIL_PROVIDER", "resend")
     const hmac = (value: string) => createHmac("sha256", secret).update(value).digest("hex")
     const id = hmac(`admin-otp-owner:${email}`); ids.push(id)
     credentialIds.push(createHash("sha256").update(email).digest("hex"))

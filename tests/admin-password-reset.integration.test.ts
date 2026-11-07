@@ -12,7 +12,7 @@ it.skipIf(process.env.RUN_MYSQL_INTEGRATION !== "1")("resets a forgotten passwor
   const { issueAdminToken, readAdminToken } = await import("@/lib/session-token")
   const email = `reset-${crypto.randomUUID()}@example.invalid`, secret = "reset-integration-secret-at-least-32-characters"
   const bootstrap = await hashPassword("Original test password!"), next = "Recovered new test password!"
-  vi.stubEnv("ADMIN_EMAIL", email); vi.stubEnv("ADMIN_PASSWORD_HASH", bootstrap); vi.stubEnv("SESSION_SECRET", secret); vi.stubEnv("RESEND_API_KEY", "test-not-real")
+  vi.stubEnv("ADMIN_EMAIL", email); vi.stubEnv("ADMIN_PASSWORD_HASH", bootstrap); vi.stubEnv("SESSION_SECRET", secret); vi.stubEnv("RESEND_API_KEY", "test-not-real"); vi.stubEnv("EMAIL_PROVIDER", "resend")
   const identity = credentialIdentity(), hmac = (value: string) => createHmac("sha256", secret).update(value).digest("hex")
   const ids = [hmac(`admin-otp-owner:${email}`), hmac(`admin-otp-owner:${email}:password-reset`)]
   const buckets = [-1, 0, 1].map(offset => `admin-code-send:${hmac(`admin-code-send:${email}:${Math.floor(Date.now() / 900000) + offset}`)}`)

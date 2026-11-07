@@ -4,6 +4,7 @@ import { prisma } from "./db"
 import { consumeLimit } from "./request-safety"
 import { sendAdminLoginCode } from "./notifications"
 import { readAdminPasswordHash } from "./admin-credentials"
+import { assertEmailConfigured } from "./mail-config"
 import type { Prisma } from "@/generated/prisma/client"
 export type OtpPurpose = "login" | "password-change" | "password-reset"
 
@@ -12,8 +13,9 @@ export class OtpError extends Error {
   constructor(message: string, public restart = false) { super(message) }
 }
 async function settings(purpose: OtpPurpose = "login") {
-  const { ADMIN_EMAIL: email, SESSION_SECRET: secret, RESEND_API_KEY: mail } = process.env
-  if (!email || !process.env.ADMIN_PASSWORD_HASH || !secret || secret.length < 32 || !mail) throw new OtpError("Admin email verification is unavailable. Contact the site administrator.", true)
+  const { ADMIN_EMAIL: email, SESSION_SECRET: secret } = process.env
+  if (!email || !process.env.ADMIN_PASSWORD_HASH || !secret || secret.length < 32) throw new OtpError("Admin email verification is unavailable. Contact the site administrator.", true)
+  try { assertEmailConfigured() } catch { throw new OtpError("Admin email verification is unavailable. Contact the site administrator.", true) }
   const password = await readAdminPasswordHash()
   const suffix = purpose === "login" ? "" : `:${purpose}`
   const hmac = (value: string) => createHmac("sha256", secret).update(value).digest("hex")

@@ -37,7 +37,7 @@ Screenshots show local catalog data. See the deployment notes below for moving p
 
 ## Stack and structure
 
-Next.js 16 App Router, React 19, TypeScript, CSS Modules, Prisma 7, and MySQL. Remotion renders the homepage slideshow. Production image uploads use a configured persistent filesystem directory (or an explicitly selected Supabase bucket); optional notification emails use Resend. Vitest and Testing Library cover application logic and selected UI workflows.
+Next.js 16 App Router, React 19, TypeScript, CSS Modules, Prisma 7, and MySQL. Remotion renders the homepage slideshow. Production image uploads use a configured persistent filesystem directory (or an explicitly selected Supabase bucket); email delivery supports SMTP or Resend. Vitest and Testing Library cover application logic and selected UI workflows.
 
 ```text
 src/app/          Pages, route handlers, and server actions
@@ -70,7 +70,7 @@ npm run admin:credentials
 
 Keep the password in a password manager and copy the printed `ADMIN_PASSWORD_HASH` into `.env`. The command generates values only; it does not edit `.env` or change an existing account. Restart the app after changing configuration.
 
-Admin sign-in also requires an eight-digit email code. Configure `RESEND_API_KEY` and a verified sender before signing in; codes go only to `ADMIN_EMAIL`. The sender defaults to `notifications@emanajewelry.com`, with an optional `ADMIN_OTP_FROM` override. Codes expire after 10 minutes and cannot be bypassed when delivery fails. See [admin email verification](docs/ADMIN-EMAIL-OTP.md) for setup and recovery.
+Admin sign-in also requires an eight-digit email code. Configure [Gmail SMTP](docs/EMAIL-SMTP.md) with a Google app password, or explicitly select Resend with a verified sender. Codes go only to `ADMIN_EMAIL`, expire after 10 minutes, and cannot be bypassed when delivery fails. See [admin email verification](docs/ADMIN-EMAIL-OTP.md) for setup and recovery.
 
 After signing in, use **Settings → Security & Password** to change your password with your current password and an email confirmation code. The active hash is saved in MySQL and survives app restarts. Keep `ADMIN_PASSWORD_HASH` unchanged during ordinary deployments; changing it is an explicit operator recovery/reset operation. Successful password changes sign out existing sessions.
 
@@ -105,7 +105,7 @@ Apply migrations to a persistent MySQL database and configure production environ
 - Product rows and photo files do not transfer through GitHub. `scripts/migrate-image-storage.mjs` copies and verifies existing photos without changing their URLs. Production `/media/products/...` serving requires the persistent directory configuration.
 - Search verification and social links use MySQL in both development and production. Configure them through the admin.
 - Admin authentication uses one configured staff account, shared MySQL-backed rate limits, and credential-bound sessions. Separate staff roles, deployment monitoring, and backup automation remain operational work.
-- Notification jobs are saved atomically with requests, retried with leases and provider idempotency keys, and visible under Admin → Email Delivery. Configure the protected scheduled runner for automatic recovery without new customer traffic. Sender and recipient details remain Emana-specific.
+- Notification jobs are saved atomically with requests, retried with leases and provider-specific duplicate controls, and visible under Admin → Email Delivery. Configure the protected scheduled runner for automatic recovery without new customer traffic. Sender and recipient details remain Emana-specific.
 - Some collection/product routes retain sample-data fallbacks when database queries fail. The full catalog and admin do not provide an offline production database replacement.
 - Payment processing and customer accounts are outside the current scope.
 
