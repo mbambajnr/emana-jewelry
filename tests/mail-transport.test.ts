@@ -2,6 +2,11 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest"
 const mock = vi.hoisted(() => ({ smtp: vi.fn(), resend: vi.fn(), transport: vi.fn(), close: vi.fn() }))
 vi.mock("nodemailer", () => ({ default: { createTransport: mock.transport } }))
 vi.mock("resend", () => ({ Resend: class { emails = { send: mock.resend } } }))
+vi.mock("@/lib/email-settings", () => ({ activeEmailConfig: async () => {
+  const config = await import("@/lib/mail-config")
+  config.assertEmailConfigured()
+  return config.emailProvider() === "smtp" ? { provider: "smtp", smtp: config.smtpSettings() } : { provider: "resend", apiKey: process.env.RESEND_API_KEY }
+} }))
 import { sendEmail } from "@/lib/mail-transport"
 import { assertEmailConfigured, smtpSettings } from "@/lib/mail-config"
 const payload = { from: "Emana <notifications@emanajewelry.com>", to: "owner@example.invalid", subject: "Admin code", text: "Verification message" }

@@ -9,7 +9,7 @@ export async function proxy(request: NextRequest) {
 
   const isAdminRoute = pathname.startsWith("/admin")
   const isLoginPage = pathname === "/admin/login"
-  const isRecoveryPage = pathname === "/admin/forgot-password"
+  const isRecoveryPage = pathname === "/admin/forgot-password" || pathname === "/admin/email-setup"
   const isStaticAsset =
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||

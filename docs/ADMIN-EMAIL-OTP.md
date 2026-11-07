@@ -20,6 +20,7 @@ See [OWASP's password-recovery guidance](https://cheatsheetseries.owasp.org/chea
 
 - Apply the MySQL migration with `npx prisma migrate deploy`, run `npx prisma generate`, then rebuild and restart every app process.
 - Configure Gmail SMTP as described in `EMAIL-SMTP.md`, including a Google app password. Alternatively, select `EMAIL_PROVIDER=resend`, set `RESEND_API_KEY`, and verify the sending domain; the Resend sender defaults to `notifications@emanajewelry.com`, with an optional `ADMIN_OTP_FROM` override.
+- Gmail details can be maintained under **Settings → Email Settings**. For initial setup when email codes are unavailable, a trusted operator can issue a separate expiring setup key for `/admin/email-setup`, which also requires the current password and cannot create a session. See `EMAIL-SMTP.md`.
 - `ADMIN_EMAIL` is the only recipient. The address supplied on the login form cannot change the recipient. Confirm the configured mailbox can receive the code before deploying to production.
 - If delivery is missing or fails, sign-in stops with an error. There is no password-only fallback or development code printed to logs. The code is not placed in the notification outbox because OTP secrets must not be stored in plaintext.
 - Codes are sent only after the correct password is entered or a valid pending browser requests a resend. Automated tests mock email delivery and never send actual admin codes.

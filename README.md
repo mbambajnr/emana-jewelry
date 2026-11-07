@@ -76,6 +76,8 @@ After signing in, use **Settings → Security & Password** to change your passwo
 
 If you forget the current password, use **Forgot password?** on the admin sign-in page. Email recovery requires the configured mailbox's reset code and does not bypass the normal email code at the next login.
 
+Gmail SMTP settings can be saved and tested under **Settings → Email Settings**, with app passwords encrypted in MySQL. Initial setup without working email uses an operator-issued, expiring setup key plus the current admin password at `/admin/email-setup`; it does not grant an admin session. See [SMTP setup](docs/EMAIL-SMTP.md).
+
 ```sh
 npx prisma generate
 npx prisma migrate deploy

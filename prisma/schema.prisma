@@ -219,6 +219,28 @@ model AdminCredential {
   updatedAt DateTime @updatedAt
 }
 
+model EmailSettings {
+  id String @id @db.VarChar(64)
+  host String @db.VarChar(255)
+  port Int
+  secure Boolean
+  username String @db.VarChar(254)
+  sender String @db.VarChar(320)
+  passwordEncrypted String @db.Text
+  version Int @default(1)
+  updatedAt DateTime @updatedAt
+}
+
+model EmailSetupGrant {
+  id String @id @default(cuid())
+  ownerId String @db.VarChar(64)
+  tokenHash String @unique @db.VarChar(64)
+  expiresAt DateTime
+  consumedAt DateTime?
+  attempts Int @default(0)
+  @@index([ownerId, expiresAt])
+}
+
 model NotificationJob {
   id String @id @default(cuid())
   kind String @db.VarChar(40)

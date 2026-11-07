@@ -1,5 +1,26 @@
 # Gmail SMTP
 
+## Configure from the admin
+
+Open **Admin → Settings → Email Settings**. Enter the Gmail sending address and Google app password, confirm your current admin password, then choose **Save & Send Test Email**. The app checks the connection and sends only to the configured admin mailbox before committing the settings. An SMTP acknowledgement is not proof of inbox placement.
+
+Saved app passwords are encrypted with AES-256-GCM in MySQL using the server-only `EMAIL_SETTINGS_KEY`. The browser receives only metadata and a `passwordSet` flag, never the password or encrypted value. Leave the app-password field blank to retain the saved secret when the account and connection are unchanged. Account or connection changes require entering it again. Saves use version checks, and invalid settings or failed tests leave the existing configuration intact. Saved settings take effect without restarting the app and override the environment mail provider for that owner.
+
+This page supports Gmail and Google Workspace through `smtp.gmail.com`, using port 465 with TLS or 587 with required STARTTLS. Custom SMTP providers remain available through server environment configuration. The web form cannot connect to arbitrary hosts.
+
+## First setup or email outage
+
+If admin email is unavailable, an operator can issue narrowly scoped setup access:
+
+1. Apply migrations and generate Prisma. Set `EMAIL_SETTINGS_KEY` once to 32 random bytes in base64. Keep this key in protected server settings across deployments, and back it up separately from the database. Do not reuse the session secret; rotating login credentials should not break email decryption.
+2. Run `node --env-file=.env scripts/create-email-setup-key.mjs` in the project folder. This prints a new key valid for 30 minutes and revokes previously unused keys for that owner. Do not publish the key or place it in a URL. It is stored only as a hash, allows five attempts, and can be consumed once.
+3. Open `/admin/email-setup`. Enter the setup key, current admin password, Gmail address, and Google app password. Both the setup key and the current password are required; this route never creates an admin session or changes the login identity/password.
+4. After Gmail accepts the test and the settings are saved, the key is consumed atomically. Return to sign-in and request a fresh email code. Subsequent changes use the normal admin settings page.
+
+An expired or exhausted setup key must be reissued by the trusted operator. A failed SMTP test does not consume the key, but counts as an attempt. Setup access is not enabled merely by knowing the admin password or by causing email delivery to fail. There is no public key-generation endpoint. A changed admin password during a save prevents stale authorization from committing settings.
+
+## Environment alternative
+
 Set these private environment values on each app instance:
 
 ```dotenv
