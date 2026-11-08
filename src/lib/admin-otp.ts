@@ -42,9 +42,10 @@ export async function startAdminOtp(purpose: OtpPurpose = "login", pendingPasswo
   if (expectedPasswordHash && config.password !== expectedPasswordHash) throw new OtpError("Your credentials changed. Sign in again.", true)
   await consumeLimit("admin-code-send", config.email, 5)
   await prisma.adminLoginChallenge.deleteMany({ where: { expiresAt: { lt: new Date(Date.now() - 86400000) } } })
+  // Fresh placeholders must survive another request’s expired-row cleanup.
   // A single account row makes the send cooldown atomic across browsers/processes.
   try {
-    await prisma.adminLoginChallenge.upsert({ where: { id: config.id }, create: { id: config.id, tokenHash: "", codeHash: "", credentialVersion: "", expiresAt: new Date(0), lastSentAt: new Date(0) }, update: {} })
+    await prisma.adminLoginChallenge.upsert({ where: { id: config.id }, create: { id: config.id, tokenHash: "", codeHash: "", credentialVersion: "", expiresAt: new Date(now.getTime() + OTP_LIFETIME), lastSentAt: new Date(0) }, update: {} })
   } catch (error) { if ((error as { code?: string }).code !== "P2002") throw error }
   if (browserToken && !/^[a-f0-9]{64}$/.test(browserToken)) throw new OtpError("Please start again.", true)
   const token = browserToken || randomBytes(32).toString("hex"), code = newCode(), expiresAt = new Date(now.getTime() + OTP_LIFETIME)

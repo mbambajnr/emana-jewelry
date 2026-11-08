@@ -1,17 +1,12 @@
 import type { MetadataRoute } from "next"
-import { staticProducts, collections as staticCollections } from "@/lib/products"
 import { publishedContent } from "./content-store"
 import { publicServices, servicePath } from "./service-pages"
 
 export async function getSitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelry.com"
 
-  let products: { slug: string; updatedAt?: Date }[] = staticProducts.map((p) => ({
-    slug: p.slug,
-  }))
-  let collections: { slug: string }[] = staticCollections.map((c) => ({
-    slug: c.slug,
-  }))
+  let products: { slug: string; updatedAt?: Date }[] = []
+  let collections: { slug: string }[] = []
 
   try {
     const { prisma } = await import("@/lib/db")
@@ -19,14 +14,10 @@ export async function getSitemap(): Promise<MetadataRoute.Sitemap> {
       prisma.product.findMany({ select: { slug: true, updatedAt: true } }),
       prisma.category.findMany({ select: { slug: true } }),
     ])
-    if (dbProducts && dbProducts.length > 0) {
-      products = dbProducts
-    }
-    if (dbCollections && dbCollections.length > 0) {
-      collections = dbCollections
-    }
+    products = dbProducts
+    collections = dbCollections
   } catch {
-    console.warn("Database unavailable; using the static catalog for the sitemap.")
+    throw new Error("The sitemap is temporarily unavailable")
   }
 
   const staticPages = [

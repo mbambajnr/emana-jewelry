@@ -2,7 +2,7 @@ name: CI Pipeline & Test Automation
 
 on:
   push:
-    branches: [main]
+    branches: [main, "codex/**"]
   pull_request:
     branches: [main]
 
@@ -59,7 +59,7 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Run Automated Test Suite
-        run: npm test
+        run: npm test -- --maxWorkers=2 --testTimeout=30000
 
       - name: Run Production Build
         run: npm run build

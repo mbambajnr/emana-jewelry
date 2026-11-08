@@ -2,7 +2,6 @@ import { requireAdmin } from "@/lib/auth"
 import Link from "next/link"
 import { Suspense } from "react"
 import { prisma } from "@/lib/db"
-import { staticProducts } from "@/lib/products"
 import styles from "./products.module.css"
 
 export default function AdminProducts() {
@@ -32,15 +31,7 @@ async function ProductList() {
     available: boolean
     category: { name: string }
     images: Array<{ url: string }>
-  }> = staticProducts.map((p) => ({
-    id: p.id,
-    name: p.name,
-    price: p.price,
-    sku: `EMA-${p.slug.toUpperCase().slice(0, 6)}`,
-    available: p.available,
-    category: { name: p.category },
-    images: p.images.map(url => ({ url })),
-  }))
+  }> = []
 
   try {
     const dbProducts = await prisma.product.findMany({
@@ -50,9 +41,7 @@ async function ProductList() {
       },
       orderBy: { createdAt: "desc" },
     })
-    if (dbProducts && dbProducts.length > 0) {
-      products = dbProducts
-    }
+    products = dbProducts
   } catch {
     return <p role="alert">We couldn’t load this information. Check the database connection and migrations, then refresh. No records have been changed.</p>
   }

@@ -94,3 +94,15 @@ tar -tzf snapshot.tar.gz
 Verify HTTPS, product detail/catalog pages, real upload and image display after restart/redeploy, admin email test and OTP, enquiry persistence, backup/restore, and a scheduled notification runner. Configure `NOTIFICATION_CRON_SECRET` and the host-supported HTTPS POST scheduler described in `PRODUCTION-HARDENING.md`; never put its token in a URL. Only set `TRUSTED_CLIENT_IP_HEADER` after the host confirms it overwrites that header. Confirm limits on request bodies, image optimisation memory, cron frequency and concurrent Node processes with OrangeHost.
 
 The preflight checks filesystem free blocks, not a cPanel account quota. Keep an eye on both. Image compression, pixel-dimension limits, unused-file cleanup and measured load testing remain separate improvements; a deployment structure does not provide those automatically.
+
+## Notification jobs and image housekeeping
+
+Set `SHOP_NOTIFICATION_EMAIL` to the business inbox; if blank, notifications go to `ADMIN_EMAIL`. Sender settings do not change the recipient. This replaces the previous hardcoded shop inbox. Confirm both inboxes deliberately before launch.
+
+Set a separate `NOTIFICATION_CRON_SECRET` on the runtime and in the private scheduler environment. The host scheduler can run `node --env-file=/home/ACCOUNT/emana-secrets/production.env /home/ACCOUNT/emana-ops/scripts/hosting/run-notifications.mjs` at the interval supported by the account. This command uses HTTPS POST, rejects redirects, limits request duration, never prints the token, and exits nonzero for HTTP failures or failed deliveries. Prevent overlapping scheduler runs using the host-supported lock mechanism. Merely adding the command does not configure cPanel cron; verify actual runs and a controlled retry after restart.
+
+New photos are decoded, restricted to 25 megapixels, resized within 2048×2048, stripped of metadata and converted to WebP. Upload request bodies are bounded to 11 MB before multipart parsing; each file remains limited to 10 MB. One image transformation runs at a time per process. Existing originals are retained. Also set the reverse proxy request body limit to 11 MB and start with one Node worker on Micro.
+
+Use `npm run hosting:images` for a report-only scan of originals older than seven days. It checks product images, category images, published/draft CMS content and retained revisions, preserving files referenced by any of them. Unknown filenames and symlinks are retained. Do not delete photos automatically when deleting a product; CMS content may still reference them.
+
+After verifying a database-plus-files backup and stopping all writers, `npm run hosting:images -- --delete --maintenance-confirmed --backup-confirmed` removes only the old, unreferenced candidates. Do not run this delete mode while staff are editing or uploading. No image files were deleted as part of implementing these tools.

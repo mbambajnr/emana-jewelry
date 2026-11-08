@@ -26,6 +26,17 @@ try {
   report(disk.bavail * disk.bsize >= 512 * 1024 * 1024, 'Filesystem reports at least 512 MB free (also check cPanel account quota)')
 } catch { report(false, 'Configure an existing writable image directory outside the application and public web root') }
 report(!!process.env.HOSTING_PUBLIC_ROOT, 'HOSTING_PUBLIC_ROOT configured so public-path checks can run')
+report((process.env.NOTIFICATION_CRON_SECRET || '').length >= 32, 'Notification scheduler secret configured (verify cron execution separately)')
+report((process.env.BACKUP_ENCRYPTION_PASSWORD || '').length >= 32, 'Separate backup encryption password configured')
+try {
+  const configured = process.env.BACKUP_DIRECTORY
+  if (!configured || !path.isAbsolute(configured) || !process.env.HOSTING_PUBLIC_ROOT) throw new Error()
+  const [backups, app, publicRoot] = await Promise.all([configured, process.cwd(), process.env.HOSTING_PUBLIC_ROOT].map(value => realpath(value)))
+  const overlap = (a, b) => a === b || a.startsWith(b + path.sep) || b.startsWith(a + path.sep)
+  if (overlap(backups, app) || overlap(backups, publicRoot) || (media && overlap(backups, media))) throw new Error()
+  await access(backups, constants.R_OK | constants.W_OK)
+  report(true, 'Private backup directory accessible and separate from app, public root and media')
+} catch { report(false, 'Configure a private writable backup directory outside app/public/media directories') }
 let connection
 try {
   const u = new URL(process.env.DATABASE_URL)

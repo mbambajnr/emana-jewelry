@@ -7,7 +7,6 @@ import Image from "next/image"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/db"
 
-import { collections as staticCollections, products as staticProducts } from "@/lib/products"
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
@@ -16,11 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   try {
     collection = await prisma.category.findUnique({ where: { slug } })
   } catch {
-    // Database connection refused or offline, fallback to static collections
-  }
-
-  if (!collection) {
-    collection = staticCollections.find((c) => c.slug === slug) || null
+    return { title: "Collection temporarily unavailable", robots: { index: false } }
   }
 
   if (!collection) return { title: "Collection Not Found", robots: { index: false } }
@@ -88,27 +83,7 @@ async function CollectionContent({ slug }: { slug: string }) {
     collection = dbCollection
     products = dbProducts
   } catch {
-    // Database connection refused or offline, fallback to static collections
-  }
-
-  if (!collection) {
-    collection = staticCollections.find((c) => c.slug === slug) || null
-    if (collection) {
-      products = staticProducts
-        .filter((p) => p.category === slug)
-        .map((p) => ({
-          id: p.id,
-          slug: p.slug,
-          name: p.name,
-          subcategory: p.subcategory || null,
-          price: p.price,
-          description: p.description,
-          rating: p.rating,
-          reviewCount: p.reviewCount,
-          stones: p.stones.map(stone => ({ type: stone.type })),
-          images: p.images.map((url, i) => ({ url, sortOrder: i })),
-        }))
-    }
+    return <p role="alert">We couldn’t load this collection. Please try again shortly.</p>
   }
 
   if (!collection) notFound()

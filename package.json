@@ -13,7 +13,9 @@
     "admin:credentials": "node scripts/create-admin-credentials.mjs",
     "hosting:check": "node --env-file-if-exists=.env scripts/hosting/check.mjs",
     "hosting:backup": "node --env-file-if-exists=.env scripts/hosting/backup.mjs",
-    "hosting:package": "node scripts/hosting/package.mjs"
+    "hosting:package": "node scripts/hosting/package.mjs",
+    "hosting:notifications": "node --env-file-if-exists=.env scripts/hosting/run-notifications.mjs",
+    "hosting:images": "node --env-file-if-exists=.env scripts/hosting/unused-images.mjs"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.10.1",
@@ -26,7 +28,8 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "remotion": "^4.0.538",
-    "resend": "^6.17.1"
+    "resend": "^6.17.1",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^7.0.1",

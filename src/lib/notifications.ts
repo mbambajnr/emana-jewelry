@@ -2,7 +2,11 @@ import { sendEmail } from "./mail-transport"
 import type { CartItem } from "./cart"
 
 const escapeHtml = (value: string) => value.replace(/[<>&"']/g, character => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&#39;" })[character]!)
-const adminEmail = "emanagold6590@gmail.com"
+function shopNotificationEmail() {
+  const email = process.env.SHOP_NOTIFICATION_EMAIL || process.env.ADMIN_EMAIL
+  if (!email || !/^[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+$/.test(email)) throw new Error("Configure the shop notification email")
+  return email
+}
 
 export async function sendAdminLoginCode(email: string, code: string, expiresAt: Date, purpose: "login" | "password-change" | "password-reset" = "login") {
   const action = purpose === "login" ? "sign-in" : purpose === "password-change" ? "password change" : "password reset"
@@ -43,7 +47,7 @@ export async function sendOrderNotification(order: {
 
   await sendEmail({
     from: "Emana Jewelry <notifications@emanajewelry.com>",
-    to: adminEmail,
+    to: shopNotificationEmail(),
     subject: `New Quote Request — ${order.name}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
@@ -77,7 +81,7 @@ export async function sendOrderNotification(order: {
         </p>
 
         <p style="margin-top: 24px; font-size: 0.85rem; color: #888;">
-          <a href="https://emanajewelry.com/admin/orders" style="color: #c5a880;">View in Admin</a>
+          <a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelry.com"}/admin/orders" style="color: #c5a880;">View in Admin</a>
         </p>
       </div>
     `,
@@ -143,7 +147,7 @@ export async function sendConsultationNotification(booking: {
 
   await sendEmail({
     from: "Emana Jewelry <notifications@emanajewelry.com>",
-    to: adminEmail,
+    to: shopNotificationEmail(),
     subject: `New Appointment Request — ${booking.name}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
@@ -158,7 +162,7 @@ export async function sendConsultationNotification(booking: {
           <tr><td style="padding: 8px 0; color: #888; font-size: 0.85rem;">Notes</td><td style="padding: 8px 0;">${escapeHtml(booking.notes || "—")}</td></tr>
         </table>
         <p style="margin-top: 24px; font-size: 0.85rem; color: #888;">
-          <a href="https://emanajewelry.com/admin/consultations" style="color: #c5a880;">View in Admin</a>
+          <a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelry.com"}/admin/consultations" style="color: #c5a880;">View in Admin</a>
         </p>
       </div>
     `,

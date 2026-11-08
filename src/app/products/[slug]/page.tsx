@@ -5,50 +5,10 @@ import { absoluteUrl } from "@/lib/seo"
 import { Suspense } from "react"
 import type { Metadata } from "next"
 import { prisma } from "@/lib/db"
-import { products as staticProducts } from "@/lib/products"
 import { notFound } from "next/navigation"
 
 import Header from "@/components/Header"
 import ProductDetailClient, { type ProductFromDb } from "./product-detail-client"
-
-function getFallbackProduct(slug: string): ProductFromDb | null {
-  const p = staticProducts.find((item) => item.slug === slug)
-  if (!p) return null
-  return {
-    id: p.id,
-    youtubeUrl: p.youtubeUrl ?? null,
-    slug: p.slug,
-    name: p.name,
-    subcategory: p.subcategory || null,
-    price: p.price,
-    originalPrice: p.originalPrice || null,
-    description: p.description,
-    available: p.available,
-    sku: p.sku,
-    rating: p.rating,
-    reviewCount: p.reviewCount,
-    category: {
-      slug: p.category,
-      name: p.category.charAt(0).toUpperCase() + p.category.slice(1),
-    },
-    images: p.images.map((url, i) => ({ url, sortOrder: i })),
-    materials: p.materials.map((m) => ({
-      metal: m.metal,
-      purity: m.purity,
-      weight: m.weight || null,
-    })),
-    stones: p.stones.map((s) => ({
-      type: s.type,
-      carat: s.carat,
-      clarity: s.clarity || null,
-      color: s.color || null,
-      cut: s.cut || null,
-      certification: s.certification || null,
-    })),
-    details: p.details.map((text) => ({ text })),
-    reviews: p.reviews,
-  }
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug: rawSlug } = await params
@@ -61,11 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       include: { images: { take: 1, orderBy: { sortOrder: "asc" } }, category: true },
     })
   } catch {
-    // Database connection refused or offline, fallback to static catalog
-  }
-
-  if (!product) {
-    product = getFallbackProduct(slug)
+    return { title: "Product temporarily unavailable", robots: { index: false } }
   }
 
   if (!product) return { title: "Product Not Found", robots: { index: false } }
@@ -109,11 +65,7 @@ async function ProductContent({ slug, initialMetal }: { slug: string; initialMet
       },
     })
   } catch {
-    // Database connection refused or offline, fallback to static catalog
-  }
-
-  if (!product) {
-    product = getFallbackProduct(slug)
+    return <p role="alert" style={{ padding: "120px 24px" }}>We couldn’t load this piece. Please try again shortly.</p>
   }
 
   if (!product) notFound()

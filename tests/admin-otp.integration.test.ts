@@ -21,7 +21,16 @@ it.skipIf(process.env.RUN_MYSQL_INTEGRATION !== "1")("enforces the admin email c
   }
   try {
     let id = configure()
-    const first = await startAdminOtp(), code = mail.send.mock.calls[0][1]
+    // Deterministically emulate another request cleaning expired rows between insert and claim.
+    const insert = prisma.adminLoginChallenge.upsert.bind(prisma.adminLoginChallenge)
+    const paused = vi.spyOn(prisma.adminLoginChallenge, "upsert").mockImplementationOnce((async (args: Parameters<typeof insert>[0]) => {
+      const row = await insert(args)
+      await prisma.adminLoginChallenge.deleteMany({ where: { expiresAt: { lt: new Date(Date.now() - 86400000) } } })
+      return row
+    }) as unknown as typeof insert)
+    let first
+    try { first = await startAdminOtp() } finally { paused.mockRestore() }
+    const code = mail.send.mock.calls[0][1]
     expect(code).toMatch(/^\d{8}$/)
     expect(mail.send.mock.calls[0][0]).toBe(process.env.ADMIN_EMAIL)
     expect(await prisma.adminLoginChallenge.findUniqueOrThrow({ where: { id } })).toMatchObject({ delivered: true, attempts: 0 })

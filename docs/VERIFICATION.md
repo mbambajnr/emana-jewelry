@@ -2,7 +2,7 @@
 
 ## Automated checks
 
-Run `npm run lint`, `npm run typecheck`, `npm test`, and `npm run build`. GitHub Actions repeats those checks with PostgreSQL and applies migrations to a fresh temporary database. Tests cover request validation and stage changes, authentication boundaries through route mocks, catalog navigation, media validation, quote lists, product galleries, recent history, and selected admin forms. They do not replace a browser acceptance pass or production integration tests.
+Run `npm run lint`, `npm run typecheck`, `npm test`, and `npm run build`. GitHub Actions repeats those checks with MySQL and applies migrations to a fresh temporary database. Tests cover request validation and stage changes, authentication boundaries through route mocks, catalog navigation, media validation, quote lists, product galleries, recent history, and selected admin forms. They do not replace a browser acceptance pass or production integration tests.
 
 ## Browser acceptance pass
 

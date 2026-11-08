@@ -1,7 +1,6 @@
 import { isAdminRequest } from "@/lib/admin-request"
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
-import { collections as staticCollections } from "@/lib/products"
 
 export async function GET() {
   try {
@@ -9,23 +8,10 @@ export async function GET() {
       orderBy: { sortOrder: "asc" },
     })
 
-    if (categories && categories.length > 0) {
-      return NextResponse.json(categories)
-    }
-  } catch (error) {
-    console.warn("Database unavailable in /api/categories, serving static collections fallback:", error)
+    return NextResponse.json(categories)
+  } catch {
+    return NextResponse.json({ error: "Collections are temporarily unavailable. Please try again shortly." }, { status: 503, headers: { "Cache-Control": "no-store" } })
   }
-
-  const fallback = staticCollections.map((c, idx) => ({
-    id: c.slug,
-    name: c.name,
-    slug: c.slug,
-    description: c.description,
-    image: c.image,
-    sortOrder: idx,
-  }))
-
-  return NextResponse.json(fallback)
 }
 
 export async function POST(request: Request) {

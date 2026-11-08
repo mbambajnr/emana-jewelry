@@ -11,7 +11,6 @@ import { prisma } from "@/lib/db"
 import Header from "@/components/Header"
 import styles from "./page.module.css"
 
-import { collections as staticCollections, products as staticProducts } from "@/lib/products"
 
 interface CollectionItem {
   slug: string
@@ -30,19 +29,10 @@ async function CollectionsGrid() {
       include: { _count: { select: { products: true } } },
     })
   } catch {
-    // Database connection refused or offline, fallback to static collections
+    return <p role="alert">We couldn’t load the collections. Please try again shortly.</p>
   }
-
-  const list = collectionsData.length > 0 ? collectionsData : staticCollections.map((col) => {
-    const count = staticProducts.filter((p) => p.category === col.slug).length
-    return {
-      slug: col.slug,
-      name: col.name,
-      description: col.description,
-      image: col.image,
-      _count: { products: count },
-    }
-  })
+  const list = collectionsData
+  if (!list.length) return <p>New collections will appear here soon.</p>
 
   return (
     <div className={styles.grid}>

@@ -45,3 +45,16 @@ it('packages standalone runtime assets without environment files and refuses ove
   expect(await readFile(path.join(root, 'build/orangehost/.next/static/chunk.js'), 'utf8')).toBe('chunk')
   await expect(execute(process.execPath, [path.join(scripts, 'package.mjs')], { cwd: root })).rejects.toThrow('already contains files')
 })
+it('notification scheduler rejects missing credentials and sends only an authenticated HTTPS POST', async () => {
+  const moduleUrl = new URL('file://' + path.join(scripts, 'run-notifications.mjs')).href
+  const code = `import { runNotifications } from ${JSON.stringify(moduleUrl)};
+    let called = false;
+    try { await runNotifications({}, () => { called = true }); process.exit(2) } catch {}
+    if (called) process.exit(3);
+    await runNotifications({ NEXT_PUBLIC_SITE_URL: 'https://shop.example.invalid', NOTIFICATION_CRON_SECRET: 'fixture-secret-of-at-least-32-characters' }, async (url, options) => {
+      if (url.pathname !== '/api/jobs/notifications' || options.method !== 'POST' || options.redirect !== 'error' || !options.headers.Authorization.startsWith('Bearer ')) throw Error('invalid request');
+      return { ok: true, json: async () => ({ sent: 2, failed: 0 }) };
+    });`
+  const { stdout } = await execute(process.execPath, ['--input-type=module', '-e', code])
+  expect(stdout).toContain('"sent":2'); expect(stdout).not.toContain('fixture-secret')
+})
