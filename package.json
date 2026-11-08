@@ -10,7 +10,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "admin:credentials": "node scripts/create-admin-credentials.mjs"
+    "admin:credentials": "node scripts/create-admin-credentials.mjs",
+    "hosting:check": "node --env-file-if-exists=.env scripts/hosting/check.mjs",
+    "hosting:backup": "node --env-file-if-exists=.env scripts/hosting/backup.mjs",
+    "hosting:package": "node scripts/hosting/package.mjs"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.10.1",

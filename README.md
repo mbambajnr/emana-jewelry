@@ -124,3 +124,5 @@ Further notes: [Backend operations](docs/BACKEND-OPERATIONS.md), [Product media]
 AI coding tools assisted implementation. Changes still need human review and verification against the shop's requirements. `AGENTS.md` records the repository's Next.js guidance; `CLAUDE.md` points to the same instructions. These files are tooling context, not application dependencies.
 
 The repository began with a Create Next App commit followed by an import of the working application. Subsequent maintenance uses focused commits; the original history is retained.
+
+For the OrangeHost private directory layout, Linux runtime packaging, readiness checks, encrypted database/photo snapshots and restore drills, see [OrangeHost deployment](docs/ORANGEHOST.md). These tools prepare the release; they do not provision or verify the hosting account.
