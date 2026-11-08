@@ -85,7 +85,10 @@ export default function Footer() {
       </div>
 
       <div className={styles.bottom}>
-        <span>&copy; 2026 Emana Jewelry. All rights reserved.</span>
+        <div className={styles.credits}>
+          <span>&copy; 2026 Emana Jewelry. All rights reserved.</span>
+          <a href="https://wa.me/233539490469" target="_blank" rel="noopener noreferrer" className={`${styles.link} ${styles.developerCredit}`}>Developed By Bali-Can Limited<span className={styles.srOnly}> — contact on WhatsApp (opens in a new tab)</span></a>
+        </div>
         <div className={styles.bottomLinks}>
           <Link href="/privacy" className={styles.link}>Privacy Policy</Link>
           <Link href="/terms" className={styles.link}>Terms of Service</Link>
