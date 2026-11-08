@@ -58,7 +58,7 @@ export async function resetPassword(_prev: unknown, form: FormData): Promise<Sta
     await deleteSession()
     const recipient = process.env.ADMIN_EMAIL
     if (recipient) after(async () => { try { await sendAdminPasswordResetNotice(recipient) } catch { console.warn("Admin password reset confirmation email could not be sent.") } })
-    return { step: "done", message: "Your password has been reset. Sign in with your new password, then enter the usual email sign-in code." }
+    return { step: "done", message: "Your password has been reset. Sign in using your admin email and a fresh login code. Your new password is used for security settings." }
   } catch (error) {
     return { step: intent === "begin" || intent === "restart" ? "email" : "code", error: error instanceof RequestError ? error.message : "Password recovery is temporarily unavailable. Please try again shortly." }
   }

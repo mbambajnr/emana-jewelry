@@ -10,7 +10,7 @@ async function credentialVersion(signingKey: CryptoKey, passwordHash: string) {
 }
 export async function issueAdminToken(email: string, expiresAt: number, passwordHash = process.env.ADMIN_PASSWORD_HASH!) {
   const signingKey = await key()
-  const data = new TextEncoder().encode(JSON.stringify({ email, expiresAt, authentication: "password-email-otp-v1", credentialVersion: await credentialVersion(signingKey, passwordHash) }))
+  const data = new TextEncoder().encode(JSON.stringify({ email, expiresAt, authentication: "email-otp-v2", credentialVersion: await credentialVersion(signingKey, passwordHash) }))
   return `${encode(data)}.${encode(new Uint8Array(await crypto.subtle.sign("HMAC", signingKey, data)))}`
 }
 export async function readAdminToken(token: string, passwordHash = process.env.ADMIN_PASSWORD_HASH!) {
@@ -20,7 +20,7 @@ export async function readAdminToken(token: string, passwordHash = process.env.A
     const signingKey = await key(), data = decode(parts[0])
     if (!await crypto.subtle.verify("HMAC", signingKey, decode(parts[1]), data)) return null
     const payload = JSON.parse(new TextDecoder().decode(data))
-    if (payload.authentication !== "password-email-otp-v1" || typeof payload.expiresAt !== "number" || !Number.isFinite(payload.expiresAt) || payload.expiresAt <= Date.now() || payload.email !== process.env.ADMIN_EMAIL || payload.credentialVersion !== await credentialVersion(signingKey, passwordHash)) return null
+    if (payload.authentication !== "email-otp-v2" || typeof payload.expiresAt !== "number" || !Number.isFinite(payload.expiresAt) || payload.expiresAt <= Date.now() || payload.email !== process.env.ADMIN_EMAIL || payload.credentialVersion !== await credentialVersion(signingKey, passwordHash)) return null
     return { email: String(payload.email) }
   } catch { return null }
 }

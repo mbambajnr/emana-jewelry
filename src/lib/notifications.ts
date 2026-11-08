@@ -20,7 +20,7 @@ export async function sendAdminPasswordResetNotice(email: string) {
     from: process.env.ADMIN_OTP_FROM || "Emana Jewelry <notifications@emanajewelry.com>",
     to: email,
     subject: "Your Emana admin password has been reset",
-    text: "Your Emana Jewelry admin password was reset through email recovery. Existing admin sessions have been signed out. Sign in through the usual admin page with your new password and the email sign-in code. If you did not make this change, contact your site administrator immediately. Your password is never sent by email.",
+    text: "Your Emana Jewelry admin password was reset through email recovery. Existing admin sessions have been signed out. Sign in through the usual admin page with your admin email and a fresh sign-in code. If you did not make this change, contact your site administrator immediately. Your password is never sent by email.",
   })
 }
 

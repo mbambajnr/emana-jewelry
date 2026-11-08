@@ -47,7 +47,7 @@ export default function EmailSettingsForm({ setup = false }: { setup?: boolean }
     <p>Connect Gmail to send sign-in codes and shop notifications.</p>
     {setup && <p>Connect Gmail, send a test email, then sign in to receive your login code.</p>}
     {error && <p role="alert" className={styles.error}>{error}</p>}
-    {message && <div role="status" className={styles.notice}><h2 className={layout.heading}>Email settings saved</h2><p>Gmail accepted the test email. Check your admin inbox or spam folder. This test email does not contain a login code.</p>{setup && <><p>You can now sign in with your admin password and request a login code.</p><Link className={layout.continue} href="/admin/login">Continue to sign in →</Link></>}</div>}
+    {message && <div role="status" className={styles.notice}><h2 className={layout.heading}>Email settings saved</h2><p>Gmail accepted the test email. Check your admin inbox or spam folder. This test email does not contain a login code.</p>{setup && <><p>You can now enter your admin email and request a login code.</p><Link className={layout.continue} href="/admin/login">Continue to sign in →</Link></>}</div>}
     {loading ? <p role="status">Loading email settings…</p> : !complete && <form onSubmit={submit} className={styles.form}>
       <fieldset disabled={busy} className={layout.controls}>
         <section className={layout.step} aria-labelledby="mail-connect">
@@ -60,7 +60,7 @@ export default function EmailSettingsForm({ setup = false }: { setup?: boolean }
         </section>
         <section className={layout.step} aria-labelledby="mail-confirm"><h2 id="mail-confirm" className={layout.heading}>2. Confirm it’s you</h2>
           {setup && <div className={layout.field}><label htmlFor="mail-setup-key">One-time setup key</label><input id="mail-setup-key" type="password" autoComplete="off" aria-describedby="mail-key-help" value={setupKey} required maxLength={43} onChange={event => setSetupKey(event.target.value.trim())} /><p id="mail-key-help">Paste the key provided by the site administrator. It expires after 30 minutes and can be used once. It is not an emailed login code.</p></div>}
-          <div className={layout.field}><label htmlFor="mail-current-password">Current admin password</label><input id="mail-current-password" type="password" autoComplete="current-password" aria-describedby="mail-admin-help" value={currentPassword} required maxLength={1024} onChange={event => setCurrentPassword(event.target.value)} /><p id="mail-admin-help">Use the password you normally enter on the Emana admin sign-in page.</p></div>
+          <div className={layout.field}><label htmlFor="mail-current-password">Current admin password</label><input id="mail-current-password" type="password" autoComplete="current-password" aria-describedby="mail-admin-help" value={currentPassword} required maxLength={1024} onChange={event => setCurrentPassword(event.target.value)} /><p id="mail-admin-help">Use your admin security password. This is still required to change sensitive settings, even though daily sign-in uses an email code.</p></div>
         </section>
         <section className={layout.step} aria-labelledby="mail-test"><h2 id="mail-test" className={layout.heading}>3. Test and save</h2><p>We’ll send a test to your configured admin mailbox. Settings are saved only after Gmail accepts it.</p><button disabled={busy}>{busy ? "Sending test email…" : "Send test email & save"}</button><p>Your app password is stored encrypted and will not be shown again.</p></section>
       </fieldset>

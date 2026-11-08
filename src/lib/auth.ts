@@ -8,8 +8,8 @@ import { issueAdminToken, readAdminToken } from "./session-token"
 
 const SESSION_NAME = "admin_session"
 
-export async function createSession(email: string, verifiedPasswordHash?: string): Promise<void> {
-  const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000
+export async function createSession(email: string, verifiedPasswordHash?: string, remember = false): Promise<void> {
+  const expiresAt = Date.now() + (remember ? 7 * 24 : 12) * 60 * 60 * 1000
   const token = await issueAdminToken(email, expiresAt, verifiedPasswordHash || await readAdminPasswordHash())
   const cookieStore = await cookies()
   cookieStore.set(SESSION_NAME, token, {

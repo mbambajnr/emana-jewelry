@@ -55,7 +55,7 @@ export async function startAdminOtp(purpose: OtpPurpose = "login", pendingPasswo
 }
 async function pending(token: string | undefined, purpose: OtpPurpose) {
   const config = await settings(purpose)
-  if (!token || !/^[a-f0-9]{64}$/.test(token)) throw new OtpError("Please enter your email and password again.", true)
+  if (!token || !/^[a-f0-9]{64}$/.test(token)) throw new OtpError("Please enter your admin email again.", true)
   const row = await prisma.adminLoginChallenge.findUnique({ where: { id: config.id } })
   if (!row || row.tokenHash !== digest(token) || row.credentialVersion !== config.version || row.consumedAt || row.expiresAt.getTime() <= Date.now() || row.attempts >= 5 || !row.delivered) throw new OtpError("This sign-in code has expired or is no longer valid. Please sign in again.", true)
   return { row, config, token }

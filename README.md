@@ -70,11 +70,11 @@ npm run admin:credentials
 
 Keep the password in a password manager and copy the printed `ADMIN_PASSWORD_HASH` into `.env`. The command generates values only; it does not edit `.env` or change an existing account. Restart the app after changing configuration.
 
-Admin sign-in also requires an eight-digit email code. Configure [Gmail SMTP](docs/EMAIL-SMTP.md) with a Google app password, or explicitly select Resend with a verified sender. Codes go only to `ADMIN_EMAIL`, expire after 10 minutes, and cannot be bypassed when delivery fails. See [admin email verification](docs/ADMIN-EMAIL-OTP.md) for setup and recovery.
+Admin sign-in uses the admin email and an eight-digit email code, without a password in the daily login flow. Sessions last 12 hours, or seven days when the trusted-device option is selected. Configure [Gmail SMTP](docs/EMAIL-SMTP.md) with a Google app password, or explicitly select Resend with a verified sender. Codes go only to `ADMIN_EMAIL`, expire after 10 minutes, and cannot be bypassed when delivery fails. See [admin email verification](docs/ADMIN-EMAIL-OTP.md) for setup and recovery.
 
 After signing in, use **Settings → Security & Password** to change your password with your current password and an email confirmation code. The active hash is saved in MySQL and survives app restarts. Keep `ADMIN_PASSWORD_HASH` unchanged during ordinary deployments; changing it is an explicit operator recovery/reset operation. Successful password changes sign out existing sessions.
 
-If you forget the current password, use **Forgot password?** on the admin sign-in page. Email recovery requires the configured mailbox's reset code and does not bypass the normal email code at the next login.
+If you forget the current password, use **Manage admin password** on the admin sign-in page. Email recovery requires the configured mailbox's reset code and does not bypass the normal email code at the next login.
 
 Gmail SMTP settings can be saved and tested under **Settings → Email Settings**, with app passwords encrypted in MySQL. Initial setup without working email uses an operator-issued, expiring setup key plus the current admin password at `/admin/email-setup`; it does not grant an admin session. See [SMTP setup](docs/EMAIL-SMTP.md).
 
