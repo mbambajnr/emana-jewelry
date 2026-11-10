@@ -1,3 +1,4 @@
+import { adminCodeEmail } from "./admin-code-email"
 import { sendEmail } from "./mail-transport"
 import type { CartItem } from "./cart"
 
@@ -9,14 +10,11 @@ function shopNotificationEmail() {
 }
 
 export async function sendAdminLoginCode(email: string, code: string, expiresAt: Date, purpose: "login" | "password-change" | "password-reset" = "login") {
-  const action = purpose === "login" ? "sign-in" : purpose === "password-change" ? "password change" : "password reset"
-  const page = purpose === "login" ? "admin sign-in" : purpose === "password-change" ? "admin Security settings" : "Forgot password"
   await sendEmail({
     from: process.env.ADMIN_OTP_FROM || "Emana Jewelry <notifications@emanajewelry.com>",
     to: email,
     replyTo: shopNotificationEmail(),
-    subject: `Your Emana admin ${action} code`,
-    text: `Your Emana Jewelry admin ${action} code is ${code}. It expires at ${expiresAt.toISOString()}. Use it only on the ${page} page. Never share this code. If you did not request it, contact your site administrator.`,
+    ...adminCodeEmail(code, expiresAt, purpose),
   })
 }
 
