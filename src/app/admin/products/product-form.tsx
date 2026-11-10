@@ -353,9 +353,9 @@ export default function ProductForm({
       {/* Images */}
       <fieldset className={styles.fieldset}>
         <legend className={styles.legend}>Product photos</legend>
-        <p className={styles.hint}>The first photo is your cover image. Drag photos to reorder them, or use the arrow buttons. Add a front view, a close-up, and a photo showing the piece being worn. Label each photo Gold, Silver, or General so the gallery can follow the client’s choice.</p>
+        <p className={styles.hint}>The first photo is your cover image. Drag photos to reorder them, or use the arrow buttons. Add a front view, a close-up, and a photo showing the piece being worn. Label each photo Gold, Silver, or General / reference. Matching photos appear first. General photos can appear for either choice and are labelled as references. Only offer metals the shop can supply; a missing photo does not remove a metal option.</p>
 
-        {metalOptions.filter(option => !images.some((url, index) => url.trim() && imageMetals[index] === option)).map(option => <p key={option} className={styles.hint}>{option} photo not assigned yet. Upload a photo of that version and choose {option} under Photo version.</p>)}
+        {metalOptions.filter(option => !images.some((url, index) => url.trim() && imageMetals[index] === option)).map(option => <p key={option} className={styles.hint}>{option} photo not assigned yet. If you have a photo of that version, label it {option}. Otherwise, a General / reference photo will be used with a notice. Without either, clients will see a photo request message.</p>)}
 
         <div className={styles.uploadRow}>
           <input
@@ -403,7 +403,7 @@ export default function ProductForm({
             <label className={styles.hint}>
               Photo version
               <select className={styles.input} aria-label={`Photo ${i + 1} metal`} value={imageMetals[i] || ""} onChange={event => setImageMetals(images.map((_, index) => index === i ? event.target.value : imageMetals[index] || ""))}>
-                <option value="">General photo</option><option value="Gold">Gold</option><option value="Silver">Silver</option>
+                <option value="">General / reference (both choices)</option><option value="Gold">Gold</option><option value="Silver">Silver</option>
               </select>
             </label>
             <button type="button" className={styles.mediaOrder} aria-label={`Move photo ${i + 1} earlier`} disabled={i === 0 || uploading} onClick={() => moveImage(i, i - 1)}>↑</button>

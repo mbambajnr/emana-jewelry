@@ -50,4 +50,27 @@ describe("Product gallery", () => {
     expect(screen.getByRole("img", { name: "Silver view" })).toBeInTheDocument()
   })
 
+  it("keeps a default photo for either metal and clearly labels it as a reference", () => {
+    const general = [{ url: "/default.jpg", alt: "Default view", sortOrder: 0 }]
+    const { rerender } = render(<ProductGallery name="Pendant" metal="Gold" images={general} />)
+    expect(screen.getByRole("img", { name: "Default view" })).toHaveAttribute("src", expect.stringContaining("default.jpg"))
+    expect(screen.getByRole("status")).toHaveTextContent("Your enquiry will still include Gold")
+    rerender(<ProductGallery name="Pendant" metal="Silver" images={general} />)
+    expect(screen.getByRole("img", { name: "Default view" })).toBeInTheDocument()
+    expect(screen.getByRole("status")).toHaveTextContent("Your enquiry will still include Silver")
+  })
+  it("identifies general photos even when a matching version is also available", () => {
+    render(<ProductGallery name="Pendant" metal="Gold" images={[{ url: "/gold.jpg", metal: "Gold", sortOrder: 0 }, { url: "/default.jpg", sortOrder: 1 }]} />)
+    expect(screen.queryByRole("status")).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Next photo" }))
+    expect(screen.getByRole("status")).toHaveTextContent("General reference photo. Your selected option is Gold.")
+  })
+  it("does not replace a failed product photo with an unrelated image or invite zooming", () => {
+    render(<ProductGallery name="Pendant" metal="Gold" images={[{ url: "/broken.jpg", alt: "Broken view", metal: "Gold", sortOrder: 0 }]} />)
+    fireEvent.error(screen.getByRole("img", { name: "Broken view" }))
+    expect(screen.getByRole("button", { name: "Enlarge photo 1 of Pendant" })).toBeDisabled()
+    expect(screen.getAllByText("Photo unavailable").length).toBeGreaterThan(0)
+    expect(screen.queryByText(/Tap the photo for a closer look/)).not.toBeInTheDocument()
+  })
+
 })
