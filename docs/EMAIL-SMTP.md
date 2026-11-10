@@ -50,3 +50,11 @@ Business emails continue through the existing durable notification jobs. SMTP re
 Resend remains an explicit alternative: use `EMAIL_PROVIDER=resend` and configure `RESEND_API_KEY` plus a verified sender domain. `ADMIN_OTP_FROM` applies to those Resend admin messages; SMTP uses its own From setting.
 
 Sources: [Google app passwords](https://support.google.com/accounts/answer/185833), [Nodemailer SMTP transport](https://nodemailer.com/smtp).
+
+## Official shop mailbox
+
+The public business address and intended admin/notification inbox are `emanajewelries@gmail.com`; the production origin is `https://emanajewelries.com`. Public content uses the CMS business email; the notification destination is `SHOP_NOTIFICATION_EMAIL`, and login/recovery codes use `ADMIN_EMAIL`.
+
+Changing a recipient does not authenticate a different Gmail sender. To send as the official account, enter `emanajewelries@gmail.com` and a Google App Password created by that account in Admin → Email Settings. Do not reuse the old account's App Password or set only the From header. The existing working SMTP sender may be retained during this transition; reply addresses and notification recipients can already use the official inbox. No email is sent by this documentation update.
+
+Admin credentials and encrypted SMTP records are keyed by the configured admin email. Preserve/migrate the active password and re-encrypt saved SMTP credentials with the new owner-bound encryption context before changing an existing identity. Simply editing ADMIN_EMAIL without that migration selects a different identity. The local identity migration has been completed; it does not configure the separate OrangeHost environment. Keep passwords and SMTP secrets out of Git and chat.

@@ -14,6 +14,7 @@ export async function sendAdminLoginCode(email: string, code: string, expiresAt:
   await sendEmail({
     from: process.env.ADMIN_OTP_FROM || "Emana Jewelry <notifications@emanajewelry.com>",
     to: email,
+    replyTo: shopNotificationEmail(),
     subject: `Your Emana admin ${action} code`,
     text: `Your Emana Jewelry admin ${action} code is ${code}. It expires at ${expiresAt.toISOString()}. Use it only on the ${page} page. Never share this code. If you did not request it, contact your site administrator.`,
   })
@@ -23,6 +24,7 @@ export async function sendAdminPasswordResetNotice(email: string) {
   await sendEmail({
     from: process.env.ADMIN_OTP_FROM || "Emana Jewelry <notifications@emanajewelry.com>",
     to: email,
+    replyTo: shopNotificationEmail(),
     subject: "Your Emana admin password has been reset",
     text: "Your Emana Jewelry admin password was reset through email recovery. Existing admin sessions have been signed out. Sign in through the usual admin page with your admin email and a fresh sign-in code. If you did not make this change, contact your site administrator immediately. Your password is never sent by email.",
   })
@@ -48,6 +50,7 @@ export async function sendOrderNotification(order: {
   await sendEmail({
     from: "Emana Jewelry <notifications@emanajewelry.com>",
     to: shopNotificationEmail(),
+    replyTo: order.email,
     subject: `New Quote Request — ${order.name}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
@@ -103,6 +106,7 @@ export async function sendOrderConfirmation(order: {
   await sendEmail({
     from: "Emana Jewelry <notifications@emanajewelry.com>",
     to: order.email,
+    replyTo: shopNotificationEmail(),
     subject: "Quote Request Received — Emana Jewelry",
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
@@ -148,6 +152,7 @@ export async function sendConsultationNotification(booking: {
   await sendEmail({
     from: "Emana Jewelry <notifications@emanajewelry.com>",
     to: shopNotificationEmail(),
+    replyTo: booking.email,
     subject: `New Appointment Request — ${booking.name}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">

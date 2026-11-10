@@ -5,7 +5,7 @@ import { Resend } from "resend"
 import { smtpSettings } from "./mail-config"
 import { activeEmailConfig } from "./email-settings"
 
-type Message = { from: string; to: string; subject: string } & ({ text: string; html?: string } | { html: string; text?: string })
+type Message = { from: string; to: string; subject: string; replyTo?: string } & ({ text: string; html?: string } | { html: string; text?: string })
 export async function sendEmail(payload: Message, idempotencyKey?: string) {
   const active = await activeEmailConfig()
   if (active.provider === "resend") {

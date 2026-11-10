@@ -5,7 +5,7 @@ import { offerMessage } from "./website-offer"
 
 export const CONCIERGE_PHONE = "233242186590"
 export const CONCIERGE_DISPLAY_PHONE = "+233 24 218 6590"
-export const CONCIERGE_EMAIL = "emanagold6590@gmail.com"
+export const CONCIERGE_EMAIL = "emanajewelries@gmail.com"
 export const CONCIERGE_HOURS = "Monday – Saturday: 9:00 AM – 6:00 PM GMT"
 
 export interface ConciergeItem {
