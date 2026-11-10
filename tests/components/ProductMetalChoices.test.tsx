@@ -32,7 +32,7 @@ describe("product metal choices", () => {
     expect(screen.getByRole("alert")).toHaveTextContent("Choose a metal")
     expect(getCart()).toEqual([])
     await user.click(screen.getByRole("radio", { name: "Silver" }))
-    expect(screen.getByRole("status")).toHaveTextContent("confirm the Silver option")
+    expect(screen.getByRole("status")).toHaveTextContent("Your enquiry will still include Silver")
     await user.selectOptions(screen.getByRole("combobox", { name: "Quantity" }), "2")
     await user.click(screen.getByRole("button", { name: "Get Price on WhatsApp" }))
     const message = new URL(String(open.mock.calls[0][0])).searchParams.get("text")

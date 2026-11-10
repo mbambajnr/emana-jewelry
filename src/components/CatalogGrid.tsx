@@ -1,3 +1,5 @@
+import { publishedContent } from "@/lib/content-store"
+import { businessInformation } from "@/lib/business-information"
 import { METAL_OPTIONS, photosForMetal } from "@/lib/product-options"
 import { catalogWhere } from "@/lib/catalog-search"
 import { redirect } from "next/navigation"
@@ -10,6 +12,7 @@ import { WhatsappButton } from "./WhatsappButton"
 import styles from "@/app/catalog/catalog.module.css"
 
 export default async function CatalogGrid({ searchParams = Promise.resolve({}) }: { searchParams?: Promise<CatalogSearchParams> } = {}) {
+  const business = businessInformation((await publishedContent()).copy)
   const { category, page, q, metal, sort } = catalogQuery(await searchParams)
   const where = catalogWhere(category, q, metal)
   let collections, total
@@ -31,7 +34,7 @@ export default async function CatalogGrid({ searchParams = Promise.resolve({}) }
       select: { id: true, slug: true, name: true, subcategory: true, images: { orderBy: { sortOrder: "asc" }, select: { url: true, alt: true, metal: true, sortOrder: true } } },
     })
   } catch {
-    return <p data-catalog-grid-ready role="alert">We couldn’t load the catalog. Please refresh or <a href="https://wa.me/233242186590" target="_blank" rel="noreferrer">speak with us on WhatsApp</a>.</p>
+    return <p data-catalog-grid-ready role="alert">We couldn’t load the catalog. Please refresh or <a href={business.whatsapp} target="_blank" rel="noreferrer">speak with us on WhatsApp</a>.</p>
   }
   return <section data-catalog-grid-ready>
     <form action="/catalog" method="get" className={styles.searchForm} key={`${category}:${q}:${metal}:${sort}`}>
@@ -70,7 +73,7 @@ export default async function CatalogGrid({ searchParams = Promise.resolve({}) }
         </div>
         <div className={styles.body}><h2><Link href={href}>{product.name}</Link></h2><WhatsappButton metal={metal} productName={product.name} productUrl={href} className={styles.inquiry} label="Enquire on WhatsApp" iconSize={16} /></div>
       </article>
-    })}</div> : <p>{q || metal ? "No matching pieces. Try another word, clear the search, or choose a different category." : category ? "No pieces in this category yet. Choose another category or view all jewelry." : "New pieces will appear here soon."} <a href="https://wa.me/233242186590" target="_blank" rel="noreferrer">Ask us what’s available.</a></p>}
+    })}</div> : <p>{q || metal ? "No matching pieces. Try another word, clear the search, or choose a different category." : category ? "No pieces in this category yet. Choose another category or view all jewelry." : "New pieces will appear here soon."} <a href={business.whatsapp} target="_blank" rel="noreferrer">Ask us what’s available.</a></p>}
     <nav className={styles.pagination} aria-label="Catalog pages">
       {page > 1 ? <Link href={catalogHref(category, page - 1, q, metal, sort)} rel="prev">← Previous</Link> : <span aria-disabled="true">← Previous</span>}
       <div className={styles.pageNumbers}>{visiblePageNumbers(page, pages).map((number, index) => number === "gap" ? <span key={`gap-${index}`} aria-hidden="true">…</span> : <Link key={number} href={catalogHref(category, number, q, metal, sort)} aria-label={`Page ${number}`} aria-current={page === number ? "page" : undefined}>{number}</Link>)}</div>

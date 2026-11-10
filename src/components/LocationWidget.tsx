@@ -2,13 +2,15 @@
 
 import { useSiteContent } from "@/components/cms/SiteContentProvider";
 
+import { businessInformation, displayOpeningHours } from "@/lib/business-information"
 import React, { useState } from "react"
 import styles from "./LocationWidget.module.css"
 
 export default function LocationWidget() {
   const { copy } = useSiteContent();
   const [copied, setCopied] = useState(false)
-  const addressText = "Emana Jewelry, Justmoh Ave, Takoradi, Ghana"
+  const business = businessInformation(copy)
+  const addressText = `Emana Jewelry, ${business.address}`
   const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressText)}`
   const mapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(addressText)}`
   const embedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(addressText)}&t=&z=15&ie=UTF8&iwloc=&output=embed`
@@ -50,8 +52,8 @@ export default function LocationWidget() {
               </div>
               <div>
                 <h3 className={styles.venueName}>Emana Jewelry</h3>
-                <p className={styles.venueAddress}>Justmoh Ave, Takoradi</p>
-                <p className={styles.venueRegion}>Western Region, Ghana</p>
+                <p className={styles.venueAddress}>{business.street}, {business.city}</p>
+                <p className={styles.venueRegion}>{business.region}, Ghana</p>
               </div>
             </div>
 
@@ -66,15 +68,15 @@ export default function LocationWidget() {
               <ul className={styles.hoursList}>
                 <li>
                   <span>Monday – Friday</span>
-                  <strong>9:00 AM – 6:00 PM</strong>
+                  <strong>{displayOpeningHours(business.weekdays)}</strong>
                 </li>
                 <li>
                   <span>Saturday</span>
-                  <strong>9:00 AM – 6:00 PM</strong>
+                  <strong>{displayOpeningHours(business.saturday)}</strong>
                 </li>
                 <li>
                   <span>Sunday</span>
-                  <em>By VIP Appointment</em>
+                  <em>{business.sundayNote}</em>
                 </li>
               </ul>
             </div>
@@ -121,7 +123,7 @@ export default function LocationWidget() {
               <p>
                 <strong>Visiting from outside Takoradi?</strong> Private consultations or airport transport coordination can be arranged directly via our{" "}
                 <a
-                  href={`https://wa.me/233242186590?text=${encodeURIComponent("Hi Emana Jewelry, I am planning a visit to your Takoradi shop on Justmoh Ave and would like assistance.")}`}
+                  href={`${business.whatsapp}?text=${encodeURIComponent(`Hello Emana, I am planning a visit to your shop at ${business.address}. Please help me arrange a suitable time.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.waLink}
@@ -147,7 +149,7 @@ export default function LocationWidget() {
             <div className={styles.mapFooter}>
               <div className={styles.mapLabel}>
                 <span className={styles.pinIcon}>📍</span>
-                <span>Emana Jewelry &bull; Justmoh Ave, Takoradi, Ghana</span>
+                <span>Emana Jewelry &bull; {business.address}</span>
               </div>
               <a
                 href={mapsSearchUrl}

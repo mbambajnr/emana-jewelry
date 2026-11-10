@@ -1,3 +1,5 @@
+import { publishedContent } from "@/lib/content-store"
+import { businessInformation } from "@/lib/business-information"
 import { pageMetadata } from "@/lib/seo"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
@@ -5,7 +7,8 @@ import styles from "./page.module.css"
 
 export const metadata = pageMetadata("Ethical Sourcing Policy", "Emana Jewelry's commitment to ethical sourcing — responsible gemstone procurement, conflict-free materials, and sustainable practices.", "/ethical-sourcing")
 
-export default function EthicalSourcingPage() {
+export default async function EthicalSourcingPage() {
+  const business = businessInformation((await publishedContent()).copy)
   return (
     <div className={styles.page}>
       <Header />
@@ -78,8 +81,8 @@ export default function EthicalSourcingPage() {
             <h2 className={styles.h2}>8. Reporting Concerns</h2>
             <p>If you have concerns about our sourcing practices or suspect a violation of this policy, please contact us:</p>
             <ul className={styles.list}>
-              <li>Email: <a href="mailto:emanagold6590@gmail.com" className={styles.link}>emanagold6590@gmail.com</a></li>
-              <li>WhatsApp: <a href="https://wa.me/233242186590" className={styles.link}>+233 24 218 6590</a></li>
+              <li>Email: <a href={`mailto:${business.email}`} className={styles.link}>{business.email}</a></li>
+              <li>WhatsApp: <a href={business.whatsapp} className={styles.link}>{business.phone}</a></li>
             </ul>
             <p>All reports will be investigated promptly and confidentially.</p>
           </section>

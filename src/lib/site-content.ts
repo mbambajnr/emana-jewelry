@@ -1,5 +1,7 @@
+import { validOpeningHours } from "./business-information"
 import fields from "./content-fields.json"
-import faqs from "./default-faqs.json"
+import legacyFaqs from "./legacy-faqs.json"
+import defaultFaqs from "./default-faqs.json"
 import { normalizeYoutubeUrl } from "./product-media"
 
 export const contentFields = fields
@@ -23,7 +25,7 @@ export interface SiteDocument {
 const service = (id: string, title: string, description: string, duration: number, legacyValue: string, kind: ServiceContent["kind"], showOnHomepage = false): ServiceContent => ({ id, title, description, duration, legacyValue, kind, showOnHomepage, enabled: true, bookable: true })
 export const defaultContent: SiteDocument = {
   copy: Object.fromEntries(fields.map(field => [field.key, field.default])),
-  faqs,
+  faqs: defaultFaqs,
   services: [
     service("custom-design", "Talk About Your Custom Design", "Bring us your picture or idea and we’ll discuss the design, materials, and budget.", 30, "Bespoke Design Walkthrough (30 Mins)", "custom"),
     service("gemstone-advice", "Help Choosing Gemstones", "Talk with us about the available stones and options for your piece.", 45, "Gemstone Sourcing Consultation (45 Mins)", "advice"),
@@ -49,6 +51,9 @@ export function validateContent(value: unknown, publish = false): SiteDocument {
   const copy: Record<string, string> = {}
   for (const field of fields) {
     const content = text(value.copy[field.key] ?? field.default, field.label, field.type === "image" ? 1500 : field.type === "short" ? 300 : 5000, !["youtube", "percent"].includes(field.type))
+    if (field.key === "business.phone" && !/^\+[1-9]\d{7,14}$/.test(content)) throw new Error("Use an international shop phone number such as +233242186590.")
+    if (field.key === "business.email" && !/^[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+$/.test(content)) throw new Error("Enter a valid public shop email.")
+    if (["business.weekdays", "business.saturday"].includes(field.key) && !validOpeningHours(content)) throw new Error("Enter opening hours as HH:MM-HH:MM, with closing after opening, or Closed.")
     if (field.type === "percent" && content && !/^(?:[1-9]|[1-9][0-9]|100)$/.test(content)) throw new Error("Please enter a whole discount percentage from 1 to 100, or leave it blank.")
     if (field.type === "youtube") {
       copy[field.key] = normalizeYoutubeUrl(content) || ""
@@ -76,7 +81,9 @@ export function validateContent(value: unknown, publish = false): SiteDocument {
   })
   const faqs = value.faqs.map(item => {
     if (!record(item)) throw new Error("Please check the FAQs.")
-    return { q: text(item.q, "the question", 300, publish), a: text(item.a, "the answer", 4000, publish) }
+    const q = text(item.q, "the question", 300, publish), answer = text(item.a, "the answer", 4000, publish)
+    const legacy = legacyFaqs.find(faq => faq.q === q && faq.a === answer)
+    return { q, a: legacy ? defaultFaqs.find(faq => faq.q === q)?.a || answer : answer }
   })
   return { copy, services, faqs }
 }

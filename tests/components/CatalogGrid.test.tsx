@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react"
 const mocks = vi.hoisted(() => ({ products: vi.fn(), count: vi.fn(), categories: vi.fn() }))
 vi.mock("@/lib/db", () => ({ prisma: { product: { findMany: mocks.products, count: mocks.count }, category: { findMany: mocks.categories } } }))
 vi.mock("next/navigation", () => ({ redirect: (url: string) => { throw new Error(`Redirect: ${url}`) } }))
+vi.mock("@/lib/content-store", async () => { const { defaultContent } = await import("@/lib/site-content"); return { publishedContent: async () => defaultContent } })
 import CatalogGrid from "@/components/CatalogGrid"
 
 beforeEach(() => {

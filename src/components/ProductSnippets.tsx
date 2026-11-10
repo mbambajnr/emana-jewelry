@@ -1,5 +1,7 @@
 "use client"
 
+import { businessInformation } from "@/lib/business-information"
+
 import { useSiteContent } from "@/components/cms/SiteContentProvider";
 
 import ProductCardImage from "./ProductCardImage"
@@ -75,7 +77,7 @@ export default function ProductSnippets({ products }: { products: FeaturedProduc
     const origin = typeof window !== "undefined" ? window.location.origin : ""
     const url = `${origin}/products/${encodeURIComponent(p.slug)}`
     const message = buildProductInquiryConciergeMessage(p.name, url)
-    const href = getWhatsAppConciergeUrl(message)
+    const href = getWhatsAppConciergeUrl(message, businessInformation(copy).phone)
     window.open(href, "_blank", "noopener,noreferrer")
     trackConciergeClick("/#featured-creations", "snippet_whatsapp_click", p.name)
   }
@@ -129,7 +131,7 @@ export default function ProductSnippets({ products }: { products: FeaturedProduc
           <p className={styles.emptyDesc}>{copy["featured.005"]}</p>
           <div className={styles.emptyActions}>
             <a
-              href="https://wa.me/233242186590?text=Hi%20Emana%20Jewelry,%20I'd%20like%20to%20inquire%20about%20upcoming%20creations%20and%20bespoke%20pieces."
+              href={`${businessInformation(copy).whatsapp}?text=${encodeURIComponent("Hello Emana, I would like to ask about your jewelry and custom designs.")}`}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.emptyWaBtn}

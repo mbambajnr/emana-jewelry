@@ -117,8 +117,8 @@ export function buildServiceConciergeMessage(
 /**
  * Returns the full WhatsApp Click-to-Chat deep link for the Emana Concierge.
  */
-export function getWhatsAppConciergeUrl(message: string): string {
-  return `https://wa.me/${CONCIERGE_PHONE}?text=${encodeURIComponent(message)}`
+export function getWhatsAppConciergeUrl(message: string, phone = CONCIERGE_PHONE): string {
+  return `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`
 }
 
 /**

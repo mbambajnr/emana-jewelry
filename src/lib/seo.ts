@@ -1,3 +1,4 @@
+import { businessInformation } from "./business-information"
 import type { Metadata } from "next"
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelry.com").replace(/\/+$/, "")
@@ -13,21 +14,16 @@ export function pageMetadata(title: string, description: string, path: string): 
   }
 }
 
-export const businessSchema = {
-  "@context": "https://schema.org",
-  "@type": "JewelryStore",
-  "@id": `${SITE_URL}/#business`,
-  name: "Emana Jewelry",
-  url: SITE_URL,
-  image: absoluteUrl("/og-image.jpg"),
-  logo: absoluteUrl("/logo.png"),
-  description: "Jewelry in a range of materials and styles, custom designs, cleaning and repairs in Takoradi, Ghana.",
-  telephone: "+233242186590",
-  email: "emanagold6590@gmail.com",
-  address: { "@type": "PostalAddress", streetAddress: "Justmoh Ave", addressLocality: "Takoradi", addressRegion: "Western Region", addressCountry: "GH" },
-  openingHoursSpecification: [
-    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "18:00" },
-    { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "09:00", closes: "18:00" },
-  ],
-  hasOfferCatalog: { "@type": "OfferCatalog", name: "Jewelry and Services", itemListElement: ["Custom Jewelry Design", "Jewelry Cleaning and Polishing", "Ring Resizing and Repairs", "Gemstone Sourcing"].map(name => ({ "@type": "Offer", itemOffered: { "@type": "Service", name } })) },
+export function createBusinessSchema(copy: Record<string, string>) {
+  const business = businessInformation(copy)
+  const hours = (days: string[], value: string) => value === "Closed" ? [] : [{ "@type": "OpeningHoursSpecification", dayOfWeek: days, opens: value.split("-")[0], closes: value.split("-")[1] }]
+  return {
+    "@context": "https://schema.org", "@type": "JewelryStore", "@id": `${SITE_URL}/#business`,
+    name: "Emana Jewelry", url: SITE_URL, image: absoluteUrl("/og-image.jpg"), logo: absoluteUrl("/logo.png"),
+    description: `Jewelry, custom designs, cleaning and repairs in ${business.city}, Ghana.`,
+    telephone: business.phone, email: business.email, hasMap: business.map,
+    address: { "@type": "PostalAddress", streetAddress: business.street, addressLocality: business.city, addressRegion: business.region, addressCountry: "GH" },
+    openingHoursSpecification: [...hours(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], business.weekdays), ...hours(["Saturday"], business.saturday)],
+  }
 }
+export const businessSchema = createBusinessSchema({})

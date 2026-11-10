@@ -27,7 +27,7 @@ describe("LocationWidget Component", () => {
     const iframe = screen.getByTitle("Emana Jewelry Takoradi Location Map") as HTMLIFrameElement
     expect(iframe).toBeInTheDocument()
     expect(iframe.src).toContain("maps.google.com/maps")
-    expect(iframe.src).toContain(encodeURIComponent("Emana Jewelry, Justmoh Ave, Takoradi, Ghana"))
+    expect(iframe.src).toContain(encodeURIComponent("Emana Jewelry, Justmoh Ave, Takoradi, Western Region, Ghana"))
   })
 
   it("provides Get Directions link pointing to Google Maps directions", () => {
@@ -36,7 +36,7 @@ describe("LocationWidget Component", () => {
     const directionsLink = screen.getByRole("link", { name: /Get Directions/i })
     expect(directionsLink).toBeInTheDocument()
     expect(directionsLink.getAttribute("href")).toContain("google.com/maps/dir")
-    expect(directionsLink.getAttribute("href")).toContain(encodeURIComponent("Emana Jewelry, Justmoh Ave, Takoradi, Ghana"))
+    expect(directionsLink.getAttribute("href")).toContain(encodeURIComponent("Emana Jewelry, Justmoh Ave, Takoradi, Western Region, Ghana"))
   })
 
   it("copies address to clipboard when Copy Address button is clicked", async () => {
@@ -46,7 +46,7 @@ describe("LocationWidget Component", () => {
     fireEvent.click(copyBtn)
 
     await waitFor(() => {
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith("Emana Jewelry, Justmoh Ave, Takoradi, Ghana")
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith("Emana Jewelry, Justmoh Ave, Takoradi, Western Region, Ghana")
       expect(screen.getByText(/Copied!/i)).toBeInTheDocument()
     })
   })

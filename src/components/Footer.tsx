@@ -2,6 +2,7 @@
 
 import { useSiteContent } from "@/components/cms/SiteContentProvider";
 
+import { businessInformation, displayOpeningHours } from "@/lib/business-information";
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +11,7 @@ import styles from "./Footer.module.css";
 
 export default function Footer() {
   const { copy } = useSiteContent();
+  const business = businessInformation(copy);
   return (
     <footer className={styles.footer}>
       <div className={styles.grid}>
@@ -47,7 +49,7 @@ export default function Footer() {
             <li><Link href="/services" className={styles.link}>All Jewelry Services</Link></li>
             <li><Link href="/#consultation" className={styles.link}>Private Consultation</Link></li>
             <li><Link href="/#atelier-location" className={styles.link}>Takoradi Store &amp; Map</Link></li>
-            <li><a href="https://wa.me/233242186590" target="_blank" rel="noopener noreferrer" className={styles.link}>Chat With Us on WhatsApp</a></li>
+            <li><a href={business.whatsapp} target="_blank" rel="noopener noreferrer" className={styles.link}>Chat With Us on WhatsApp</a></li>
           </ul>
         </div>
 
@@ -56,29 +58,30 @@ export default function Footer() {
           <ul className={styles.list}>
             <li>
               <a
-                href="https://www.google.com/maps/search/?api=1&query=Emana+Jewelry,+Justmoh+Ave,+Takoradi,+Ghana"
+                href={business.map}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.link}
               >
-                Our shop: Justmoh Ave, Takoradi, Ghana
+                Our shop: {business.address}
               </a>
             </li>
             <li>
-              <a href="mailto:emanagold6590@gmail.com" className={styles.link}>
-                emanagold6590@gmail.com
+              <a href={`mailto:${business.email}`} className={styles.link}>
+                {business.email}
               </a>
             </li>
             <li>
               <a
-                href="https://wa.me/233242186590"
+                href={business.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.link}
               >
-                WhatsApp: +233 24 218 6590
+                WhatsApp: {business.phone}
               </a>
             </li>
+            <li>Monday–Friday: {displayOpeningHours(business.weekdays)}<br />Saturday: {displayOpeningHours(business.saturday)}</li>
           </ul>
 
         </div>

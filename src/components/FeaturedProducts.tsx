@@ -1,9 +1,12 @@
+import { publishedContent } from "@/lib/content-store"
+import { businessInformation } from "@/lib/business-information"
 import { connection } from "next/server"
 import { prisma } from "@/lib/db"
 import ProductSnippets from "./ProductSnippets"
 
 export default async function FeaturedProducts() {
   await connection()
+  const business = businessInformation((await publishedContent()).copy)
   let products
   try {
     products = await prisma.product.findMany({
@@ -14,7 +17,7 @@ export default async function FeaturedProducts() {
   } catch {
     return <section id="featured-creations" style={{ padding: "56px 20px", textAlign: "center" }}>
       <h2>Featured Jewelry</h2><p>We couldn’t load our pieces right now. Please refresh or speak with us on WhatsApp.</p>
-      <a href="https://wa.me/233242186590" target="_blank" rel="noopener noreferrer">Speak with Emana →</a>
+      <a href={business.whatsapp} target="_blank" rel="noopener noreferrer">Speak with Emana →</a>
     </section>
   }
   return <ProductSnippets products={products.map(product => ({

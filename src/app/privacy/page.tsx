@@ -1,3 +1,5 @@
+import { publishedContent } from "@/lib/content-store"
+import { businessInformation } from "@/lib/business-information"
 import { pageMetadata } from "@/lib/seo"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
@@ -5,7 +7,8 @@ import styles from "./page.module.css"
 
 export const metadata = pageMetadata("Privacy Policy", "Emana Jewelry's privacy policy — how we collect, use, and protect your personal information.", "/privacy")
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const business = businessInformation((await publishedContent()).copy)
   return (
     <div className={styles.page}>
       <Header />
@@ -69,7 +72,7 @@ export default function PrivacyPage() {
               <li>Object to or restrict processing of your data.</li>
               <li>Withdraw consent at any time where processing is based on consent.</li>
             </ul>
-            <p>To exercise these rights, contact us at <a href="mailto:emanagold6590@gmail.com" className={styles.link}>emanagold6590@gmail.com</a> or via WhatsApp at <a href="https://wa.me/233242186590" className={styles.link}>+233 24 218 6590</a>.</p>
+            <p>To exercise these rights, contact us at <a href={`mailto:${business.email}`} className={styles.link}>{business.email}</a> or via WhatsApp at <a href={business.whatsapp} className={styles.link}>{business.phone}</a>.</p>
           </section>
 
           <section className={styles.section}>
@@ -91,8 +94,8 @@ export default function PrivacyPage() {
             <h2 className={styles.h2}>10. Contact</h2>
             <p>For questions or concerns about this policy, please contact us:</p>
             <ul className={styles.list}>
-              <li>Email: <a href="mailto:emanagold6590@gmail.com" className={styles.link}>emanagold6590@gmail.com</a></li>
-              <li>WhatsApp: <a href="https://wa.me/233242186590" className={styles.link}>+233 24 218 6590</a></li>
+              <li>Email: <a href={`mailto:${business.email}`} className={styles.link}>{business.email}</a></li>
+              <li>WhatsApp: <a href={business.whatsapp} className={styles.link}>{business.phone}</a></li>
               <li>Location: Takoradi, Ghana</li>
             </ul>
           </section>

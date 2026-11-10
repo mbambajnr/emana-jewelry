@@ -859,5 +859,117 @@
     "label": "Homepage offer photo description",
     "default": "Gold necklace with Adinkra motifs on a linen display",
     "type": "short"
+  },
+  {
+    "key": "business.street",
+    "group": "Shop details & search information",
+    "label": "Street address",
+    "default": "Justmoh Ave",
+    "type": "short"
+  },
+  {
+    "key": "business.city",
+    "group": "Shop details & search information",
+    "label": "Town or city",
+    "default": "Takoradi",
+    "type": "short"
+  },
+  {
+    "key": "business.region",
+    "group": "Shop details & search information",
+    "label": "Region",
+    "default": "Western Region",
+    "type": "short"
+  },
+  {
+    "key": "business.phone",
+    "group": "Shop details & search information",
+    "label": "Public phone / WhatsApp number (international format)",
+    "default": "+233242186590",
+    "type": "short"
+  },
+  {
+    "key": "business.email",
+    "group": "Shop details & search information",
+    "label": "Public shop email",
+    "default": "emanagold6590@gmail.com",
+    "type": "short"
+  },
+  {
+    "key": "business.weekdays",
+    "group": "Shop details & search information",
+    "label": "Monday–Friday hours (24-hour HH:MM-HH:MM)",
+    "default": "09:00-18:00",
+    "type": "short"
+  },
+  {
+    "key": "business.saturday",
+    "group": "Shop details & search information",
+    "label": "Saturday hours (24-hour HH:MM-HH:MM, or Closed)",
+    "default": "09:00-18:00",
+    "type": "short"
+  },
+  {
+    "key": "business.sundayNote",
+    "group": "Shop details & search information",
+    "label": "Sunday visiting guidance",
+    "default": "Please contact us before visiting on Sunday.",
+    "type": "short"
+  },
+  {
+    "key": "buying.price.question",
+    "group": "Buying guidance & search answers",
+    "label": "Question: How do I find out the price?",
+    "default": "How do I find out the price?",
+    "type": "short"
+  },
+  {
+    "key": "buying.price.answer",
+    "group": "Buying guidance & search answers",
+    "label": "Answer: How do I find out the price?",
+    "default": "Choose a piece and ask us for its price on WhatsApp, or add it to your quote list and send your request. We’ll confirm the price and availability before you decide.",
+    "type": "long"
+  },
+  {
+    "key": "buying.delivery.question",
+    "group": "Buying guidance & search answers",
+    "label": "Question: Can I collect my order or arrange delivery?",
+    "default": "Can I collect my order or arrange delivery?",
+    "type": "short"
+  },
+  {
+    "key": "buying.delivery.answer",
+    "group": "Buying guidance & search answers",
+    "label": "Answer: Can I collect my order or arrange delivery?",
+    "default": "You can arrange collection from our shop. Tell us where you need delivery, and we’ll confirm whether we can deliver there, the cost and the timing before you confirm your order.",
+    "type": "long"
+  },
+  {
+    "key": "buying.custom.question",
+    "group": "Buying guidance & search answers",
+    "label": "Question: How long will a custom design take?",
+    "default": "How long will a custom design take?",
+    "type": "short"
+  },
+  {
+    "key": "buying.custom.answer",
+    "group": "Buying guidance & search answers",
+    "label": "Answer: How long will a custom design take?",
+    "default": "Send your idea, preferred materials, budget and the date you need it. We’ll discuss what is possible and confirm a timeline for your design before work begins.",
+    "type": "long"
+  },
+  {
+    "key": "buying.metal.question",
+    "group": "Buying guidance & search answers",
+    "label": "Question: What if there is no photo of my selected metal?",
+    "default": "What if there is no photo of my selected metal?",
+    "type": "short"
+  },
+  {
+    "key": "buying.metal.answer",
+    "group": "Buying guidance & search answers",
+    "label": "Answer: What if there is no photo of my selected metal?",
+    "default": "Gold and Silver photos are labelled separately. A general photo is a reference and may appear for either choice. Your enquiry will include the metal you selected; ask us for a photo of that version if you need one.",
+    "type": "long"
   }
 ]

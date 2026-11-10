@@ -1,3 +1,5 @@
+import { publishedContent } from "@/lib/content-store"
+import { businessInformation } from "@/lib/business-information"
 import { pageMetadata } from "@/lib/seo"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
@@ -5,7 +7,8 @@ import styles from "./page.module.css"
 
 export const metadata = pageMetadata("Terms of Service", "Emana Jewelry's terms of service — rules and guidelines for using our platform and purchasing our products.", "/terms")
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const business = businessInformation((await publishedContent()).copy)
   return (
     <div className={styles.page}>
       <Header />
@@ -99,8 +102,8 @@ export default function TermsPage() {
             <h2 className={styles.h2}>13. Contact</h2>
             <p>For questions about these terms, please contact us:</p>
             <ul className={styles.list}>
-              <li>Email: <a href="mailto:emanagold6590@gmail.com" className={styles.link}>emanagold6590@gmail.com</a></li>
-              <li>WhatsApp: <a href="https://wa.me/233242186590" className={styles.link}>+233 24 218 6590</a></li>
+              <li>Email: <a href={`mailto:${business.email}`} className={styles.link}>{business.email}</a></li>
+              <li>WhatsApp: <a href={business.whatsapp} className={styles.link}>{business.phone}</a></li>
               <li>Location: Takoradi, Ghana</li>
             </ul>
           </section>

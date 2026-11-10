@@ -323,6 +323,7 @@ export default function ProductForm({
           onChange={(e) => update("description", e.target.value)}
           required
         />
+        <p className={styles.hint}>Describe this specific piece in your own words: its design, confirmed materials, finish and how it can be worn. Use the size, delivery and care fields below for practical details. Avoid copying another product’s description or making claims you cannot verify.</p>
       </div>
 
       <fieldset className={styles.fieldset}>

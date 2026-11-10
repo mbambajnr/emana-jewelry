@@ -1,5 +1,7 @@
 "use client"
 
+import { businessInformation } from "@/lib/business-information"
+
 import { submissionKey } from "@/lib/submission-key"
 import { useSiteContent } from "@/components/cms/SiteContentProvider"
 import WebsiteOffer from "@/components/WebsiteOffer"
@@ -54,7 +56,7 @@ export default function CartPage() {
         discountPercent,
         items,
         total,
-      })
+      }), businessInformation(copy).phone
     )
   }
 
@@ -95,7 +97,7 @@ export default function CartPage() {
             customerPhone: submittedSummary.phone,
             items: submittedSummary.items,
             total: submittedSummary.total,
-          })
+          }), businessInformation(copy).phone
         )
       : null
 

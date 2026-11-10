@@ -1,5 +1,7 @@
 "use client"
 
+import { businessInformation } from "@/lib/business-information"
+
 import { submissionKey } from "@/lib/submission-key"
 
 import { useSiteContent } from "@/components/cms/SiteContentProvider"
@@ -48,7 +50,7 @@ const tomorrow = () => {
 }
 
 export default function ConsultationBooking() {
-  const { services: registry, preview } = useSiteContent()
+  const { copy, services: registry, preview } = useSiteContent()
   const available = useMemo(() => bookableServices({ copy: {}, faqs: [], services: registry }), [registry])
   const services = useMemo(() => available.map(serviceValue), [available])
   const customService = available.find(service => service.kind === "custom")
@@ -147,7 +149,7 @@ export default function ConsultationBooking() {
 
   if (status === "success") {
     const waMessage = `Hi Emana Jewelry, I've booked a ${(bookingLabels[form.service] || form.service).toLowerCase()} on ${new Date(form.date).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}. I'd like to confirm my appointment details.`
-    const waHref = `https://wa.me/233242186590?text=${encodeURIComponent(waMessage)}`
+    const waHref = `${businessInformation(copy).whatsapp}?text=${encodeURIComponent(waMessage)}`
 
     return (
       <div id="custom-jewelry-form" className={`${styles.card} glass-panel`}>
@@ -197,7 +199,7 @@ export default function ConsultationBooking() {
       <h3 className={styles.title}>Book a Visit or Call</h3>
 
       <a
-        href="https://wa.me/233242186590?text=Hi%20Emana%20Jewelry%2C%20I'd%20like%20to%20book%20a%20private%20appointment."
+        href={`${businessInformation(copy).whatsapp}?text=${encodeURIComponent("Hello Emana, I would like to arrange a consultation.")}`}
         target="_blank"
         rel="noopener noreferrer"
         className={styles.waBanner}

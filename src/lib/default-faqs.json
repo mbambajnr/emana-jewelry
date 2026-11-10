@@ -1,11 +1,11 @@
 [
   {
     "q": "Where is Emana Jewelry located in Ghana?",
-    "a": "Our shop is on Justmoh Ave in Takoradi, Western Region, Ghana. Visit us to see our jewelry or speak with our goldsmiths. You can also call or WhatsApp us on +233 24 218 6590 before you come."
+    "a": "Our shop is at {{shop.address}}. Contact us before visiting if you would like to discuss a particular piece or service."
   },
   {
     "q": "What are your opening hours?",
-    "a": "Our Takoradi shop opens Monday to Friday, 9:00 AM to 6:00 PM, and Saturday, 10:00 AM to 5:00 PM, Ghana time. Sunday visits are by appointment. Please contact us to arrange your visit."
+    "a": "Monday–Friday: {{shop.weekdays}}. Saturday: {{shop.saturday}}. {{shop.sundayNote}}"
   },
   {
     "q": "How do I place an order?",
@@ -21,11 +21,11 @@
   },
   {
     "q": "What raw gemstones do you offer?",
-    "a": "We source a wide range of ethically sourced raw gemstones including emeralds, sapphires, rubies, tourmalines, and more. Contact us to ask which stones are available and request a quote."
+    "a": "Ask us which stones are currently available for your piece. We’ll discuss the options and provide a quote before you decide."
   },
   {
     "q": "Are your gemstones ethically sourced?",
-    "a": "Yes. We are committed to ethical sourcing. All our suppliers adhere to strict standards — no conflict stones, fair labor practices, and environmentally responsible mining. See our Ethical Sourcing Policy for details."
+    "a": "Ask us about the source and any available supporting documents for the specific stone you are considering. We’ll explain what information is available before you decide."
   },
   {
     "q": "How does the consultation process work?",
@@ -33,15 +33,15 @@
   },
   {
     "q": "Do you ship internationally?",
-    "a": "We primarily serve customers in Ghana with international shipping available on a case-by-case basis. Shipping costs and timelines will be provided in your quotation."
+    "a": "Tell us your delivery location when you request a quote. We’ll confirm whether delivery can be arranged, along with its cost and timing, before you confirm your order."
   },
   {
     "q": "What payment methods do you accept?",
-    "a": "Payment terms are discussed during the quotation process. We typically accept mobile money, bank transfers, and other agreed-upon methods."
+    "a": "Ask us to confirm the payment options and terms for your order when we provide your quote."
   },
   {
     "q": "Can I return or exchange a piece?",
-    "a": "Returns and exchanges are handled on a case-by-case basis. Custom-made pieces are generally non-returnable unless defective. Standard pieces may be eligible within a specified window. Damage claims must be reported within 48 hours of delivery."
+    "a": "Please confirm the return, exchange and repair terms for your specific piece before placing an order, especially for a custom design. Contact us if there is a problem with your order."
   },
   {
     "q": "What materials can I choose from?",
@@ -49,7 +49,7 @@
   },
   {
     "q": "Do you offer jewelry cleaning or repair services?",
-    "a": "Yes. We provide professional cleaning and repair services for all types of jewelry. Contact us for a quote."
+    "a": "Yes. Tell us about your piece and the work it needs, or arrange an assessment. We’ll check its materials and condition before advising what can be done and providing a quote."
   },
   {
     "q": "How does the wishlist work?",
@@ -65,10 +65,10 @@
   },
   {
     "q": "How long does a custom piece take?",
-    "a": "Timelines vary based on complexity. Simple pieces may take 1-2 weeks, while intricate designs can take 4-8 weeks or longer. We'll provide an estimated timeline during consultation."
+    "a": "Timing depends on the design, materials and work required. Tell us the date you need it, and we’ll confirm a suitable timeline before work begins."
   },
   {
     "q": "How can I contact you?",
-    "a": "You can reach us via WhatsApp at +233 24 218 6590, email at emanagold6590@gmail.com, or through the consultation booking form on our website."
+    "a": "WhatsApp us on {{shop.phone}}, email {{shop.email}}, or use the consultation form on the website."
   }
 ]

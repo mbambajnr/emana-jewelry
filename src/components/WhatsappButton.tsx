@@ -1,5 +1,7 @@
 "use client"
 
+import { businessInformation } from "@/lib/business-information"
+
 import { productTrackingDetails } from "@/lib/product-analytics"
 import { useSiteContent } from "@/components/cms/SiteContentProvider"
 import { websiteDiscount } from "@/lib/website-offer"
@@ -39,7 +41,7 @@ export function WhatsappButton({
         : `${origin}${productUrl}`
       : productUrl
     const message = buildProductInquiryConciergeMessage(productName, fullUrl, metal, websiteDiscount(copy), quantity)
-    const href = getWhatsAppConciergeUrl(message)
+    const href = getWhatsAppConciergeUrl(message, businessInformation(copy).phone)
     window.open(href, "_blank", "noopener,noreferrer")
 
     const source = typeof window !== "undefined" ? window.location.pathname : ""

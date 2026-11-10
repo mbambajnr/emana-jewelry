@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { servicePath } from "@/lib/service-pages"
 import { useSiteContent } from "@/components/cms/SiteContentProvider"
-import { CONCIERGE_PHONE } from "@/lib/concierge"
+import { businessInformation } from "@/lib/business-information"
 import styles from "@/app/page.module.css"
 
 export default function HomeServices() {
@@ -25,7 +25,7 @@ export default function HomeServices() {
           <div className={styles.serviceText}>
             <h3 className={styles.serviceTitle}><Link href={servicePath(service.id)}>{service.title}</Link></h3><p className={styles.serviceDesc}>{service.description}</p>
             <Link className={styles.serviceWa} href={servicePath(service.id)}>Service details →</Link>{" · "}
-            <a className={styles.serviceWa} href={`https://wa.me/${CONCIERGE_PHONE}?text=${encodeURIComponent(`Hello Emana, I’d like to ask about ${service.title}. Please, how much will it cost?`)}`} target="_blank" rel="noopener noreferrer">Ask about this service →</a>
+            <a className={styles.serviceWa} href={`${businessInformation(copy).whatsapp}?text=${encodeURIComponent(`Hello Emana, I’d like to ask about ${service.title}. Please, how much will it cost?`)}`} target="_blank" rel="noopener noreferrer">Ask about this service →</a>
           </div>
         </div>)}
       </div></div>
