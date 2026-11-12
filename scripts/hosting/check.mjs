@@ -1,3 +1,4 @@
+import { socketConnectionOptions } from "../../src/lib/mysql-socket.mjs"
 import { access, constants, realpath, statfs } from 'node:fs/promises'
 import path from 'node:path'
 import { createHash } from 'node:crypto'
@@ -43,7 +44,7 @@ try {
   if (u.protocol !== 'mysql:' || (u.searchParams.get('sslaccept') && u.searchParams.get('sslaccept') !== 'strict')) throw new Error()
   const limit = Number(u.searchParams.get('connection_limit') || 3)
   report(Number.isInteger(limit) && limit >= 1 && limit <= 3, 'Database pool limited to 1–3 connections per app process')
-  connection = await mariadb.createConnection({ host: u.hostname, port: Number(u.port || 3306), user: decodeURIComponent(u.username), password: decodeURIComponent(u.password), database: decodeURIComponent(u.pathname.slice(1)), connectTimeout: 5000, ...(u.searchParams.get('sslaccept') === 'strict' ? { ssl: { rejectUnauthorized: true } } : {}) })
+  connection = await mariadb.createConnection({ ...socketConnectionOptions(u), host: u.hostname, port: Number(u.port || 3306), user: decodeURIComponent(u.username), password: decodeURIComponent(u.password), database: decodeURIComponent(u.pathname.slice(1)), connectTimeout: 5000, ...(u.searchParams.get('sslaccept') === 'strict' ? { ssl: { rejectUnauthorized: true } } : {}) })
   const version = await connection.query('SELECT VERSION() AS version')
   console.log(`INFO Database server: ${version[0].version}`)
   const migrations = await connection.query('SELECT COUNT(*) AS count FROM _prisma_migrations WHERE finished_at IS NULL AND rolled_back_at IS NULL')

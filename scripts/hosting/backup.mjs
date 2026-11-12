@@ -1,3 +1,4 @@
+import { socketConnectionOptions } from "../../src/lib/mysql-socket.mjs"
 import { spawn } from 'node:child_process'
 import { pipeline } from 'node:stream/promises'
 import { mkdir, mkdtemp, realpath, writeFile, rm, chmod } from 'node:fs/promises'
@@ -29,7 +30,8 @@ const run = (command, args, options = {}) => {
 }
 try {
   const config = path.join(stage, 'mysql.cnf')
-  await writeFile(config, `[client]\nhost=${quote(u.hostname)}\nport=${Number(u.port || 3306)}\nuser=${quote(decodeURIComponent(u.username))}\npassword=${quote(decodeURIComponent(u.password))}\n`, { mode: 0o600 })
+  const socket = socketConnectionOptions(u).socketPath
+  await writeFile(config, `[client]\n${socket ? `socket=${quote(socket)}\nprotocol=SOCKET\n` : ''}host=${quote(u.hostname)}\nport=${Number(u.port || 3306)}\nuser=${quote(decodeURIComponent(u.username))}\npassword=${quote(decodeURIComponent(u.password))}\n`, { mode: 0o600 })
   const dump = run(process.env.MYSQLDUMP_BIN || 'mysqldump', [`--defaults-extra-file=${config}`, '--single-transaction', '--quick', '--skip-lock-tables', '--no-tablespaces', '--hex-blob', '--default-character-set=utf8mb4', '--', decodeURIComponent(u.pathname.slice(1))])
   await Promise.all([pipeline(dump.child.stdout, createWriteStream(path.join(stage, 'database.sql'), { mode: 0o600, flags: 'wx' })), dump.done])
   await rm(config)

@@ -1,3 +1,4 @@
+import { socketConnectionOptions } from "./mysql-socket.mjs"
 export function mysqlConnectionOptions(connectionString: string | undefined) {
   if (!connectionString) throw new Error("Configure DATABASE_URL for the MySQL database.")
   let url: URL
@@ -8,6 +9,7 @@ export function mysqlConnectionOptions(connectionString: string | undefined) {
   const ssl = url.searchParams.get("sslaccept")
   if (ssl && ssl !== "strict") throw new Error("Use sslaccept=strict for verified database TLS.")
   return {
+    ...socketConnectionOptions(url),
     host: url.hostname, port: Number(url.port || 3306),
     user: decodeURIComponent(url.username), password: decodeURIComponent(url.password), database: decodeURIComponent(url.pathname.slice(1)),
     connectionLimit: limit, connectTimeout: 5000, acquireTimeout: 10000, charset: "utf8mb4", timezone: "Z", initSql: "SET time_zone = '+00:00'",

@@ -133,3 +133,9 @@ Production now avoids native Sharp: `images.unoptimized` serves existing image f
 Sharp is retained only as development tooling to generate/inspect test fixtures. The packager excludes Sharp and its platform libraries, and verifies their absence. CI smoke-tests the actual packaged server on Node 20: startup, homepage, an original image served byte-for-byte, and protected upload endpoint imports. This is additional evidence, not a substitute for Passenger acceptance on server104.
 
 Runtime image optimisation is deliberately disabled: the host no longer generates responsive image variants on demand. Newly uploaded photos are resized within 2048 pixels; pre-existing large originals should be reviewed for mobile transfer size. Do not rewrite or delete originals automatically during deployment. No external image service or subscription is introduced.
+
+## Confirmed database transport on server104
+
+The account's local MySQL server reports 5.7.41. TCP authentication fails for this user, while local socket access succeeds. The runtime URL therefore needs `socket=/var/lib/mysql/mysql.sock` (URL-encoded by the configuration command). Runtime connection options explicitly support this local socket. Do not replace the working password because of the TCP denial, and do not enable remote MySQL access to work around it.
+
+CI now applies all migrations and runs the integration suite against MySQL 5.7 and 8.4. The deployable artifact is produced by the 5.7 job after its tests/build/runtime checks pass. This validates compatibility with 5.7, not long-term vendor support for that database release. Confirm the host's security maintenance arrangements separately. Full acceptance still requires connecting from the actual Node process through the local socket.

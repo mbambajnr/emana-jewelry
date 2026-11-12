@@ -1,3 +1,4 @@
+import { socketConnectionOptions } from "../../src/lib/mysql-socket.mjs"
 import mariadb from 'mariadb'
 import { readdir, lstat, realpath, unlink } from 'node:fs/promises'
 import path from 'node:path'
@@ -9,7 +10,7 @@ const folder = await realpath(configured), root = await realpath(process.cwd())
 if (folder === root || folder.startsWith(root + path.sep) || root.startsWith(folder + path.sep)) throw new Error('Use a separate private photo directory.')
 const u = new URL(process.env.DATABASE_URL)
 if (u.protocol !== 'mysql:' || (u.searchParams.get('sslaccept') && u.searchParams.get('sslaccept') !== 'strict')) throw new Error('Use MySQL with verified TLS when remote.')
-const connection = await mariadb.createConnection({ host: u.hostname, port: Number(u.port || 3306), user: decodeURIComponent(u.username), password: decodeURIComponent(u.password), database: decodeURIComponent(u.pathname.slice(1)), ...(u.searchParams.get('sslaccept') === 'strict' ? { ssl: { rejectUnauthorized: true } } : {}) })
+const connection = await mariadb.createConnection({ ...socketConnectionOptions(u), host: u.hostname, port: Number(u.port || 3306), user: decodeURIComponent(u.username), password: decodeURIComponent(u.password), database: decodeURIComponent(u.pathname.slice(1)), ...(u.searchParams.get('sslaccept') === 'strict' ? { ssl: { rejectUnauthorized: true } } : {}) })
 try {
   // Fail closed: every reference source must be readable before proposing deletion.
   const sources = await Promise.all([

@@ -14,10 +14,14 @@ jobs:
   quality-gate:
     name: Lint, Test & Build Verification
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        mysql: ["5.7", "8.4"]
 
     services:
       mysql:
-        image: mysql:8.4
+        image: mysql:${{ matrix.mysql }}
         env:
           MYSQL_USER: emana_ci
           MYSQL_PASSWORD: emana_ci
@@ -98,7 +102,7 @@ jobs:
           test "$(curl --silent -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:3010/api/admin/upload)" = 401
 
       - name: Upload tested deployment package
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && matrix.mysql == '5.7'
         uses: actions/upload-artifact@v7
         with:
           name: emana-orangehost-${{ github.sha }}
