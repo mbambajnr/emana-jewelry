@@ -43,10 +43,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js (OrangeHost 20.20.2)
+      - name: Setup Node.js for development checks (24)
         uses: actions/setup-node@v4
         with:
-          node-version: 20.20.2
+          node-version: 24
           cache: "npm"
 
       - name: Install Dependencies
@@ -66,6 +66,11 @@ jobs:
 
       - name: Run Automated Test Suite
         run: npm test -- --maxWorkers=2 --testTimeout=30000
+
+      - name: Switch to OrangeHost runtime (20.20.2)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.20.2
 
       - name: Run Production Build
         run: npm run build
