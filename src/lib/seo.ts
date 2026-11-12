@@ -1,7 +1,7 @@
 import { businessInformation } from "./business-information"
 import type { Metadata } from "next"
 
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelry.com").replace(/\/+$/, "")
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelries.com").replace(/\/+$/, "")
 export const absoluteUrl = (path: string) => new URL(path, `${SITE_URL}/`).toString()
 export const jsonLdString = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c")
 

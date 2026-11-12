@@ -82,7 +82,7 @@ export async function sendOrderNotification(order: {
         </p>
 
         <p style="margin-top: 24px; font-size: 0.85rem; color: #888;">
-          <a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelry.com"}/admin/orders" style="color: #c5a880;">View in Admin</a>
+          <a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelries.com"}/admin/orders" style="color: #c5a880;">View in Admin</a>
         </p>
       </div>
     `,
@@ -165,7 +165,7 @@ export async function sendConsultationNotification(booking: {
           <tr><td style="padding: 8px 0; color: #888; font-size: 0.85rem;">Notes</td><td style="padding: 8px 0;">${escapeHtml(booking.notes || "—")}</td></tr>
         </table>
         <p style="margin-top: 24px; font-size: 0.85rem; color: #888;">
-          <a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelry.com"}/admin/consultations" style="color: #c5a880;">View in Admin</a>
+          <a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelries.com"}/admin/consultations" style="color: #c5a880;">View in Admin</a>
         </p>
       </div>
     `,

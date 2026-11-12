@@ -3,7 +3,7 @@ import { publishedContent } from "./content-store"
 import { publicServices, servicePath } from "./service-pages"
 
 export async function getSitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelry.com"
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelries.com"
 
   let products: { slug: string; updatedAt?: Date }[] = []
   let collections: { slug: string }[] = []

@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!product) return { title: "Product Not Found", robots: { index: false } }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelry.com"
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelries.com"
   const productUrl = `${siteUrl}/products/${encodeURIComponent(slug)}`
   const imageUrl = product.images[0]?.url ? absoluteUrl(product.images[0].url) : undefined
 

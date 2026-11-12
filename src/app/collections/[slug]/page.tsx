@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!collection) return { title: "Collection Not Found", robots: { index: false } }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelry.com"
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://emanajewelries.com"
   const url = `${siteUrl}/collections/${slug}`
 
   return {

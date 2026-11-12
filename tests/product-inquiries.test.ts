@@ -1,10 +1,11 @@
 import { describe, it, expect } from "vitest"
+import { SITE_URL } from "@/lib/seo"
 import { buildProductInquiryConciergeMessage } from "@/lib/concierge"
 
 describe("Simple product WhatsApp inquiry", () => {
   it("includes only the product name, a price question, and a usable product URL", () => {
     expect(buildProductInquiryConciergeMessage("Dollar Sign Necklace", "http://localhost:3000/products/dollar-sign-necklace")).toBe(
-      "Hello Emana, I’m interested in the *Dollar Sign Necklace*.\nPlease, how much is it?\n\nhttps://emanajewelry.com/products/dollar-sign-necklace"
+      `Hello Emana, I’m interested in the *Dollar Sign Necklace*.\nPlease, how much is it?\n\n${SITE_URL}/products/dollar-sign-necklace`
     )
   })
   it("keeps the same concise format for different products", () => {

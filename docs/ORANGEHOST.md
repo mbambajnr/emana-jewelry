@@ -106,3 +106,18 @@ New photos are decoded, restricted to 25 megapixels, resized within 2048×2048, 
 Use `npm run hosting:images` for a report-only scan of originals older than seven days. It checks product images, category images, published/draft CMS content and retained revisions, preserving files referenced by any of them. Unknown filenames and symlinks are retained. Do not delete photos automatically when deleting a product; CMS content may still reference them.
 
 After verifying a database-plus-files backup and stopping all writers, `npm run hosting:images -- --delete --maintenance-confirmed --backup-confirmed` removes only the old, unreferenced candidates. Do not run this delete mode while staff are editing or uploading. No image files were deleted as part of implementing these tools.
+
+## Deployment handoff for emanajewelries.com
+
+The CI workflow now targets Ubuntu 22.04 x64 and Node 20.20.2 (the runtime shown in the account screenshot), builds for `https://emanajewelries.com`, then packages the tested standalone runtime as a tar archive with a SHA-256 checksum. On a successful branch push, download the `emana-orangehost-COMMIT` artifact from GitHub Actions. Verify its checksum and extract the tar archive into the private application root. The tar preserves `.next` and file permissions; do not upload only the visible files from an extracted folder. Pull request runs test/package but do not publish an artifact. A manual dispatch option is available after the workflow is available to GitHub.
+
+This is a build pipeline, not an automatic deployment. A successful remote workflow run and a matching host architecture/OS remain required. Do not deploy the older locally generated Mac artifact. Supply the real database, keys and SMTP settings at runtime, not as CI build secrets. No business database, photos or live credentials are included in the runtime artifact.
+
+Account checklist before transferring data:
+
+- cPanel application: Node 20.20.2, Production, private `emana-app` root, `emanajewelries.com` at `/`, startup file `server.js`. Confirm actual home path and Passenger compatibility.
+- Create the cPanel MySQL database/user and grant access only to this app database. Preserve the source database; do not seed/reset live data.
+- Create separate private media, backup and secrets directories. Move the current original photos with byte verification; retain their public URLs.
+- Admin and shop recipient: `emanajewelries@gmail.com`. SMTP remains authenticated as `welsa250@gmail.com` by user preference; preserve its encrypted password plus EMAIL_SETTINGS_KEY, or configure that same account with its own App Password on the target. Public contact and reply address remain official.
+- Configure the notification scheduler, backup password and off-host retention. Then complete a full restore drill using an isolated database before calling recovery ready.
+- Verify HTTPS and both domain variants, canonical origin, admin OTP, product upload/edit, image persistence across restart, quote/consultation storage and delivery, sitemap and mobile browsing. Keep DNS changes until the target is validated through the host's supported preview mechanism.

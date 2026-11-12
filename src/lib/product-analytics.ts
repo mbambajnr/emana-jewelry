@@ -15,7 +15,7 @@ export function trackProductView(slug: string) {
 }
 export function productTrackingDetails(url: string, metal?: MetalOption) {
   try {
-    const path = new URL(url, "https://emanajewelry.com").pathname
+    const path = new URL(url, "https://emanajewelries.com").pathname
     if (!path.startsWith("/products/")) return {}
     const slug = decodeURIComponent(path.slice("/products/".length))
     return slug && slug.length <= 160 ? { productSlug: slug, metal } : {}

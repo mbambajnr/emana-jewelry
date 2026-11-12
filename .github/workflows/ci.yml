@@ -1,15 +1,19 @@
 name: CI Pipeline & Test Automation
 
 on:
+  workflow_dispatch:
   push:
     branches: [main, "codex/**"]
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   quality-gate:
     name: Lint, Test & Build Verification
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     services:
       mysql:
@@ -31,16 +35,18 @@ jobs:
       NEXT_TELEMETRY_DISABLED: 1
       RUN_MYSQL_INTEGRATION: "1"
       SESSION_SECRET: test-secret-key-32-chars-minimum-xyz
+      NEXT_PUBLIC_SITE_URL: "https://emanajewelries.com"
+      ORANGEHOST_STANDALONE: "1"
       DATABASE_URL: "mysql://emana_ci:emana_ci@127.0.0.1:3306/emana_test"
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js (v24)
+      - name: Setup Node.js (OrangeHost 20.20.2)
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20.20.2
           cache: "npm"
 
       - name: Install Dependencies
@@ -63,3 +69,20 @@ jobs:
 
       - name: Run Production Build
         run: npm run build
+
+      - name: Package OrangeHost Linux runtime
+        run: |
+          npm run hosting:package
+          tar -czf build/emana-orangehost-linux-x64.tar.gz -C build/orangehost .
+          sha256sum build/emana-orangehost-linux-x64.tar.gz > build/emana-orangehost-linux-x64.sha256
+
+      - name: Upload tested deployment package
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: emana-orangehost-${{ github.sha }}
+          path: |
+            build/emana-orangehost-linux-x64.tar.gz
+            build/emana-orangehost-linux-x64.sha256
+          if-no-files-found: error
+          retention-days: 14
