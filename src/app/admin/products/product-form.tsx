@@ -1,5 +1,7 @@
 "use client"
 
+import { prepareUploadPhoto } from "@/lib/prepare-upload-photo"
+
 import { AVAILABILITY_OPTIONS, type ProductInformation } from "@/lib/product-information"
 
 import { METAL_OPTIONS, productMetalOptions, type MetalOption } from "@/lib/product-options"
@@ -140,10 +142,9 @@ export default function ProductForm({
   ) => setter((prev) => prev.filter((_, i) => i !== index))
 
   const handleUpload = async (file: File) => {
-    const formData = new FormData()
-    formData.append("file", file)
-
     try {
+      const formData = new FormData()
+      formData.append("file", await prepareUploadPhoto(file))
       const res = await fetch("/api/admin/upload", { method: "POST", body: formData })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || "The photo could not be uploaded.")

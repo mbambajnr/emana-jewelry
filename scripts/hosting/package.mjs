@@ -5,13 +5,14 @@ await stat('.next/standalone/server.js').catch(() => { throw new Error('Build fi
 // Only copy the runtime tree and public assets. No source checkout or operator secrets.
 await mkdir(destination, { recursive: true })
 if ((await readdir(destination)).length) throw new Error('build/orangehost already contains files. Move the previous artifact before packaging again.')
-const filter = source => !path.basename(source).startsWith('.env')
+const filter = source => !path.basename(source).startsWith('.env') && !/^sharp(?:-|$)/.test(path.basename(source))
 await cp('.next/standalone', destination, { recursive: true, filter })
 await cp('public', path.join(destination, 'public'), { recursive: true })
 await cp('.next/static', path.join(destination, '.next/static'), { recursive: true })
 // Next can trace .env files; check recursively as well as filtering during copy.
 async function check(folder) {
   for (const entry of await readdir(folder, { withFileTypes: true })) {
+    if (entry.name === 'sharp' || entry.name.startsWith('sharp-')) { await rm(destination, { recursive: true, force: true }); throw new Error('Native Sharp found in runtime artifact; artifact removed.') }
     if (entry.name.startsWith('.env')) { await rm(destination, { recursive: true, force: true }); throw new Error('Environment file found in runtime artifact; artifact removed.') }
     if (entry.isDirectory()) await check(path.join(folder, entry.name))
   }

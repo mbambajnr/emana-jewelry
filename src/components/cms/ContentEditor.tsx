@@ -1,5 +1,7 @@
 "use client"
 
+import { prepareUploadPhoto } from "@/lib/prepare-upload-photo"
+
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
@@ -51,7 +53,7 @@ export default function ContentEditor() {
   async function upload(key: string, file: File) {
     setBusy(true); setError("")
     try {
-      const body = new FormData(); body.set("file", file)
+      const body = new FormData(); body.set("file", await prepareUploadPhoto(file))
       const response = await fetch("/api/admin/upload", { method: "POST", body })
       const data = await response.json()
       if (!response.ok) throw new Error(data.error)

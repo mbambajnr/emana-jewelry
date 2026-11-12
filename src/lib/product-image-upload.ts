@@ -1,5 +1,6 @@
 import "server-only"
-import sharp from "sharp"
+import { Jimp } from "jimp"
+import { imageSize } from "image-size"
 import { RequestError } from "./request-safety"
 import { validImageBytes } from "./local-product-images"
 
@@ -29,16 +30,32 @@ export async function uploadedPhoto(request: Request) {
     catch { throw new RequestError("We couldn’t read the upload. Choose the photo again.") }
     const file = form.get("file")
     if (!(file instanceof File)) throw new RequestError("Choose a photo to upload.")
-    const extensions: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/avif": "avif" }
+    const extensions: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png" }
     const ext = extensions[file.type]
-    if (!ext || !file.size || file.size > 10 * 1024 * 1024) throw new RequestError("Choose a JPG, PNG, WebP, or AVIF image up to 10 MB.")
+    if (!ext || !file.size || file.size > 10 * 1024 * 1024) throw new RequestError("Upload a prepared JPG or PNG photo up to 10 MB.")
     const bytes = Buffer.from(await file.arrayBuffer())
     if (!validImageBytes(bytes, ext)) throw new RequestError("This file does not contain a supported image.")
     try {
-      const image = sharp(bytes, { limitInputPixels: 25000000, failOn: "warning", sequentialRead: true })
-      const metadata = await image.metadata()
-      if ((metadata.pages || 1) > 1) throw new Error("Animated images unsupported")
-      return await image.rotate().resize({ width: 2048, height: 2048, fit: "inside", withoutEnlargement: true }).webp({ quality: 82, effort: 3 }).toBuffer()
+      const dimensions = imageSize(bytes)
+      if (!dimensions.width || !dimensions.height || dimensions.width * dimensions.height > 25000000) throw new Error("Image dimensions exceed limit")
+      if (ext === "png") {
+        let offset = 8
+        while (offset + 12 <= bytes.length) {
+          const size = bytes.readUInt32BE(offset)
+          if (size > bytes.length - offset - 12) throw new Error("Invalid PNG chunk")
+          if (bytes.toString("ascii", offset + 4, offset + 8) === "acTL") throw new Error("Animated images unsupported")
+          offset += size + 12
+        }
+      }
+      const image = await Jimp.read(bytes)
+      const scale = Math.min(1, 2048 / image.bitmap.width, 2048 / image.bitmap.height)
+      if (scale < 1) image.resize({ w: Math.max(1, Math.round(image.bitmap.width * scale)), h: Math.max(1, Math.round(image.bitmap.height * scale)) })
+      const transparent = image.hasAlpha()
+      const extension = transparent ? "png" : "jpg"
+      const contentType = transparent ? "image/png" : "image/jpeg"
+      const buffer = transparent ? await image.getBuffer("image/png") : await image.getBuffer("image/jpeg", { quality: 85 })
+      if (buffer.length > 10 * 1024 * 1024) throw new Error("Image output too large")
+      return { buffer, extension, contentType }
     } catch { throw new RequestError("We couldn’t read this photo. Use a still image under 25 megapixels and try again.") }
   } finally { processing = false }
 }

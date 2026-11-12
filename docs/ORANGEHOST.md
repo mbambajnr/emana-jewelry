@@ -123,3 +123,13 @@ Account checklist before transferring data:
 - Verify HTTPS and both domain variants, canonical origin, admin OTP, product upload/edit, image persistence across restart, quote/consultation storage and delivery, sitemap and mobile browsing. Keep DNS changes until the target is validated through the host's supported preview mechanism.
 
 CI runs development checks on Node 24 because jsdom 30/its HTTP test dependencies require a newer Node than the production server. It then switches to Node 20.20.2 for the production build and runtime packaging. Test-only dependencies are not part of the standalone runtime. Use Node 24 locally for npm test; the Node 20 compatibility check is the production build, package startup and host acceptance.
+
+## Confirmed server104 compatibility adaptation
+
+The actual account is x86_64 with glibc 2.17. OrangeHost confirmed its shared servers cannot provide newer glibc. The earlier Sharp-based release must not be deployed there.
+
+Production now avoids native Sharp: `images.unoptimized` serves existing image files directly; browser-side upload preparation converts browser-readable JPG/PNG/WebP/AVIF files into bounded JPEG/PNG, preserving transparency. Server-side Jimp and image-size validate/decode/re-encode images with the existing byte, dimension, authentication and concurrency limits. Browsers that cannot decode an input format give a JPG/PNG retry message. Animated inputs are not supported. Existing WebP/AVIF originals remain readable by customers' browsers and their URLs are unchanged.
+
+Sharp is retained only as development tooling to generate/inspect test fixtures. The packager excludes Sharp and its platform libraries, and verifies their absence. CI smoke-tests the actual packaged server on Node 20: startup, homepage, an original image served byte-for-byte, and protected upload endpoint imports. This is additional evidence, not a substitute for Passenger acceptance on server104.
+
+Runtime image optimisation is deliberately disabled: the host no longer generates responsive image variants on demand. Newly uploaded photos are resized within 2048 pixels; pre-existing large originals should be reviewed for mobile transfer size. Do not rewrite or delete originals automatically during deployment. No external image service or subscription is introduced.

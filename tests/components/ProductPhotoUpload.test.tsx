@@ -1,3 +1,4 @@
+vi.mock("@/lib/prepare-upload-photo", () => ({ prepareUploadPhoto: async (file: File) => file }))
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))

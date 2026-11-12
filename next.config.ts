@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     }];
   },
   images: {
+    unoptimized: true, // OrangeHost glibc 2.17 cannot load native Sharp. Uploads are resized before storage.
     formats: ["image/avif", "image/webp"],
     maximumResponseBody: 10 * 1024 * 1024,
     remotePatterns: [

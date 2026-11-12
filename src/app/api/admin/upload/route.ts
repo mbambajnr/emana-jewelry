@@ -8,8 +8,8 @@ export async function POST(request: Request) {
   if (!await isAdminRequest(request)) return NextResponse.json({ error: "Admin sign-in required" }, { status: 401 })
   try {
     await consumeLimit("admin-image-upload", "site", 60)
-    const buffer = await uploadedPhoto(request)
-    const ext = "webp", fileName = `${crypto.randomUUID()}.webp`
+    const { buffer, extension: ext, contentType } = await uploadedPhoto(request)
+    const fileName = `${crypto.randomUUID()}.${ext}`
 
     if (process.env.IMAGE_STORAGE !== "supabase") {
       const url = await storeLocalProductImage(buffer, ext)
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const { error } = await supabaseAdmin.storage
       .from("product-images")
       .upload(fileName, buffer, {
-        contentType: "image/webp",
+        contentType,
         upsert: false,
       })
 

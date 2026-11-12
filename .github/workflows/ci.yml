@@ -81,6 +81,22 @@ jobs:
           tar -czf build/emana-orangehost-linux-x64.tar.gz -C build/orangehost .
           sha256sum build/emana-orangehost-linux-x64.tar.gz > build/emana-orangehost-linux-x64.sha256
 
+      - name: Smoke test runtime without native image dependencies
+        run: |
+          mkdir -p build/runtime-media
+          cp public/gold_signet_ring.jpg build/runtime-media/00000000-0000-0000-0000-000000000000.jpg
+          HOSTNAME=127.0.0.1 PORT=3010 PRODUCT_IMAGE_DIRECTORY="$PWD/build/runtime-media" node build/orangehost/server.js > build/runtime-smoke.log 2>&1 &
+          runtime_pid=$!
+          trap 'kill "$runtime_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3010/robots.txt > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:3010/ > /dev/null
+          curl --fail --silent http://127.0.0.1:3010/media/products/00000000-0000-0000-0000-000000000000.jpg -o build/runtime-photo.jpg
+          cmp public/gold_signet_ring.jpg build/runtime-photo.jpg
+          test "$(curl --silent -o /dev/null -w '%{http_code}' -X POST http://127.0.0.1:3010/api/admin/upload)" = 401
+
       - name: Upload tested deployment package
         if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@v7
